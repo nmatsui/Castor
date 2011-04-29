@@ -1,0 +1,283 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		86F85B89136ACEB00031F3B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F85B88136ACEB00031F3B2 /* UIKit.framework */; };
+		86F85B8B136ACEB00031F3B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F85B8A136ACEB00031F3B2 /* Foundation.framework */; };
+		86F85B8D136ACEB00031F3B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F85B8C136ACEB00031F3B2 /* CoreGraphics.framework */; };
+		86F85B93136ACEB10031F3B2 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 86F85B91136ACEB10031F3B2 /* InfoPlist.strings */; };
+		86F85B96136ACEB10031F3B2 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F85B95136ACEB10031F3B2 /* main.m */; };
+		86F85B99136ACEB10031F3B2 /* CastorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F85B98136ACEB10031F3B2 /* CastorAppDelegate.m */; };
+		86F85B9C136ACEB10031F3B2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86F85B9A136ACEB10031F3B2 /* MainWindow.xib */; };
+		86F85B9F136ACEB10031F3B2 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F85B9E136ACEB10031F3B2 /* RootViewController.m */; };
+		86F85BA2136ACEB10031F3B2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86F85BA0136ACEB10031F3B2 /* RootViewController.xib */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		86F85B84136ACEB00031F3B2 /* Castor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Castor.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		86F85B88136ACEB00031F3B2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		86F85B8A136ACEB00031F3B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		86F85B8C136ACEB00031F3B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		86F85B90136ACEB10031F3B2 /* Castor-Info.plist */ = {isa = PBXFileReference; path = "Castor-Info.plist"; sourceTree = "<group>"; };
+		86F85B92136ACEB10031F3B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		86F85B94136ACEB10031F3B2 /* Castor-Prefix.pch */ = {isa = PBXFileReference; path = "Castor-Prefix.pch"; sourceTree = "<group>"; };
+		86F85B95136ACEB10031F3B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */ = {isa = PBXFileReference; path = CastorAppDelegate.h; sourceTree = "<group>"; };
+		86F85B98136ACEB10031F3B2 /* CastorAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CastorAppDelegate.m; sourceTree = "<group>"; };
+		86F85B9B136ACEB10031F3B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
+		86F85B9D136ACEB10031F3B2 /* RootViewController.h */ = {isa = PBXFileReference; path = RootViewController.h; sourceTree = "<group>"; };
+		86F85B9E136ACEB10031F3B2 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
+		86F85BA1136ACEB10031F3B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		86F85B81136ACEB00031F3B2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86F85B89136ACEB00031F3B2 /* UIKit.framework in Frameworks */,
+				86F85B8B136ACEB00031F3B2 /* Foundation.framework in Frameworks */,
+				86F85B8D136ACEB00031F3B2 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		86F85B79136ACEB00031F3B2 = {
+			isa = PBXGroup;
+			children = (
+				86F85B8E136ACEB00031F3B2 /* Castor */,
+				86F85B87136ACEB00031F3B2 /* Frameworks */,
+				86F85B85136ACEB00031F3B2 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		86F85B85136ACEB00031F3B2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				86F85B84136ACEB00031F3B2 /* Castor.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		86F85B87136ACEB00031F3B2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				86F85B88136ACEB00031F3B2 /* UIKit.framework */,
+				86F85B8A136ACEB00031F3B2 /* Foundation.framework */,
+				86F85B8C136ACEB00031F3B2 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		86F85B8E136ACEB00031F3B2 /* Castor */ = {
+			isa = PBXGroup;
+			children = (
+				86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */,
+				86F85B98136ACEB10031F3B2 /* CastorAppDelegate.m */,
+				86F85B9A136ACEB10031F3B2 /* MainWindow.xib */,
+				86F85B9D136ACEB10031F3B2 /* RootViewController.h */,
+				86F85B9E136ACEB10031F3B2 /* RootViewController.m */,
+				86F85BA0136ACEB10031F3B2 /* RootViewController.xib */,
+				86F85B8F136ACEB00031F3B2 /* Supporting Files */,
+			);
+			path = Castor;
+			sourceTree = "<group>";
+		};
+		86F85B8F136ACEB00031F3B2 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				86F85B90136ACEB10031F3B2 /* Castor-Info.plist */,
+				86F85B91136ACEB10031F3B2 /* InfoPlist.strings */,
+				86F85B94136ACEB10031F3B2 /* Castor-Prefix.pch */,
+				86F85B95136ACEB10031F3B2 /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		86F85B83136ACEB00031F3B2 /* Castor */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 86F85BA5136ACEB10031F3B2 /* Build configuration list for PBXNativeTarget "Castor" */;
+			buildPhases = (
+				86F85B80136ACEB00031F3B2 /* Sources */,
+				86F85B81136ACEB00031F3B2 /* Frameworks */,
+				86F85B82136ACEB00031F3B2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Castor;
+			productName = Castor;
+			productReference = 86F85B84136ACEB00031F3B2 /* Castor.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		86F85B7B136ACEB00031F3B2 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 86F85B7E136ACEB00031F3B2 /* Build configuration list for PBXProject "Castor" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 86F85B79136ACEB00031F3B2;
+			productRefGroup = 86F85B85136ACEB00031F3B2 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				86F85B83136ACEB00031F3B2 /* Castor */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		86F85B82136ACEB00031F3B2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86F85B93136ACEB10031F3B2 /* InfoPlist.strings in Resources */,
+				86F85B9C136ACEB10031F3B2 /* MainWindow.xib in Resources */,
+				86F85BA2136ACEB10031F3B2 /* RootViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		86F85B80136ACEB00031F3B2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				86F85B96136ACEB10031F3B2 /* main.m in Sources */,
+				86F85B99136ACEB10031F3B2 /* CastorAppDelegate.m in Sources */,
+				86F85B9F136ACEB10031F3B2 /* RootViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		86F85B91136ACEB10031F3B2 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86F85B92136ACEB10031F3B2 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		86F85B9A136ACEB10031F3B2 /* MainWindow.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86F85B9B136ACEB10031F3B2 /* en */,
+			);
+			name = MainWindow.xib;
+			sourceTree = "<group>";
+		};
+		86F85BA0136ACEB10031F3B2 /* RootViewController.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				86F85BA1136ACEB10031F3B2 /* en */,
+			);
+			name = RootViewController.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		86F85BA3136ACEB10031F3B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		86F85BA4136ACEB10031F3B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+			};
+			name = Release;
+		};
+		86F85BA6136ACEB10031F3B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Castor/Castor-Prefix.pch";
+				INFOPLIST_FILE = "Castor/Castor-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		86F85BA7136ACEB10031F3B2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Castor/Castor-Prefix.pch";
+				INFOPLIST_FILE = "Castor/Castor-Info.plist";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALIDATE_PRODUCT = YES;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		86F85B7E136ACEB00031F3B2 /* Build configuration list for PBXProject "Castor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86F85BA3136ACEB10031F3B2 /* Debug */,
+				86F85BA4136ACEB10031F3B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		86F85BA5136ACEB10031F3B2 /* Build configuration list for PBXNativeTarget "Castor" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				86F85BA6136ACEB10031F3B2 /* Debug */,
+				86F85BA7136ACEB10031F3B2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 86F85B7B136ACEB00031F3B2 /* Project object */;
+}
