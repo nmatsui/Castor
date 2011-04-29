@@ -11,6 +11,8 @@
 
 @implementation GroupView
 
+@synthesize groupTable;
+
 -(void)getGroupList:(id)obj
 {
     NSLog(@"getGroupList");
@@ -34,6 +36,7 @@
 
 - (void)dealloc
 {
+    self.groupTable = nil;
     [super dealloc];
 }
 
@@ -57,8 +60,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    self.groupTable = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -10,8 +10,11 @@
 
 
 @interface GroupView : UIViewController {
-    IBOutlet UITableView *groupTable;
+    UITableView *groupTable;
 }
+
+@property(nonatomic, retain) IBOutlet UITableView *groupTable;
+
 -(IBAction) reloadGroup:(id)sender;
 
 @end

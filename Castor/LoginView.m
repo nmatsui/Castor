@@ -10,6 +10,11 @@
 
 
 @implementation LoginView
+
+@synthesize email;
+@synthesize password;
+@synthesize loginButton;
+
 -(IBAction) loginClick:(id)sender
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -44,6 +49,9 @@
 
 - (void)dealloc
 {
+    self.email = nil;
+    self.password = nil;
+    self.loginButton = nil;
     [super dealloc];
 }
 
@@ -73,8 +81,9 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    self.email = nil;
+    self.password = nil;
+    self.loginButton = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

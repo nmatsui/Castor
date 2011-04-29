@@ -11,10 +11,15 @@
 
 
 @interface LoginView : UIViewController {
-    IBOutlet UITextField *email;
-    IBOutlet UITextField *password;
-    IBOutlet UIButton    *loginButton;
+    UITextField *email;
+    UITextField *password;
+    UIButton    *loginButton;
 }
+
+@property(nonatomic, retain) IBOutlet UITextField *email;
+@property(nonatomic, retain) IBOutlet UITextField *password;
+@property(nonatomic, retain) IBOutlet UIButton    *loginButton;
+
 -(IBAction) loginClick:(id)sender;
 -(IBAction) doneEmailEdit:(id)sender;
 -(IBAction) donePasswordEdit:(id)sender;
