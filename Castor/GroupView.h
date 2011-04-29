@@ -1,5 +1,5 @@
 //
-//  RootViewController.h
+//  GroupView.h
 //  Castor
 //
 //  Created by Nobuyuki Matsui on 11/04/29.
@@ -7,10 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LoginView.h"
 
-@interface RootViewController : UIViewController {
 
+@interface GroupView : UIViewController {
+    IBOutlet UITableView *groupTable;
 }
+-(IBAction) reloadGroup:(id)sender;
 
 @end

@@ -16,6 +16,10 @@
 		86F85B9C136ACEB10031F3B2 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86F85B9A136ACEB10031F3B2 /* MainWindow.xib */; };
 		86F85B9F136ACEB10031F3B2 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F85B9E136ACEB10031F3B2 /* RootViewController.m */; };
 		86F85BA2136ACEB10031F3B2 /* RootViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86F85BA0136ACEB10031F3B2 /* RootViewController.xib */; };
+		86F85BAB136AD1110031F3B2 /* LoginView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F85BA9136AD1110031F3B2 /* LoginView.m */; };
+		86F85BAC136AD1110031F3B2 /* LoginView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86F85BAA136AD1110031F3B2 /* LoginView.xib */; };
+		86F85BBA136AF0280031F3B2 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86F85BB8136AF0280031F3B2 /* GroupView.m */; };
+		86F85BBB136AF0280031F3B2 /* GroupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86F85BB9136AF0280031F3B2 /* GroupView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,16 +27,22 @@
 		86F85B88136ACEB00031F3B2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		86F85B8A136ACEB00031F3B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		86F85B8C136ACEB00031F3B2 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		86F85B90136ACEB10031F3B2 /* Castor-Info.plist */ = {isa = PBXFileReference; path = "Castor-Info.plist"; sourceTree = "<group>"; };
+		86F85B90136ACEB10031F3B2 /* Castor-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Castor-Info.plist"; sourceTree = "<group>"; };
 		86F85B92136ACEB10031F3B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		86F85B94136ACEB10031F3B2 /* Castor-Prefix.pch */ = {isa = PBXFileReference; path = "Castor-Prefix.pch"; sourceTree = "<group>"; };
+		86F85B94136ACEB10031F3B2 /* Castor-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Castor-Prefix.pch"; sourceTree = "<group>"; };
 		86F85B95136ACEB10031F3B2 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */ = {isa = PBXFileReference; path = CastorAppDelegate.h; sourceTree = "<group>"; };
+		86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CastorAppDelegate.h; sourceTree = "<group>"; };
 		86F85B98136ACEB10031F3B2 /* CastorAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CastorAppDelegate.m; sourceTree = "<group>"; };
 		86F85B9B136ACEB10031F3B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		86F85B9D136ACEB10031F3B2 /* RootViewController.h */ = {isa = PBXFileReference; path = RootViewController.h; sourceTree = "<group>"; };
+		86F85B9D136ACEB10031F3B2 /* RootViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		86F85B9E136ACEB10031F3B2 /* RootViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		86F85BA1136ACEB10031F3B2 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/RootViewController.xib; sourceTree = "<group>"; };
+		86F85BA8136AD1110031F3B2 /* LoginView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginView.h; sourceTree = "<group>"; };
+		86F85BA9136AD1110031F3B2 /* LoginView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginView.m; sourceTree = "<group>"; };
+		86F85BAA136AD1110031F3B2 /* LoginView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginView.xib; sourceTree = "<group>"; };
+		86F85BB7136AF0280031F3B2 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
+		86F85BB8136AF0280031F3B2 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
+		86F85BB9136AF0280031F3B2 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,13 +89,19 @@
 		86F85B8E136ACEB00031F3B2 /* Castor */ = {
 			isa = PBXGroup;
 			children = (
+				86F85B8F136ACEB00031F3B2 /* Supporting Files */,
 				86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */,
 				86F85B98136ACEB10031F3B2 /* CastorAppDelegate.m */,
 				86F85B9A136ACEB10031F3B2 /* MainWindow.xib */,
 				86F85B9D136ACEB10031F3B2 /* RootViewController.h */,
 				86F85B9E136ACEB10031F3B2 /* RootViewController.m */,
 				86F85BA0136ACEB10031F3B2 /* RootViewController.xib */,
-				86F85B8F136ACEB00031F3B2 /* Supporting Files */,
+				86F85BA8136AD1110031F3B2 /* LoginView.h */,
+				86F85BA9136AD1110031F3B2 /* LoginView.m */,
+				86F85BAA136AD1110031F3B2 /* LoginView.xib */,
+				86F85BB7136AF0280031F3B2 /* GroupView.h */,
+				86F85BB8136AF0280031F3B2 /* GroupView.m */,
+				86F85BB9136AF0280031F3B2 /* GroupView.xib */,
 			);
 			path = Castor;
 			sourceTree = "<group>";
@@ -151,6 +167,8 @@
 				86F85B93136ACEB10031F3B2 /* InfoPlist.strings in Resources */,
 				86F85B9C136ACEB10031F3B2 /* MainWindow.xib in Resources */,
 				86F85BA2136ACEB10031F3B2 /* RootViewController.xib in Resources */,
+				86F85BAC136AD1110031F3B2 /* LoginView.xib in Resources */,
+				86F85BBB136AF0280031F3B2 /* GroupView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +182,8 @@
 				86F85B96136ACEB10031F3B2 /* main.m in Sources */,
 				86F85B99136ACEB10031F3B2 /* CastorAppDelegate.m in Sources */,
 				86F85B9F136ACEB10031F3B2 /* RootViewController.m in Sources */,
+				86F85BAB136AD1110031F3B2 /* LoginView.m in Sources */,
+				86F85BBA136AF0280031F3B2 /* GroupView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -209,7 +229,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -223,7 +243,7 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				SDKROOT = iphoneos;
 			};
@@ -238,6 +258,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Castor/Castor-Prefix.pch";
 				INFOPLIST_FILE = "Castor/Castor-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -251,6 +272,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Castor/Castor-Prefix.pch";
 				INFOPLIST_FILE = "Castor/Castor-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
