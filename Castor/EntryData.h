@@ -12,13 +12,17 @@
 @interface EntryData : NSObject {
     NSNumber *entryId;
     NSNumber *roomId;
-    NSString *name;
+    NSString *participantName;
     NSString *content;
+    NSNumber *level;
+    UIImage  *participantIcon;
 }
 
 @property(nonatomic, retain) NSNumber *entryId;
 @property(nonatomic, retain) NSNumber *roomId;
-@property(nonatomic, retain) NSString *name;
+@property(nonatomic, retain) NSString *participantName;
 @property(nonatomic, retain) NSString *content;
+@property(nonatomic, retain) NSNumber *level;
+@property(nonatomic, retain) UIImage  *participantIcon;
 
 @end

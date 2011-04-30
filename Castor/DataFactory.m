@@ -18,6 +18,7 @@
         GroupData *groupData = [[[GroupData alloc] init] autorelease];
         groupData.roomId = [[NSNumber alloc] initWithInt:i];
         groupData.roomName = [NSString stringWithFormat:@"%d room",i];
+        groupData.roomIcon = [UIImage imageNamed:@"myrooms.png"];
         [list addObject:groupData];
     }
     return list;
@@ -30,10 +31,31 @@
         EntryData *entryData = [[[EntryData alloc] init] autorelease];
         entryData.entryId = [[NSNumber alloc] initWithInt:i];
         entryData.roomId = rId;
-        entryData.name = @"ほげほげ";
+        entryData.participantName = @"ほげほげ";
+        entryData.level = [[NSNumber alloc] initWithInt:0];
+        entryData.participantIcon = [UIImage imageNamed:@"myrooms.png"];
         NSString *str = [NSString stringWithFormat:@"[%d] %d entry",[rId intValue], i];
         for (int j = 0; j < i; j++) {
             str = [str stringByAppendingString:@"あいうえおかきくけこ"];
+        }
+        entryData.content = str;
+        [list addObject:entryData];
+    }
+    return list;
+}
+
+- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)eId
+{
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    for (int i = 0; i < 20; i++) {
+        EntryData *entryData = [[[EntryData alloc] init] autorelease];
+        entryData.entryId = [[NSNumber alloc] initWithInt:i];
+        entryData.participantName = @"こめんと";
+        entryData.level = [[NSNumber alloc] initWithInt:i%5+1];
+        entryData.participantIcon = [UIImage imageNamed:@"myrooms.png"];
+        NSString *str = [NSString stringWithFormat:@"[%d] %d comment",[eId intValue], i];
+        for (int j = 0; j < i; j++) {
+            str = [str stringByAppendingString:@"アイウエオカキクケコ"];
         }
         entryData.content = str;
         [list addObject:entryData];

@@ -12,9 +12,11 @@
 @interface GroupData : NSObject {
     NSNumber *roomId;
     NSString *roomName;
+    UIImage  *roomIcon;
 }
 
 @property(nonatomic, retain) NSNumber *roomId;
 @property(nonatomic, retain) NSString *roomName;
+@property(nonatomic, retain) UIImage  *roomIcon;
 
 @end

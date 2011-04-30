@@ -1,5 +1,5 @@
 //
-//  RoomView.h
+//  CommentView.h
 //  Castor
 //
 //  Created by Nobuyuki Matsui on 11/04/30.
@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
-#import "CommentView.h"
 #import "ViewUtil.h"
 
-@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
     DataFactory *factory;
-    GroupData *group;
+    EntryData *originEntry;
     
     UITableView *entryTable;
     NSMutableArray *entryList;
@@ -22,11 +21,9 @@
 }
 
 @property(nonatomic, retain) DataFactory *factory;
-@property(nonatomic, retain) GroupData *group;
+@property(nonatomic, retain) EntryData *originEntry;
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
-
-- (IBAction)reloadRoom:(id)sender;
 
 @end

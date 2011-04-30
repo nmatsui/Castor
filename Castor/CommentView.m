@@ -1,36 +1,27 @@
 //
-//  RoomView.m
+//  CommentView.m
 //  Castor
 //
 //  Created by Nobuyuki Matsui on 11/04/30.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "RoomView.h"
+#import "CommentView.h"
 
 
-@implementation RoomView
+@implementation CommentView
 
 @synthesize factory;
-@synthesize group;
+@synthesize originEntry;
 
 @synthesize entryTable;
 @synthesize entryList;
-
-- (IBAction)reloadRoom:(id)sender
-{
-    NSLog(@"reloadRoom");
-    NSLog(@"roomId : %d", [self.group.roomId intValue]);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
-    [pool release];
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+        // Custom initialization
     }
     return self;
 }
@@ -38,7 +29,7 @@
 - (void)dealloc
 {
     self.factory = nil;
-    self.group = nil;
+    self.originEntry = nil;
     
     self.entryList = nil;
     self.entryTable = nil;
@@ -78,21 +69,8 @@
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate]];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
     return cell;    
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"RoomView %d row clicked",indexPath.row);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to CommentView");
-    CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" bundle:nil] autorelease];
-    commentView.factory = self.factory;
-    commentView.originEntry = [self.entryList objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:commentView animated:YES];
-    [pool release];
 }
 
 #pragma mark - View lifecycle
@@ -100,14 +78,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"roomView loaded");
-    NSLog(@"roomId : %d", [self.group.roomId intValue]);
-    self.title = self.group.roomName;
+    NSLog(@"commentView loaded");
+    NSLog(@"origin entryId : %d", [self.originEntry.entryId intValue]);
+    self.title = @"Comments";
     if (self.factory == nil) {
         self.factory = [[DataFactory alloc] init];
     }
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
+    self.entryList = [factory getEntryCommentListByEntryId:self.originEntry.entryId];
     [pool release];
 }
 
@@ -115,7 +93,7 @@
 {
     [super viewDidUnload];
     self.factory = nil;
-    self.group = nil;
+    self.originEntry = nil;
     
     self.entryList = nil;
     self.entryTable = nil;

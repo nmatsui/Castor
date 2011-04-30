@@ -13,15 +13,19 @@
 
 @synthesize entryId;
 @synthesize roomId;
-@synthesize name;
+@synthesize participantName;
 @synthesize content;
+@synthesize level;
+@synthesize participantIcon;
 
 - (void)dealloc
 {
     self.entryId = nil;
     self.roomId = nil;
-    self.name = nil;
+    self.participantName = nil;
     self.content = nil;
+    self.level = nil;
+    self.participantIcon = nil;
     [super dealloc];
 }
 @end

@@ -13,11 +13,13 @@
 
 @synthesize roomId;
 @synthesize roomName;
+@synthesize roomIcon;
 
 - (void)dealloc
 {
     self.roomId = nil;
     self.roomName = nil;
+    self.roomIcon = nil;
     [super dealloc];
 }
 @end

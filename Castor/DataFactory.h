@@ -16,5 +16,6 @@
 
 - (NSMutableArray *)getGroupList;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)rId;
+- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)eId;
 
 @end

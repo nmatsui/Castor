@@ -10,6 +10,9 @@
 		86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C2E136C0B1600F8BFA1 /* GroupView.m */; };
 		86B04C31136C0B1600F8BFA1 /* GroupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C2F136C0B1600F8BFA1 /* GroupView.xib */; };
 		86B04C35136C2F0F00F8BFA1 /* ViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */; };
+		86B04C39136C41FF00F8BFA1 /* CommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C37136C41FF00F8BFA1 /* CommentView.m */; };
+		86B04C3A136C41FF00F8BFA1 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C38136C41FF00F8BFA1 /* CommentView.xib */; };
+		86B04C3C136C4D9600F8BFA1 /* myrooms.png in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C3B136C4D9500F8BFA1 /* myrooms.png */; };
 		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
 		86EE1B07136BBCB200B94192 /* GroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* GroupData.m */; };
 		86EE1B0B136BD46800B94192 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B09136BD46700B94192 /* RoomView.m */; };
@@ -34,6 +37,10 @@
 		86B04C2F136C0B1600F8BFA1 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
 		86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtil.h; sourceTree = "<group>"; };
 		86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtil.m; sourceTree = "<group>"; };
+		86B04C36136C41FE00F8BFA1 /* CommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentView.h; sourceTree = "<group>"; };
+		86B04C37136C41FF00F8BFA1 /* CommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentView.m; sourceTree = "<group>"; };
+		86B04C38136C41FF00F8BFA1 /* CommentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentView.xib; sourceTree = "<group>"; };
+		86B04C3B136C4D9500F8BFA1 /* myrooms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myrooms.png; sourceTree = "<group>"; };
 		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
 		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
 		86EE1B05136BBCB100B94192 /* GroupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupData.h; sourceTree = "<group>"; };
@@ -106,6 +113,7 @@
 		86F85B8E136ACEB00031F3B2 /* Castor */ = {
 			isa = PBXGroup;
 			children = (
+				86B04C3B136C4D9500F8BFA1 /* myrooms.png */,
 				86F85B8F136ACEB00031F3B2 /* Supporting Files */,
 				86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */,
 				86F85B98136ACEB10031F3B2 /* CastorAppDelegate.m */,
@@ -122,10 +130,13 @@
 				86EE1B08136BD46700B94192 /* RoomView.h */,
 				86EE1B09136BD46700B94192 /* RoomView.m */,
 				86EE1B0A136BD46700B94192 /* RoomView.xib */,
+				86B04C36136C41FE00F8BFA1 /* CommentView.h */,
+				86B04C37136C41FF00F8BFA1 /* CommentView.m */,
+				86B04C38136C41FF00F8BFA1 /* CommentView.xib */,
 				86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */,
 				86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */,
-				86EE1B03136BBAAB00B94192 /* DataFactory.m */,
 				86EE1B02136BBAAB00B94192 /* DataFactory.h */,
+				86EE1B03136BBAAB00B94192 /* DataFactory.m */,
 				86EE1B05136BBCB100B94192 /* GroupData.h */,
 				86EE1B06136BBCB200B94192 /* GroupData.m */,
 				86EE1B12136BF4DF00B94192 /* EntryData.h */,
@@ -198,6 +209,8 @@
 				86F85BAC136AD1110031F3B2 /* LoginView.xib in Resources */,
 				86EE1B0C136BD46800B94192 /* RoomView.xib in Resources */,
 				86B04C31136C0B1600F8BFA1 /* GroupView.xib in Resources */,
+				86B04C3A136C41FF00F8BFA1 /* CommentView.xib in Resources */,
+				86B04C3C136C4D9600F8BFA1 /* myrooms.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -218,6 +231,7 @@
 				86EE1B14136BF4E000B94192 /* EntryData.m in Sources */,
 				86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */,
 				86B04C35136C2F0F00F8BFA1 /* ViewUtil.m in Sources */,
+				86B04C39136C41FF00F8BFA1 /* CommentView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
