@@ -8,12 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
-
-
+#import "ViewUtil.h"
 
 @interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
     DataFactory *factory;
-    NSNumber *roomId;
+    GroupData *group;
     
     UITableView *entryTable;
     NSMutableArray *entryList;
@@ -22,7 +21,7 @@
 }
 
 @property(nonatomic, retain) DataFactory *factory;
-@property(nonatomic, retain) NSNumber *roomId;
+@property(nonatomic, retain) GroupData *group;
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;

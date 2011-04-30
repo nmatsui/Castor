@@ -31,7 +31,11 @@
         entryData.entryId = [[NSNumber alloc] initWithInt:i];
         entryData.roomId = rId;
         entryData.name = @"ほげほげ";
-        entryData.content = [NSString stringWithFormat:@"[%d] %d entry 11111111111111111111111111111ffffffffffffffffffffffffffffffffffffffffffffffffffff1111111111111111111111111あああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああああ",[rId intValue], i];
+        NSString *str = [NSString stringWithFormat:@"[%d] %d entry",[rId intValue], i];
+        for (int j = 0; j < i; j++) {
+            str = [str stringByAppendingString:@"あいうえおかきくけこ"];
+        }
+        entryData.content = str;
         [list addObject:entryData];
     }
     return list;

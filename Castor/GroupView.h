@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
 #import "RoomView.h"
+#import "ViewUtil.h"
 
 @interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
     DataFactory *factory;

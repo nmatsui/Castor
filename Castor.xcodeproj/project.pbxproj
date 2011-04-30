@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C2E136C0B1600F8BFA1 /* GroupView.m */; };
 		86B04C31136C0B1600F8BFA1 /* GroupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C2F136C0B1600F8BFA1 /* GroupView.xib */; };
+		86B04C35136C2F0F00F8BFA1 /* ViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */; };
 		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
 		86EE1B07136BBCB200B94192 /* GroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* GroupData.m */; };
 		86EE1B0B136BD46800B94192 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B09136BD46700B94192 /* RoomView.m */; };
@@ -28,9 +29,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GroupView.h; sourceTree = "<group>"; };
+		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
 		86B04C2E136C0B1600F8BFA1 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
 		86B04C2F136C0B1600F8BFA1 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
+		86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtil.h; sourceTree = "<group>"; };
+		86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewUtil.m; sourceTree = "<group>"; };
 		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
 		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
 		86EE1B05136BBCB100B94192 /* GroupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupData.h; sourceTree = "<group>"; };
@@ -113,18 +116,20 @@
 				86F85BA8136AD1110031F3B2 /* LoginView.h */,
 				86F85BA9136AD1110031F3B2 /* LoginView.m */,
 				86F85BAA136AD1110031F3B2 /* LoginView.xib */,
+				86B04C2D136C0B1600F8BFA1 /* GroupView.h */,
+				86B04C2E136C0B1600F8BFA1 /* GroupView.m */,
+				86B04C2F136C0B1600F8BFA1 /* GroupView.xib */,
 				86EE1B08136BD46700B94192 /* RoomView.h */,
 				86EE1B09136BD46700B94192 /* RoomView.m */,
 				86EE1B0A136BD46700B94192 /* RoomView.xib */,
-				86EE1B02136BBAAB00B94192 /* DataFactory.h */,
+				86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */,
+				86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */,
 				86EE1B03136BBAAB00B94192 /* DataFactory.m */,
+				86EE1B02136BBAAB00B94192 /* DataFactory.h */,
 				86EE1B05136BBCB100B94192 /* GroupData.h */,
 				86EE1B06136BBCB200B94192 /* GroupData.m */,
 				86EE1B12136BF4DF00B94192 /* EntryData.h */,
 				86EE1B13136BF4E000B94192 /* EntryData.m */,
-				86B04C2D136C0B1600F8BFA1 /* GroupView.h */,
-				86B04C2E136C0B1600F8BFA1 /* GroupView.m */,
-				86B04C2F136C0B1600F8BFA1 /* GroupView.xib */,
 			);
 			path = Castor;
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 				86EE1B0B136BD46800B94192 /* RoomView.m in Sources */,
 				86EE1B14136BF4E000B94192 /* EntryData.m in Sources */,
 				86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */,
+				86B04C35136C2F0F00F8BFA1 /* ViewUtil.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,31 +12,17 @@
 @implementation RoomView
 
 @synthesize factory;
-@synthesize roomId;
+@synthesize group;
 
 @synthesize entryTable;
 @synthesize entryList;
 
-- (UILabel *)makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font
-{
-    UILabel *label = [[[UILabel alloc] init] autorelease];
-    [label setFrame:rect];
-    [label setText:text];
-    [label setFont:font];
-    [label setTextColor:[UIColor blackColor]];
-    [label setBackgroundColor:[UIColor clearColor]];
-    [label setTextAlignment:UITextAlignmentLeft];
-    [label setNumberOfLines:0];
-    [label setLineBreakMode:UILineBreakModeWordWrap];
-    return label;
-}
-
 - (IBAction)reloadRoom:(id)sender
 {
     NSLog(@"reloadRoom");
-    NSLog(@"roomId : %d", [self.roomId intValue]);
+    NSLog(@"roomId : %d", [self.group.roomId intValue]);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getRoomEntryListByRoomId:self.roomId];
+    self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
     [pool release];
 }
 
@@ -52,7 +38,7 @@
 - (void)dealloc
 {
     self.factory = nil;
-    self.roomId = nil;
+    self.group = nil;
     
     self.entryList = nil;
     self.entryTable = nil;
@@ -79,13 +65,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    EntryData *entry = [entryList objectAtIndex:indexPath.row];
-    float w = (portrate)?
-                self.view.window.screen.bounds.size.width - 70:
-                self.view.window.screen.bounds.size.height - 70;
-    CGSize size = [entry.content sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    float height = 30 + size.height + 10;
-    return (height<60)?60:height;
+    return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,15 +75,10 @@
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if ([entryList count] <= indexPath.row) return cell;
-    EntryData *entry = [entryList objectAtIndex:indexPath.row];
-    UILabel *nameLabel = [self makeLabel:CGRectMake(60, 10, 250, 16) text:entry.name font:[UIFont boldSystemFontOfSize:12]];
-    [cell.contentView addSubview:nameLabel];
-    float w = (portrate)?
-    self.view.window.screen.bounds.size.width - 70:
-    self.view.window.screen.bounds.size.height - 70;
-    CGSize size = [entry.content sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    UILabel *contentLabel = [self makeLabel:CGRectMake(60, 30, w, size.height) text:entry.content font:[UIFont systemFontOfSize:12]];
-    [cell.contentView addSubview:contentLabel];
+    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate]];
+    [pool release];
     return cell;    
 }
 
@@ -113,9 +88,10 @@
 {
     [super viewDidLoad];
     NSLog(@"roomView loaded");
-    NSLog(@"roomId : %d", [self.roomId intValue]);
+    NSLog(@"roomId : %d", [self.group.roomId intValue]);
+    self.title = self.group.roomName;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getRoomEntryListByRoomId:self.roomId];
+    self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
     [pool release];
 }
 
@@ -123,7 +99,7 @@
 {
     [super viewDidUnload];
     self.factory = nil;
-    self.roomId = nil;
+    self.group = nil;
     
     self.entryList = nil;
     self.entryTable = nil;
