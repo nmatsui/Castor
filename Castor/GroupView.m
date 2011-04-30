@@ -86,14 +86,10 @@
 		cell = groupCell;
 		self.groupCell = nil;
     }
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     GroupCell *gcell = (GroupCell *)cell;
     gcell.groupName.text = [groupList objectAtIndex:indexPath.row];
     return cell;
-}
-
-- (UITableViewCellAccessoryType)tableView:(UITableView *)tableView accessoryTypeForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    return UITableViewCellAccessoryDisclosureIndicator;
 }
 
 #pragma mark - View lifecycle

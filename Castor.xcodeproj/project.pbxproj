@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		86EE1AFB136BA88200B94192 /* GroupCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1AF9136BA88200B94192 /* GroupCell.m */; };
+		86EE1AFC136BA88200B94192 /* GroupCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86EE1AFA136BA88200B94192 /* GroupCell.xib */; };
+		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
+		86EE1B07136BBCB200B94192 /* GroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* GroupData.m */; };
 		86F85B89136ACEB00031F3B2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F85B88136ACEB00031F3B2 /* UIKit.framework */; };
 		86F85B8B136ACEB00031F3B2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F85B8A136ACEB00031F3B2 /* Foundation.framework */; };
 		86F85B8D136ACEB00031F3B2 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86F85B8C136ACEB00031F3B2 /* CoreGraphics.framework */; };
@@ -23,6 +27,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		86EE1AF8136BA88200B94192 /* GroupCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupCell.h; sourceTree = "<group>"; };
+		86EE1AF9136BA88200B94192 /* GroupCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupCell.m; sourceTree = "<group>"; };
+		86EE1AFA136BA88200B94192 /* GroupCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupCell.xib; sourceTree = "<group>"; };
+		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
+		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
+		86EE1B05136BBCB100B94192 /* GroupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupData.h; sourceTree = "<group>"; };
+		86EE1B06136BBCB200B94192 /* GroupData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupData.m; sourceTree = "<group>"; };
 		86F85B84136ACEB00031F3B2 /* Castor.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Castor.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		86F85B88136ACEB00031F3B2 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		86F85B8A136ACEB00031F3B2 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -102,6 +113,13 @@
 				86F85BB7136AF0280031F3B2 /* GroupView.h */,
 				86F85BB8136AF0280031F3B2 /* GroupView.m */,
 				86F85BB9136AF0280031F3B2 /* GroupView.xib */,
+				86EE1AF8136BA88200B94192 /* GroupCell.h */,
+				86EE1AF9136BA88200B94192 /* GroupCell.m */,
+				86EE1AFA136BA88200B94192 /* GroupCell.xib */,
+				86EE1B02136BBAAB00B94192 /* DataFactory.h */,
+				86EE1B03136BBAAB00B94192 /* DataFactory.m */,
+				86EE1B05136BBCB100B94192 /* GroupData.h */,
+				86EE1B06136BBCB200B94192 /* GroupData.m */,
 			);
 			path = Castor;
 			sourceTree = "<group>";
@@ -169,6 +187,7 @@
 				86F85BA2136ACEB10031F3B2 /* RootViewController.xib in Resources */,
 				86F85BAC136AD1110031F3B2 /* LoginView.xib in Resources */,
 				86F85BBB136AF0280031F3B2 /* GroupView.xib in Resources */,
+				86EE1AFC136BA88200B94192 /* GroupCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -184,6 +203,9 @@
 				86F85B9F136ACEB10031F3B2 /* RootViewController.m in Sources */,
 				86F85BAB136AD1110031F3B2 /* LoginView.m in Sources */,
 				86F85BBA136AF0280031F3B2 /* GroupView.m in Sources */,
+				86EE1AFB136BA88200B94192 /* GroupCell.m in Sources */,
+				86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */,
+				86EE1B07136BBCB200B94192 /* GroupData.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +320,7 @@
 				86F85BA7136ACEB10031F3B2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
