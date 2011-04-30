@@ -7,13 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GroupCell.h"
 
 
-@interface GroupView : UIViewController {
+@interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
     UITableView *groupTable;
+    NSMutableArray *groupList;
+    GroupCell *groupCell;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *groupTable;
+@property(nonatomic, retain) IBOutlet NSMutableArray *groupList;
+@property(nonatomic, retain) IBOutlet GroupCell *groupCell;
 
 -(IBAction) reloadGroup:(id)sender;
 

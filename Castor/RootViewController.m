@@ -25,14 +25,13 @@
 {
     [super viewDidLoad];
     NSLog(@"RootView Loaded");
+    self.navigationController.navigationBar.hidden = YES;
     [self performSelectorInBackground:@selector(checkAuthorized:) withObject:Nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    NSLog(@"RootView Will appear");
-    self.navigationController.navigationBar.hidden = YES;
 }
 
 - (void)viewDidAppear:(BOOL)animated
