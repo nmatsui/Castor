@@ -1,20 +1,21 @@
 //
-//  GroupView2.m
+//  RoomView.m
 //  Castor
 //
 //  Created by Nobuyuki Matsui on 11/04/30.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "GroupView.h"
+#import "RoomView.h"
 
 
-@implementation GroupView
+@implementation RoomView
 
 @synthesize factory;
+@synthesize roomId;
 
-@synthesize groupTable;
-@synthesize groupList;
+@synthesize entryTable;
+@synthesize entryList;
 
 - (UILabel *)makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font
 {
@@ -30,11 +31,20 @@
     return label;
 }
 
+- (IBAction)reloadRoom:(id)sender
+{
+    NSLog(@"reloadRoom");
+    NSLog(@"roomId : %d", [self.roomId intValue]);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.entryList = [factory getRoomEntryListByRoomId:self.roomId];
+    [pool release];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -42,9 +52,10 @@
 - (void)dealloc
 {
     self.factory = nil;
+    self.roomId = nil;
     
-    self.groupList = nil;
-    self.groupTable = nil;
+    self.entryList = nil;
+    self.entryTable = nil;
     [super dealloc];
 }
 
@@ -63,48 +74,37 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [groupList count];
+    return [entryList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    GroupData *group = [groupList objectAtIndex:indexPath.row];
+    EntryData *entry = [entryList objectAtIndex:indexPath.row];
     float w = (portrate)?
-    self.view.window.screen.bounds.size.width - 70:
-    self.view.window.screen.bounds.size.height - 70;
-    CGSize size = [group.roomName sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+                self.view.window.screen.bounds.size.width - 70:
+                self.view.window.screen.bounds.size.height - 70;
+    CGSize size = [entry.content sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 30 + size.height + 10;
     return (height<60)?60:height;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"GroupCell";
+    static NSString *CellIdentifier = @"EntryCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if ([groupList count] <= indexPath.row) return cell;
-    GroupData *group = [groupList objectAtIndex:indexPath.row];
+    if ([entryList count] <= indexPath.row) return cell;
+    EntryData *entry = [entryList objectAtIndex:indexPath.row];
+    UILabel *nameLabel = [self makeLabel:CGRectMake(60, 10, 250, 16) text:entry.name font:[UIFont boldSystemFontOfSize:12]];
+    [cell.contentView addSubview:nameLabel];
     float w = (portrate)?
     self.view.window.screen.bounds.size.width - 70:
     self.view.window.screen.bounds.size.height - 70;
-    CGSize size = [group.roomName sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    UILabel *nameLabel = [self makeLabel:CGRectMake(60, 30, w, size.height) text:group.roomName font:[UIFont systemFontOfSize:12]];
-    [cell.contentView addSubview:nameLabel];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    CGSize size = [entry.content sizeWithFont:[UIFont systemFontOfSize:12] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+    UILabel *contentLabel = [self makeLabel:CGRectMake(60, 30, w, size.height) text:entry.content font:[UIFont systemFontOfSize:12]];
+    [cell.contentView addSubview:contentLabel];
     return cell;    
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"%d clicked",indexPath.row);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to RoomView");
-    RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil] autorelease];
-    roomView.factory = self.factory;
-    roomView.roomId = [NSNumber numberWithInteger:indexPath.row];
-    [self.navigationController pushViewController:roomView animated:YES];
-    [pool release];
 }
 
 #pragma mark - View lifecycle
@@ -112,15 +112,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"GroupView Loaded");
-    self.title = @"Group";
-    [self.navigationItem.backBarButtonItem setEnabled:NO];
-    self.navigationItem.hidesBackButton = YES;
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
+    NSLog(@"roomView loaded");
+    NSLog(@"roomId : %d", [self.roomId intValue]);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.groupList = [factory getGroupList];
+    self.entryList = [factory getRoomEntryListByRoomId:self.roomId];
     [pool release];
 }
 
@@ -128,20 +123,21 @@
 {
     [super viewDidUnload];
     self.factory = nil;
+    self.roomId = nil;
     
-    self.groupList = nil;
-    self.groupTable = nil;
+    self.entryList = nil;
+    self.entryTable = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
         portrate = NO;
-        [groupTable reloadData];
+        [entryTable reloadData];
     }
     else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
         portrate = YES;
-        [groupTable reloadData];
+        [entryTable reloadData];
     }
     return YES;
 }

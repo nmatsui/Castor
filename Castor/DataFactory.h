@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "GroupData.h"
+#import "EntryData.h"
 
 @interface DataFactory : NSObject {
     
 }
 
 - (NSMutableArray *)getGroupList;
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)rId;
 
 @end

@@ -25,9 +25,9 @@
 @property(nonatomic, retain) IBOutlet UITextField *password;
 @property(nonatomic, retain) IBOutlet UIButton    *loginButton;
 
--(IBAction) loginClick:(id)sender;
--(IBAction) doneEmailEdit:(id)sender;
--(IBAction) donePasswordEdit:(id)sender;
--(IBAction) backTap:(id)sender;
+- (IBAction)loginClick:(id)sender;
+- (IBAction)doneEmailEdit:(id)sender;
+- (IBAction)donePasswordEdit:(id)sender;
+- (IBAction)backTap:(id)sender;
 
 @end

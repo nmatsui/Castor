@@ -12,11 +12,11 @@
 
 @synthesize factory;
 
--(void)checkAuthorized:(id)arg
+- (void)checkAuthorized:(id)arg
 {
     NSLog(@"checkAuthorized");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [NSThread sleepForTimeInterval:5];
+    [NSThread sleepForTimeInterval:1];
     NSLog(@"move to LoginView");
     self.factory = [[DataFactory alloc] init];
     LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];

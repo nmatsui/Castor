@@ -17,25 +17,25 @@
 @synthesize password;
 @synthesize loginButton;
 
--(IBAction) loginClick:(id)sender
+- (IBAction)loginClick:(id)sender
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"%s:%s",[email.text UTF8String], [password.text UTF8String]);
     NSLog(@"move to GroupView");
-    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
+    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView2" bundle:nil] autorelease];
     groupView.factory = self.factory;
     [self.navigationController pushViewController:groupView animated:YES];
     [pool release];
 }
--(IBAction) doneEmailEdit:(id)sender
+- (IBAction)doneEmailEdit:(id)sender
 {
     [sender resignFirstResponder];
 }
--(IBAction) donePasswordEdit:(id)sender
+- (IBAction)donePasswordEdit:(id)sender
 {
     [sender resignFirstResponder];
 }
--(IBAction) backTap:(id)sender
+- (IBAction)backTap:(id)sender
 {
     [email resignFirstResponder];
     [password resignFirstResponder];
