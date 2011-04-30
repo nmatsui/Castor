@@ -7,14 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataFactory.h"
 #import "GroupCell.h"
 
 
 @interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
+    DataFactory *factory;
+    
     UITableView *groupTable;
     NSMutableArray *groupList;
     GroupCell *groupCell;
 }
+
+@property(nonatomic, retain) DataFactory *factory;
 
 @property(nonatomic, retain) IBOutlet UITableView *groupTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *groupList;

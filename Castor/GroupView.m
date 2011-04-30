@@ -11,6 +11,8 @@
 
 @implementation GroupView
 
+@synthesize factory;
+
 @synthesize groupTable;
 @synthesize groupList;
 @synthesize groupCell;
@@ -18,42 +20,24 @@
 -(IBAction) reloadGroup:(id)sender
 {
     NSLog(@"reloadGroup");
-    NSMutableArray *tmp = [[NSMutableArray alloc] init];
-    [tmp addObject:@"1"];
-    [tmp addObject:@"2"];
-    [tmp addObject:@"3"];
-    [tmp addObject:@"4"];
-    [tmp addObject:@"5"];
-    [tmp addObject:@"6"];
-    [tmp addObject:@"7"];
-    [tmp addObject:@"8"];
-    [tmp addObject:@"9"];
-    [tmp addObject:@"10"];
-    [tmp addObject:@"11"];
-    [tmp addObject:@"12"];
-    [tmp addObject:@"13"];
-    [tmp addObject:@"14"];
-    [tmp addObject:@"15"];
-    [tmp addObject:@"16"];
-    [tmp addObject:@"17"];
-    [tmp addObject:@"18"];
-    [tmp addObject:@"19"];
-    [tmp addObject:@"20"];
-    self.groupList = tmp;
-    [tmp release];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.groupList = [factory getGroupList];
+    [pool release];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        [self reloadGroup:self];
+
     }
     return self;
 }
 
 - (void)dealloc
 {
+    self.factory = nil;
+    
     self.groupList = nil;
     self.groupTable = nil;
     [super dealloc];
@@ -88,7 +72,7 @@
     }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     GroupCell *gcell = (GroupCell *)cell;
-    gcell.groupName.text = [groupList objectAtIndex:indexPath.row];
+    gcell.groupName.text = [[groupList objectAtIndex:indexPath.row] roomName];
     return cell;
 }
 
@@ -101,11 +85,17 @@
     self.title = @"Group";
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;
+    if (self.factory == nil) {
+        self.factory = [[DataFactory alloc] init];
+    }
+    [self reloadGroup:self];
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    self.factory = nil;
+    
     self.groupList = nil;
     self.groupTable = nil;
 }

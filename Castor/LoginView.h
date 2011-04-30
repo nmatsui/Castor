@@ -7,14 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataFactory.h"
 #import "GroupView.h"
 
 
 @interface LoginView : UIViewController {
+    DataFactory *factory;
+    
     UITextField *email;
     UITextField *password;
     UIButton    *loginButton;
 }
+
+@property(nonatomic, retain) DataFactory *factory;
 
 @property(nonatomic, retain) IBOutlet UITextField *email;
 @property(nonatomic, retain) IBOutlet UITextField *password;

@@ -7,10 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DataFactory.h"
 #import "LoginView.h"
 
 @interface RootViewController : UIViewController {
-
+    DataFactory *factory;
 }
+
+@property(nonatomic, retain) DataFactory *factory;
 
 @end

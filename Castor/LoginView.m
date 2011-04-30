@@ -11,6 +11,8 @@
 
 @implementation LoginView
 
+@synthesize factory;
+
 @synthesize email;
 @synthesize password;
 @synthesize loginButton;
@@ -21,6 +23,7 @@
     NSLog(@"%s:%s",[email.text UTF8String], [password.text UTF8String]);
     NSLog(@"move to GroupView");
     GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
+    groupView.factory = self.factory;
     [self.navigationController pushViewController:groupView animated:YES];
     [pool release];
 }
@@ -42,13 +45,15 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
 
 - (void)dealloc
 {
+    self.factory = nil;
+    
     self.email = nil;
     self.password = nil;
     self.loginButton = nil;
@@ -76,11 +81,16 @@
 {
     [super viewDidLoad];
     self.title = @"Login";
+    if (self.factory == nil) {
+        self.factory = [[DataFactory alloc] init];
+    }
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    self.factory = nil;
+    
     self.email = nil;
     self.password = nil;
     self.loginButton = nil;

@@ -10,13 +10,17 @@
 
 @implementation RootViewController
 
+@synthesize factory;
+
 -(void)checkAuthorized:(id)arg
 {
     NSLog(@"checkAuthorized");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [NSThread sleepForTimeInterval:5];
     NSLog(@"move to LoginView");
+    self.factory = [[DataFactory alloc] init];
     LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
+    loginView.factory = self.factory;
     [self.navigationController pushViewController:loginView animated:YES];
     [pool release];
 }
@@ -68,13 +72,13 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+    self.factory = nil;
 }
 
 - (void)dealloc
 {
+    self.factory = nil;
+    
     [super dealloc];
 }
 
