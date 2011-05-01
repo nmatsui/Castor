@@ -123,6 +123,21 @@ static double singleTapDelay = 0.2;
 {
     NSLog(@"double Tap at %d", indexPath.row);
     tapCount = 0;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
+    if ([@"Text" isEqualToString:entry.attachmentType]) {
+        NSLog(@"move to LongTextView");
+        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil] autorelease];
+        longTextView.entry = entry;
+        [self.navigationController pushViewController:longTextView animated:YES];
+    }
+    else if ([@"Image" isEqualToString:entry.attachmentType]) {
+        NSLog(@"move to ImageView");
+        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil] autorelease];
+        imageView.entry = entry;
+        [self.navigationController pushViewController:imageView animated:YES];
+    }
+    [pool release];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

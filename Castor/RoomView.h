@@ -10,6 +10,8 @@
 #import "DataFactory.h"
 #import "CommentView.h"
 #import "EditView.h"
+#import "LongTextView.h"
+#import "ImageView.h"
 #import "ViewUtil.h"
 
 @interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
