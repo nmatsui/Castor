@@ -17,6 +17,9 @@
 @synthesize content;
 @synthesize level;
 @synthesize participantIcon;
+@synthesize attachmentType;
+@synthesize attachmentText;
+@synthesize attachmentImage;
 
 - (void)dealloc
 {
@@ -26,6 +29,9 @@
     self.content = nil;
     self.level = nil;
     self.participantIcon = nil;
+    self.attachmentType = nil;
+    self.attachmentText = nil;
+    self.attachmentImage = nil;
     [super dealloc];
 }
 @end

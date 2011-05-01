@@ -17,12 +17,27 @@
 @synthesize entryTable;
 @synthesize entryList;
 
+static double singleTapDelay = 0.2;
+
 - (IBAction)reloadRoom:(id)sender
 {
     NSLog(@"reloadRoom");
     NSLog(@"roomId : %d", [self.group.roomId intValue]);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
+    [entryTable reloadData];
+    [pool release];
+}
+
+- (IBAction)editEntry:(id)sender
+{
+    NSLog(@"editEntry");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to EditView");
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+    editView.factory = self.factory;
+    editView.originEntry = nil;
+    [self.navigationController pushViewController:editView animated:YES];
     [pool release];
 }
 
@@ -91,9 +106,10 @@
     return cell;    
 }
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+- (void)singleTapAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"RoomView %d row clicked",indexPath.row);
+    NSLog(@"single Tap at %d", indexPath.row);
+    tapCount = 0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to CommentView");
     CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" bundle:nil] autorelease];
@@ -101,6 +117,32 @@
     commentView.originEntry = [self.entryList objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:commentView animated:YES];
     [pool release];
+}
+
+- (void)doubleTapAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"double Tap at %d", indexPath.row);
+    tapCount = 0;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"RoomView %d row tapped",indexPath.row);
+    selectedRow = indexPath;
+    tapCount++;
+    
+    switch (tapCount)
+    {
+        case 1: //single tap
+            [self performSelector:@selector(singleTapAtIndexPath:) withObject:indexPath afterDelay:singleTapDelay];
+            break;
+        case 2: //double tap
+            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAtIndexPath:) object:indexPath];
+            [self performSelector:@selector(doubleTapAtIndexPath:) withObject:indexPath];
+            break;
+        default:
+            break;
+    }
 }
 
 #pragma mark - View lifecycle

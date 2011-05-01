@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
 #import "CommentView.h"
+#import "EditView.h"
 #import "ViewUtil.h"
 
 @interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
@@ -19,6 +20,9 @@
     NSMutableArray *entryList;
     
     BOOL portrate;
+    
+    int tapCount;
+    NSIndexPath *selectedRow;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -28,5 +32,6 @@
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
 
 - (IBAction)reloadRoom:(id)sender;
+- (IBAction)editEntry:(id)sender;
 
 @end

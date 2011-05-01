@@ -81,7 +81,7 @@ static int indentWidth    = 6;
     [v addSubview:nameLabel];
     float w = (portrate) ? size.width - 100 : size.height - 100;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:entryFontSize] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    UILabel *contentLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*indentWidth, 30, w, s.height) text:entry.content font:[UIFont systemFontOfSize:entryFontSize]];
+    UILabel *contentLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*indentWidth, 30, w-[entry.level intValue]*indentWidth, s.height) text:entry.content font:[UIFont systemFontOfSize:entryFontSize]];
     [v addSubview:contentLabel];
     return v;
 }

@@ -17,6 +17,30 @@
 @synthesize entryTable;
 @synthesize entryList;
 
+static int maxLevel = 5;
+
+- (IBAction)reloadComments:(id)sender
+{
+    NSLog(@"reloadComments");
+    NSLog(@"originEntryId : %d", [self.originEntry.entryId intValue]);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.entryList = [factory getEntryCommentListByEntryId:self.originEntry.entryId];
+    [entryTable reloadData];
+    [pool release];
+}
+
+- (IBAction)editEntry:(id)sender
+{
+    NSLog(@"editEntry");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to EditView");
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+    editView.factory = self.factory;
+    editView.originEntry = self.originEntry;
+    [self.navigationController pushViewController:editView animated:YES];
+    [pool release];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -68,9 +92,28 @@
     if ([entryList count] <= indexPath.row) return cell;
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate]];
+    EntryData *entry = [entryList objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:portrate]];
+    if ([entry.level intValue] < maxLevel) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    }
     [pool release];
     return cell;    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"GroupView %d row clicked",indexPath.row);
+    EntryData *entry = [entryList objectAtIndex:indexPath.row];
+    if ([entry.level intValue] < maxLevel) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        NSLog(@"move to RoomView");
+        EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+        editView.factory = self.factory;
+        editView.originEntry = [self.entryList objectAtIndex:indexPath.row];
+        [self.navigationController pushViewController:editView animated:YES];
+        [pool release];
+    }
 }
 
 #pragma mark - View lifecycle

@@ -16,6 +16,10 @@
 		86B04C39136C41FF00F8BFA1 /* CommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C37136C41FF00F8BFA1 /* CommentView.m */; };
 		86B04C3A136C41FF00F8BFA1 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C38136C41FF00F8BFA1 /* CommentView.xib */; };
 		86B04C3C136C4D9600F8BFA1 /* myrooms.png in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C3B136C4D9500F8BFA1 /* myrooms.png */; };
+		86CD2351136D385A005AB366 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2350136D385A005AB366 /* test.jpg */; };
+		86CD2356136D3C53005AB366 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CD2354136D3C53005AB366 /* EditView.m */; };
+		86CD2357136D3C53005AB366 /* EditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2355136D3C53005AB366 /* EditView.xib */; };
+		86CD2359136D3D60005AB366 /* 117-todo.png in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2358136D3D60005AB366 /* 117-todo.png */; };
 		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
 		86EE1B07136BBCB200B94192 /* GroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* GroupData.m */; };
 		86EE1B0B136BD46800B94192 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B09136BD46700B94192 /* RoomView.m */; };
@@ -47,6 +51,11 @@
 		86B04C37136C41FF00F8BFA1 /* CommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentView.m; sourceTree = "<group>"; };
 		86B04C38136C41FF00F8BFA1 /* CommentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentView.xib; sourceTree = "<group>"; };
 		86B04C3B136C4D9500F8BFA1 /* myrooms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myrooms.png; sourceTree = "<group>"; };
+		86CD2350136D385A005AB366 /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
+		86CD2353136D3C53005AB366 /* EditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditView.h; sourceTree = "<group>"; };
+		86CD2354136D3C53005AB366 /* EditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditView.m; sourceTree = "<group>"; };
+		86CD2355136D3C53005AB366 /* EditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditView.xib; sourceTree = "<group>"; };
+		86CD2358136D3D60005AB366 /* 117-todo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "117-todo.png"; path = "../117-todo.png"; sourceTree = "<group>"; };
 		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
 		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
 		86EE1B05136BBCB100B94192 /* GroupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupData.h; sourceTree = "<group>"; };
@@ -119,6 +128,8 @@
 		86F85B8E136ACEB00031F3B2 /* Castor */ = {
 			isa = PBXGroup;
 			children = (
+				86CD2358136D3D60005AB366 /* 117-todo.png */,
+				86CD2350136D385A005AB366 /* test.jpg */,
 				8627EDC9136D1D7B0093BD59 /* 01-refresh.png */,
 				8627EDCA136D1D7B0093BD59 /* 09-chat-2.png */,
 				8627EDCB136D1D7B0093BD59 /* 19-gear.png */,
@@ -142,6 +153,9 @@
 				86B04C36136C41FE00F8BFA1 /* CommentView.h */,
 				86B04C37136C41FF00F8BFA1 /* CommentView.m */,
 				86B04C38136C41FF00F8BFA1 /* CommentView.xib */,
+				86CD2353136D3C53005AB366 /* EditView.h */,
+				86CD2354136D3C53005AB366 /* EditView.m */,
+				86CD2355136D3C53005AB366 /* EditView.xib */,
 				86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */,
 				86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */,
 				86EE1B02136BBAAB00B94192 /* DataFactory.h */,
@@ -223,6 +237,9 @@
 				8627EDCC136D1D7B0093BD59 /* 01-refresh.png in Resources */,
 				8627EDCD136D1D7B0093BD59 /* 09-chat-2.png in Resources */,
 				8627EDCE136D1D7B0093BD59 /* 19-gear.png in Resources */,
+				86CD2351136D385A005AB366 /* test.jpg in Resources */,
+				86CD2357136D3C53005AB366 /* EditView.xib in Resources */,
+				86CD2359136D3D60005AB366 /* 117-todo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,6 +261,7 @@
 				86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */,
 				86B04C35136C2F0F00F8BFA1 /* ViewUtil.m in Sources */,
 				86B04C39136C41FF00F8BFA1 /* CommentView.m in Sources */,
+				86CD2356136D3C53005AB366 /* EditView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

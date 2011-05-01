@@ -16,6 +16,9 @@
     NSString *content;
     NSNumber *level;
     UIImage  *participantIcon;
+    NSString *attachmentType;
+    NSString *attachmentText;
+    UIImage  *attachmentImage;
 }
 
 @property(nonatomic, retain) NSNumber *entryId;
@@ -24,5 +27,8 @@
 @property(nonatomic, retain) NSString *content;
 @property(nonatomic, retain) NSNumber *level;
 @property(nonatomic, retain) UIImage  *participantIcon;
+@property(nonatomic, retain) NSString *attachmentType;
+@property(nonatomic, retain) NSString *attachmentText;
+@property(nonatomic, retain) UIImage  *attachmentImage;
 
 @end

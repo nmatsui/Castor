@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
+#import "EditView.h"
 #import "ViewUtil.h"
 
 @interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
