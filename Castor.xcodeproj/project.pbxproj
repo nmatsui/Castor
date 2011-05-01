@@ -19,7 +19,7 @@
 		86CD2351136D385A005AB366 /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2350136D385A005AB366 /* test.jpg */; };
 		86CD2356136D3C53005AB366 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CD2354136D3C53005AB366 /* EditView.m */; };
 		86CD2357136D3C53005AB366 /* EditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2355136D3C53005AB366 /* EditView.xib */; };
-		86CD2359136D3D60005AB366 /* 117-todo.png in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2358136D3D60005AB366 /* 117-todo.png */; };
+		86CD235B136D52FB005AB366 /* 117-todo.png in Resources */ = {isa = PBXBuildFile; fileRef = 86CD235A136D52FB005AB366 /* 117-todo.png */; };
 		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
 		86EE1B07136BBCB200B94192 /* GroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* GroupData.m */; };
 		86EE1B0B136BD46800B94192 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B09136BD46700B94192 /* RoomView.m */; };
@@ -55,7 +55,7 @@
 		86CD2353136D3C53005AB366 /* EditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditView.h; sourceTree = "<group>"; };
 		86CD2354136D3C53005AB366 /* EditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditView.m; sourceTree = "<group>"; };
 		86CD2355136D3C53005AB366 /* EditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditView.xib; sourceTree = "<group>"; };
-		86CD2358136D3D60005AB366 /* 117-todo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "117-todo.png"; path = "../117-todo.png"; sourceTree = "<group>"; };
+		86CD235A136D52FB005AB366 /* 117-todo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "117-todo.png"; sourceTree = "<group>"; };
 		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
 		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
 		86EE1B05136BBCB100B94192 /* GroupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupData.h; sourceTree = "<group>"; };
@@ -128,7 +128,7 @@
 		86F85B8E136ACEB00031F3B2 /* Castor */ = {
 			isa = PBXGroup;
 			children = (
-				86CD2358136D3D60005AB366 /* 117-todo.png */,
+				86CD235A136D52FB005AB366 /* 117-todo.png */,
 				86CD2350136D385A005AB366 /* test.jpg */,
 				8627EDC9136D1D7B0093BD59 /* 01-refresh.png */,
 				8627EDCA136D1D7B0093BD59 /* 09-chat-2.png */,
@@ -239,7 +239,7 @@
 				8627EDCE136D1D7B0093BD59 /* 19-gear.png in Resources */,
 				86CD2351136D385A005AB366 /* test.jpg in Resources */,
 				86CD2357136D3C53005AB366 /* EditView.xib in Resources */,
-				86CD2359136D3D60005AB366 /* 117-todo.png in Resources */,
+				86CD235B136D52FB005AB366 /* 117-todo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
