@@ -22,7 +22,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"%s:%s",[email.text UTF8String], [password.text UTF8String]);
     NSLog(@"move to GroupView");
-    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView2" bundle:nil] autorelease];
+    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
     groupView.factory = self.factory;
     [self.navigationController pushViewController:groupView animated:YES];
     [pool release];

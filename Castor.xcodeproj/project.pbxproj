@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8627EDCC136D1D7B0093BD59 /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 8627EDC9136D1D7B0093BD59 /* 01-refresh.png */; };
+		8627EDCD136D1D7B0093BD59 /* 09-chat-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 8627EDCA136D1D7B0093BD59 /* 09-chat-2.png */; };
+		8627EDCE136D1D7B0093BD59 /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 8627EDCB136D1D7B0093BD59 /* 19-gear.png */; };
 		86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C2E136C0B1600F8BFA1 /* GroupView.m */; };
 		86B04C31136C0B1600F8BFA1 /* GroupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C2F136C0B1600F8BFA1 /* GroupView.xib */; };
 		86B04C35136C2F0F00F8BFA1 /* ViewUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C34136C2F0F00F8BFA1 /* ViewUtil.m */; };
@@ -32,6 +35,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8627EDC9136D1D7B0093BD59 /* 01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh.png"; sourceTree = "<group>"; };
+		8627EDCA136D1D7B0093BD59 /* 09-chat-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "09-chat-2.png"; sourceTree = "<group>"; };
+		8627EDCB136D1D7B0093BD59 /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
 		86B04C2E136C0B1600F8BFA1 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
 		86B04C2F136C0B1600F8BFA1 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
@@ -113,6 +119,9 @@
 		86F85B8E136ACEB00031F3B2 /* Castor */ = {
 			isa = PBXGroup;
 			children = (
+				8627EDC9136D1D7B0093BD59 /* 01-refresh.png */,
+				8627EDCA136D1D7B0093BD59 /* 09-chat-2.png */,
+				8627EDCB136D1D7B0093BD59 /* 19-gear.png */,
 				86B04C3B136C4D9500F8BFA1 /* myrooms.png */,
 				86F85B8F136ACEB00031F3B2 /* Supporting Files */,
 				86F85B97136ACEB10031F3B2 /* CastorAppDelegate.h */,
@@ -211,6 +220,9 @@
 				86B04C31136C0B1600F8BFA1 /* GroupView.xib in Resources */,
 				86B04C3A136C41FF00F8BFA1 /* CommentView.xib in Resources */,
 				86B04C3C136C4D9600F8BFA1 /* myrooms.png in Resources */,
+				8627EDCC136D1D7B0093BD59 /* 01-refresh.png in Resources */,
+				8627EDCD136D1D7B0093BD59 /* 09-chat-2.png in Resources */,
+				8627EDCE136D1D7B0093BD59 /* 19-gear.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

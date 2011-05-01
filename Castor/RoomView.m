@@ -58,6 +58,14 @@
     return 1;
 }
 
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    switch(section) {
+        case 0: return self.group.roomName;
+        default: return nil;
+    }
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return [entryList count];
@@ -102,7 +110,7 @@
     [super viewDidLoad];
     NSLog(@"roomView loaded");
     NSLog(@"roomId : %d", [self.group.roomId intValue]);
-    self.title = self.group.roomName;
+    self.title = @"Room";
     if (self.factory == nil) {
         self.factory = [[DataFactory alloc] init];
     }
