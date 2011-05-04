@@ -16,6 +16,15 @@
 @synthesize groupTable = _groupTable;
 @synthesize groupList = _groupList;
 
+- (void) reloadDataInBackground:(id)arg {
+    NSLog(@"reload groupList In Background");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.groupList = [self.factory getGroupList];
+    [self.groupTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [pool release];
+}
+
 - (IBAction)callSetting:(id)sender
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -28,14 +37,16 @@
 
 - (IBAction)reloadGroup:(id)sender
 {
-    [self.groupTable reloadData];
+    NSLog(@"reloadGroup");
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelectorInBackground:@selector(reloadDataInBackground:) withObject:Nil];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        
     }
     return self;
 }
@@ -82,7 +93,6 @@
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     GroupData *group = [self.groupList objectAtIndex:indexPath.row];
-    NSLog(@"%d=>%@", [group.roomId intValue], group.roomName);
     [cell.contentView addSubview:[ViewUtil getGroupCellView:self.view.window.screen.bounds.size group:group portrate:portrate]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
@@ -113,14 +123,12 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"GroupView Loaded");
+    NSLog(@"GroupView loaded");
     self.title = @"Group";
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.groupList = [self.factory getGroupList];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [pool release];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelectorInBackground:@selector(reloadDataInBackground:) withObject:Nil];
 }
 
 - (void)viewDidUnload

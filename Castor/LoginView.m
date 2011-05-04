@@ -17,9 +17,9 @@
 @synthesize password = _password;
 @synthesize loginButton = _loginButton;
 
-- (void)authenticate:(id)arg
+- (void)authenticateInBackground:(id)arg
 {
-    NSLog(@"authenticate");
+    NSLog(@"authenticate In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text];
     if (result) {
@@ -42,7 +42,7 @@
 {
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     NSLog(@"%@:%@",self.email.text, self.password.text);
-    [self performSelectorInBackground:@selector(authenticate:) withObject:Nil];
+    [self performSelectorInBackground:@selector(authenticateInBackground:) withObject:Nil];
 }
 - (IBAction)doneEmailEdit:(id)sender
 {
@@ -97,6 +97,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"LoginView loaded");
     self.title = @"Login";
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;

@@ -22,8 +22,8 @@
 @property(nonatomic, retain) NSString *oAuthTokenSecret;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
-- (NSDictionary *)getAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
-- (NSMutableArray *)getGroupList;
+- (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
+- (NSMutableArray *)retrieveGroupList;
 
 @end
 

@@ -12,9 +12,9 @@
 
 @synthesize factory = _factory;
 
-- (void)checkAuthorized:(id)arg
+- (void)checkAuthorizedInBackground:(id)arg
 {
-    NSLog(@"checkAuthorized");
+    NSLog(@"checkAuthorized In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [NSThread sleepForTimeInterval:1];
     self.factory = [[DataFactory alloc] init];
@@ -38,7 +38,7 @@
     [super viewDidLoad];
     NSLog(@"RootView Loaded");
     self.navigationController.navigationBar.hidden = YES;
-    [self performSelectorInBackground:@selector(checkAuthorized:) withObject:Nil];
+    [self performSelectorInBackground:@selector(checkAuthorizedInBackground:) withObject:Nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated

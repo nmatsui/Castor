@@ -24,6 +24,7 @@
 }
 
 - (NSData *)request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret {
+    NSLog(@"request(%@) to %@ [body:%@]", method, url, [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease]);
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:method];
@@ -39,8 +40,9 @@
     return [[NSString stringWithFormat:@"x_auth_username=%@&x_auth_password=%@&x_auth_mode=client_auth", username, password] dataUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (NSDictionary *)getAuthTokenWithEmail:(NSString *)email password:(NSString *)password
+- (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password
 {
+    NSLog(@"retrieveAuthToken");
     NSData *response = [self request:[NSURL URLWithString:@"https://www.youroom.in/oauth/access_token"]
                               method:@"POST"
                                 body:[self getXAuthParamStringWithUsername:email password:password]
@@ -58,13 +60,10 @@
     return dict;
 }
 
-- (NSMutableArray *)getGroupList
+- (NSMutableArray *)retrieveGroupList
 {
-    NSLog(@"##oauth_token : %@", self.oAuthToken);
-    NSLog(@"##oauth_secret : %@", self.oAuthTokenSecret);
-    
+    NSLog(@"retrieveGroupList");
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    
     NSData *response = [self request:[NSURL URLWithString:@"https://www.youroom.in/groups/my?format=json"]
                               method:@"GET"
                                 body:Nil
@@ -76,7 +75,12 @@
         GroupData *groupData = [[[GroupData alloc] init] autorelease];
         groupData.roomId = [[NSNumber alloc] initWithInt:[[group objectForKey:@"id"] intValue]];
         groupData.roomName = [group objectForKey:@"name"];
-        groupData.roomIcon = [UIImage imageNamed:@"myrooms.png"];
+        NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", groupData.roomId]]
+                                  method:@"GET"
+                                    body:Nil
+                            oauth_token:self.oAuthToken
+                      oauth_token_secret:self.oAuthTokenSecret];
+        groupData.roomIcon = [[[UIImage alloc] initWithData:response] autorelease];
         [list addObject:groupData];
     }
     return list;

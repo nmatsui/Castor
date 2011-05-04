@@ -52,6 +52,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"SettingView loaded");
     // Do any additional setup after loading the view from its nib.
 }
 
