@@ -11,21 +11,38 @@
 
 @implementation LoginView
 
-@synthesize factory;
+@synthesize factory = _factory;
 
-@synthesize email;
-@synthesize password;
-@synthesize loginButton;
+@synthesize email = _email;
+@synthesize password = _password;
+@synthesize loginButton = _loginButton;
+
+- (void)authenticate:(id)arg
+{
+    NSLog(@"authenticate");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text];
+    if (result) {
+        NSLog(@"move to GroupView");
+        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
+        groupView.factory = self.factory;
+        [self.navigationController pushViewController:groupView animated:YES];
+    }
+    else {
+        [[[[UIAlertView alloc] initWithTitle:@"" 
+                               message:@"Login Failed" 
+                               delegate:nil 
+                               cancelButtonTitle:@"OK" 
+                               otherButtonTitles:nil] autorelease] show];
+    }
+    [pool release];
+}
 
 - (IBAction)loginClick:(id)sender
 {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"%s:%s",[email.text UTF8String], [password.text UTF8String]);
-    NSLog(@"move to GroupView");
-    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
-    groupView.factory = self.factory;
-    [self.navigationController pushViewController:groupView animated:YES];
-    [pool release];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    NSLog(@"%@:%@",self.email.text, self.password.text);
+    [self performSelectorInBackground:@selector(authenticate:) withObject:Nil];
 }
 - (IBAction)doneEmailEdit:(id)sender
 {
@@ -37,8 +54,8 @@
 }
 - (IBAction)backTap:(id)sender
 {
-    [email resignFirstResponder];
-    [password resignFirstResponder];
+    [self.email resignFirstResponder];
+    [self.password resignFirstResponder];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -81,9 +98,8 @@
 {
     [super viewDidLoad];
     self.title = @"Login";
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
+    [self.navigationItem.backBarButtonItem setEnabled:NO];
+    self.navigationItem.hidesBackButton = YES;
 }
 
 - (void)viewDidUnload

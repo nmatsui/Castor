@@ -17,7 +17,7 @@
 @synthesize entryTable;
 @synthesize entryList;
 
-static double singleTapDelay = 0.2;
+static const double singleTapDelay = 0.2;
 
 - (IBAction)reloadRoom:(id)sender
 {
@@ -173,6 +173,7 @@ static double singleTapDelay = 0.2;
     }
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [pool release];
 }
 

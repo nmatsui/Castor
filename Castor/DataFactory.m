@@ -11,8 +11,57 @@
 
 @implementation DataFactory
 
+@synthesize authTokenPath = _authTokenPath;
+@synthesize tokenMap = _tokenMap;
+
+- (id)init
+{
+    self = [super init];
+    if(self){
+        self.authTokenPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"oauth_token"];
+        if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) {
+            NSData *data = [[[NSData alloc] initWithContentsOfFile:self.authTokenPath] autorelease];
+            self.tokenMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            NSLog(@"oauth_token : %@", [self.tokenMap objectForKey:@"oauth_token"]);
+            NSLog(@"oauth_token_secret : %@", [self.tokenMap objectForKey:@"oauth_token_secret"]);
+        }
+    }
+    return self;
+}
+
+- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password
+{
+    BOOL result = YES;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    @try {
+        [self clearAuthToken];
+        self.tokenMap = [[[[YouRoomGateway alloc] init] autorelease] getAuthTokenWithEmail:email password:password];
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.tokenMap];
+        [data writeToFile:self.authTokenPath atomically:YES]; 
+    }
+    @catch (...) {
+        result = NO;
+    }
+    [pool release];
+    return result;
+}
+
+- (BOOL)hasAuthToken
+{
+    return (self.tokenMap != nil) ? YES : NO;
+}
+
+- (void)clearAuthToken
+{
+    if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) [[NSFileManager defaultManager] removeItemAtPath:self.authTokenPath error:nil];
+}
+
 - (NSMutableArray *)getGroupList
 {
+    NSLog(@"getGroupList");
+    NSLog(@"oauth_token : %@", [self.tokenMap objectForKey:@"oauth_token"]);
+    NSLog(@"oauth_token_secret : %@", [self.tokenMap objectForKey:@"oauth_token_secret"]);
+    
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     for (int i = 0; i < 20; i++) {
         GroupData *groupData = [[[GroupData alloc] init] autorelease];
@@ -77,4 +126,10 @@
     return list;
 }
 
+- (void)dealloc
+{
+    self.authTokenPath = nil;
+    self.tokenMap = nil;
+    [super dealloc];
+}
 @end

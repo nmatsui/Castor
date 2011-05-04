@@ -11,10 +11,25 @@
 
 @implementation GroupView
 
-@synthesize factory;
+@synthesize factory = _factory;
 
-@synthesize groupTable;
-@synthesize groupList;
+@synthesize groupTable = _groupTable;
+@synthesize groupList = _groupList;
+
+- (IBAction)callSetting:(id)sender
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to SettingView");
+    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil] autorelease];
+    settingView.factory = self.factory;
+    [self.navigationController pushViewController:settingView animated:YES];
+    [pool release];
+}
+
+- (IBAction)reloadGroup:(id)sender
+{
+    [self.groupTable reloadData];
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,12 +64,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [groupList count];
+    return [self.groupList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [ViewUtil getGroupCellHeight:self.view.window.screen.bounds.size group:[groupList objectAtIndex:indexPath.row] portrate:portrate];
+    return [ViewUtil getGroupCellHeight:self.view.window.screen.bounds.size group:[self.groupList objectAtIndex:indexPath.row] portrate:portrate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -63,10 +78,10 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
-    if ([groupList count] <= indexPath.row) return cell;
+    if ([self.groupList count] <= indexPath.row) return cell;
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    GroupData *group = [groupList objectAtIndex:indexPath.row];
+    GroupData *group = [self.groupList objectAtIndex:indexPath.row];
     [cell.contentView addSubview:[ViewUtil getGroupCellView:self.view.window.screen.bounds.size group:group portrate:portrate]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
@@ -94,11 +109,9 @@
     self.title = @"Group";
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.groupList = [factory getGroupList];
+    self.groupList = [self.factory getGroupList];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [pool release];
 }
 
@@ -115,11 +128,11 @@
 {
     if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
         portrate = NO;
-        [groupTable reloadData];
+        [self.groupTable reloadData];
     }
     else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
         portrate = YES;
-        [groupTable reloadData];
+        [self.groupTable reloadData];
     }
     return YES;
 }

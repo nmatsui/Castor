@@ -10,18 +10,26 @@
 
 @implementation RootViewController
 
-@synthesize factory;
+@synthesize factory = _factory;
 
 - (void)checkAuthorized:(id)arg
 {
     NSLog(@"checkAuthorized");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [NSThread sleepForTimeInterval:1];
-    NSLog(@"move to LoginView");
     self.factory = [[DataFactory alloc] init];
-    LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
-    loginView.factory = self.factory;
-    [self.navigationController pushViewController:loginView animated:YES];
+    if ([self.factory hasAuthToken]) {
+        NSLog(@"move to GroupView");
+        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
+        groupView.factory = self.factory;
+        [self.navigationController pushViewController:groupView animated:YES];
+    }
+    else {
+        NSLog(@"move to LoginView");
+        LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
+        loginView.factory = self.factory;
+        [self.navigationController pushViewController:loginView animated:YES];
+    }
     [pool release];
 }
 

@@ -17,7 +17,7 @@
 @synthesize entryTable;
 @synthesize entryList;
 
-static int maxLevel = 5;
+static const int MAX_LEVLE = 5;
 
 - (IBAction)reloadComments:(id)sender
 {
@@ -94,7 +94,7 @@ static int maxLevel = 5;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     EntryData *entry = [entryList objectAtIndex:indexPath.row];
     [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:portrate]];
-    if ([entry.level intValue] < maxLevel) {
+    if ([entry.level intValue] < MAX_LEVLE) {
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }
     [pool release];
@@ -105,7 +105,7 @@ static int maxLevel = 5;
 {
     NSLog(@"GroupView %d row clicked",indexPath.row);
     EntryData *entry = [entryList objectAtIndex:indexPath.row];
-    if ([entry.level intValue] < maxLevel) {
+    if ([entry.level intValue] < MAX_LEVLE) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         NSLog(@"move to RoomView");
         EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];

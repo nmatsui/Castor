@@ -9,11 +9,18 @@
 #import <Foundation/Foundation.h>
 #import "GroupData.h"
 #import "EntryData.h"
+#import "YouRoomGateway.h"
 
 @interface DataFactory : NSObject {
-    
+    NSString *_authTokenPath;
+    NSDictionary *_tokenMap;
 }
+@property(nonatomic, retain) NSString *authTokenPath;
+@property(nonatomic, retain) NSDictionary *tokenMap;
 
+- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
+- (BOOL)hasAuthToken;
+- (void)clearAuthToken;
 - (NSMutableArray *)getGroupList;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)rId;
 - (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)eId;

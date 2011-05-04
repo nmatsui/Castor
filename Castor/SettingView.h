@@ -1,20 +1,20 @@
 //
-//  RootViewController.h
+//  SettingView.h
 //  Castor
 //
-//  Created by Nobuyuki Matsui on 11/04/29.
+//  Created by Nobuyuki Matsui on 11/05/04.
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
-#import "DataFactory.h"
 #import "LoginView.h"
-#import "GroupView.h"
+#import "DataFactory.h"
 
-@interface RootViewController : UIViewController {
+@interface SettingView : UIViewController {
     DataFactory *_factory;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
 
+- (IBAction)logoutClick:(id)sender;
 @end

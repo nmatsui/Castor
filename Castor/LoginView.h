@@ -12,11 +12,11 @@
 
 
 @interface LoginView : UIViewController {
-    DataFactory *factory;
+    DataFactory *_factory;
     
-    UITextField *email;
-    UITextField *password;
-    UIButton    *loginButton;
+    UITextField *_email;
+    UITextField *_password;
+    UIButton    *_loginButton;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
