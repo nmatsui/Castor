@@ -7,14 +7,23 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "GroupData.h"
 #import "OAuthCore.h"
 #import "OAuth+Additions.h"
+#import "JSON.h"
 
 
 @interface YouRoomGateway : NSObject {
-    
+    NSString *_oAuthToken;
+    NSString *_oAuthTokenSecret;
 }
+
+@property(nonatomic, retain) NSString *oAuthToken;
+@property(nonatomic, retain) NSString *oAuthTokenSecret;
+
+- (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)getAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
+- (NSMutableArray *)getGroupList;
 
 @end
 

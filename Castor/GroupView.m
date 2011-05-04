@@ -82,6 +82,7 @@
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     GroupData *group = [self.groupList objectAtIndex:indexPath.row];
+    NSLog(@"%d=>%@", [group.roomId intValue], group.roomName);
     [cell.contentView addSubview:[ViewUtil getGroupCellView:self.view.window.screen.bounds.size group:group portrate:portrate]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
@@ -101,6 +102,13 @@
 }
 
 #pragma mark - View lifecycle
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"GroupView Will appear");
+    self.navigationController.navigationBar.hidden = NO;
+}
 
 - (void)viewDidLoad
 {

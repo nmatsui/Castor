@@ -12,7 +12,7 @@
 @implementation DataFactory
 
 @synthesize authTokenPath = _authTokenPath;
-@synthesize tokenMap = _tokenMap;
+@synthesize gateway = _gateway;
 
 - (id)init
 {
@@ -21,9 +21,13 @@
         self.authTokenPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:@"oauth_token"];
         if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) {
             NSData *data = [[[NSData alloc] initWithContentsOfFile:self.authTokenPath] autorelease];
-            self.tokenMap = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-            NSLog(@"oauth_token : %@", [self.tokenMap objectForKey:@"oauth_token"]);
-            NSLog(@"oauth_token_secret : %@", [self.tokenMap objectForKey:@"oauth_token_secret"]);
+            NSDictionary *dict = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+            //NSLog(@"oauth_token : %@", [self.tokenMap objectForKey:@"oauth_token"]);
+            //NSLog(@"oauth_token_secret : %@", [self.tokenMap objectForKey:@"oauth_token_secret"]);
+            self.gateway = [[YouRoomGateway alloc] initWithOAuthToken:[dict objectForKey:@"oauth_token"] oAuthTokenSecret:[dict objectForKey:@"oauth_token_secret"]];
+        }
+        else {
+            self.gateway = [[YouRoomGateway alloc] init];
         }
     }
     return self;
@@ -32,23 +36,21 @@
 - (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password
 {
     BOOL result = YES;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     @try {
         [self clearAuthToken];
-        self.tokenMap = [[[[YouRoomGateway alloc] init] autorelease] getAuthTokenWithEmail:email password:password];
-        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:self.tokenMap];
-        [data writeToFile:self.authTokenPath atomically:YES]; 
+        NSDictionary *dict = [self.gateway getAuthTokenWithEmail:email password:password];
+        NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dict];
+        [data writeToFile:self.authTokenPath atomically:YES];
     }
     @catch (...) {
         result = NO;
     }
-    [pool release];
     return result;
 }
 
 - (BOOL)hasAuthToken
 {
-    return (self.tokenMap != nil) ? YES : NO;
+    return [[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath];
 }
 
 - (void)clearAuthToken
@@ -59,16 +61,29 @@
 - (NSMutableArray *)getGroupList
 {
     NSLog(@"getGroupList");
-    NSLog(@"oauth_token : %@", [self.tokenMap objectForKey:@"oauth_token"]);
-    NSLog(@"oauth_token_secret : %@", [self.tokenMap objectForKey:@"oauth_token_secret"]);
-    
-    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    for (int i = 0; i < 20; i++) {
-        GroupData *groupData = [[[GroupData alloc] init] autorelease];
-        groupData.roomId = [[NSNumber alloc] initWithInt:i];
-        groupData.roomName = [NSString stringWithFormat:@"%d room",i];
-        groupData.roomIcon = [UIImage imageNamed:@"myrooms.png"];
-        [list addObject:groupData];
+    //NSLog(@"oauth_token : %@", [self.tokenMap objectForKey:@"oauth_token"]);
+    //NSLog(@"oauth_token_secret : %@", [self.tokenMap objectForKey:@"oauth_token_secret"]);
+    NSMutableArray *list;
+    @try {
+        list = [self.gateway getGroupList];
+    }
+    @catch (...) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
+                                                  message:@"Network Disconnected" 
+                                                  delegate:nil 
+                                                  cancelButtonTitle:@"OK" 
+                                                  otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+        
+        list = [[[NSMutableArray alloc] init] autorelease];
+        for (int i = 0; i < 20; i++) {
+            GroupData *groupData = [[[GroupData alloc] init] autorelease];
+            groupData.roomId = [[NSNumber alloc] initWithInt:i];
+            groupData.roomName = [NSString stringWithFormat:@"%d room",i];
+            groupData.roomIcon = [UIImage imageNamed:@"myrooms.png"];
+            [list addObject:groupData];
+        }
     }
     return list;
 }
@@ -129,7 +144,7 @@
 - (void)dealloc
 {
     self.authTokenPath = nil;
-    self.tokenMap = nil;
+    self.gateway = nil;
     [super dealloc];
 }
 @end

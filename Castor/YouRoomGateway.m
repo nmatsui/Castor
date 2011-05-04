@@ -8,8 +8,20 @@
 
 #import "YouRoomGateway.h"
 
-
 @implementation YouRoomGateway
+
+@synthesize oAuthToken = _oAuthToken;
+@synthesize oAuthTokenSecret = _oAuthTokenSecret;
+
+- (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret
+{
+    self = [super init];
+    if (self) {
+        self.oAuthToken = oAuthToken;
+        self.oAuthTokenSecret = oAuthTokenSecret;
+    }
+    return self;
+}
 
 - (NSData *)request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret {
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
@@ -29,17 +41,45 @@
 
 - (NSDictionary *)getAuthTokenWithEmail:(NSString *)email password:(NSString *)password
 {
-    NSData *xauth_response = [self request:[NSURL URLWithString:@"https://www.youroom.in/oauth/access_token"]
-                                    method:@"POST"
-                                      body:[self getXAuthParamStringWithUsername:email password:password]
-                               oauth_token:@""
-                        oauth_token_secret:@""];
-    NSDictionary *dict = [NSURL ab_parseURLQueryString:[[[NSString alloc] initWithData:xauth_response encoding:NSUTF8StringEncoding] autorelease]];
-    if ([dict objectForKey:@"oauth_token"] == nil || [@"" isEqualToString:[dict objectForKey:@"oauth_token"]]
-        || [dict objectForKey:@"oauth_token_secret"] == nil || [@"" isEqualToString:[dict objectForKey:@"oauth_token_secret"]]) {
+    NSData *response = [self request:[NSURL URLWithString:@"https://www.youroom.in/oauth/access_token"]
+                              method:@"POST"
+                                body:[self getXAuthParamStringWithUsername:email password:password]
+                         oauth_token:@""
+                  oauth_token_secret:@""];
+    NSDictionary *dict = [NSURL ab_parseURLQueryString:[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease]];
+    NSString *oAuthToken = [dict objectForKey:@"oauth_token"];
+    NSString *oAuthTokenSecret = [dict objectForKey:@"oauth_token_secret"];
+    if (oAuthToken == nil || [@"" isEqualToString:oAuthToken] || oAuthTokenSecret == nil || [@"" isEqualToString:oAuthTokenSecret]) {
         NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"can't get token" userInfo:nil];
         [exception raise];
     }
+    self.oAuthToken = oAuthToken;
+    self.oAuthTokenSecret = oAuthTokenSecret;
     return dict;
 }
+
+- (NSMutableArray *)getGroupList
+{
+    NSLog(@"##oauth_token : %@", self.oAuthToken);
+    NSLog(@"##oauth_secret : %@", self.oAuthTokenSecret);
+    
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    
+    NSData *response = [self request:[NSURL URLWithString:@"https://www.youroom.in/groups/my?format=json"]
+                              method:@"GET"
+                                body:Nil
+                         oauth_token:self.oAuthToken
+                  oauth_token_secret:self.oAuthTokenSecret];
+    NSArray *jsonArry = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
+    for (NSDictionary *dic in jsonArry) {
+        NSDictionary *group = [dic objectForKey:@"group"];
+        GroupData *groupData = [[[GroupData alloc] init] autorelease];
+        groupData.roomId = [[NSNumber alloc] initWithInt:[[group objectForKey:@"id"] intValue]];
+        groupData.roomName = [group objectForKey:@"name"];
+        groupData.roomIcon = [UIImage imageNamed:@"myrooms.png"];
+        [list addObject:groupData];
+    }
+    return list;
+}
+
 @end

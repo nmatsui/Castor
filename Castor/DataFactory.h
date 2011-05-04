@@ -13,10 +13,11 @@
 
 @interface DataFactory : NSObject {
     NSString *_authTokenPath;
-    NSDictionary *_tokenMap;
+    
+    YouRoomGateway *_gateway;
 }
 @property(nonatomic, retain) NSString *authTokenPath;
-@property(nonatomic, retain) NSDictionary *tokenMap;
+@property(nonatomic, retain) YouRoomGateway *gateway;
 
 - (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
 - (BOOL)hasAuthToken;
