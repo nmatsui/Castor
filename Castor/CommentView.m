@@ -11,11 +11,11 @@
 
 @implementation CommentView
 
-@synthesize factory;
-@synthesize originEntry;
+@synthesize factory = _factory;
+@synthesize originEntry = _originEntry;
 
-@synthesize entryTable;
-@synthesize entryList;
+@synthesize entryTable = _entryTable;
+@synthesize entryList = _entryList;
 
 static const int MAX_LEVLE = 6;
 
@@ -23,7 +23,7 @@ static const int MAX_LEVLE = 6;
 {
     NSLog(@"reload CommentList [%@] In Background", self.originEntry.entryId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getEntryCommentListByEntryData:self.originEntry];
+    self.entryList = [self.factory getEntryCommentListByEntryData:self.originEntry];
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -47,12 +47,14 @@ static const int MAX_LEVLE = 6;
     NSLog(@"move to EditView");
     EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
     editView.factory = self.factory;
+    editView.roomId = self.originEntry.roomId;
     editView.originEntry = self.originEntry;
+    editView.previousView = self;
     [self.navigationController pushViewController:editView animated:YES];
     [pool release];
 }
 
-- (IBAction)reloadComment:(id)sender
+- (IBAction)reload:(id)sender
 {
     NSLog(@"reloadComment[%@]", self.originEntry.entryId);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -94,13 +96,13 @@ static const int MAX_LEVLE = 6;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [entryList count];
+    return [self.entryList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < [entryList count] - 1) {
-        return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate];
+    if (indexPath.row < [self.entryList count] - 1) {
+        return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -113,13 +115,13 @@ static const int MAX_LEVLE = 6;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if ([entryList count] <= indexPath.row) return cell;
+    if ([self.entryList count] <= indexPath.row) return cell;
     
-    if (indexPath.row < [entryList count] - 1) {
+    if (indexPath.row < [self.entryList count] - 1) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        EntryData *entry = [entryList objectAtIndex:indexPath.row];
-        [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:portrate]];
-        if ([entry.level intValue] < MAX_LEVLE) {
+        EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
+        [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:_portrate]];
+        if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
             cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         }
         [pool release];
@@ -130,14 +132,16 @@ static const int MAX_LEVLE = 6;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"GroupView %d row clicked",indexPath.row);
-    if (indexPath.row < [entryList count] - 1) {
-        EntryData *entry = [entryList objectAtIndex:indexPath.row];
-        if ([entry.level intValue] < MAX_LEVLE) {
+    if (indexPath.row < [self.entryList count] - 1) {
+        EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
+        if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             NSLog(@"move to RoomView");
             EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
             editView.factory = self.factory;
+            editView.roomId = self.originEntry.roomId;
             editView.originEntry = [self.entryList objectAtIndex:indexPath.row];
+            editView.previousView = self;
             [self.navigationController pushViewController:editView animated:YES];
             [pool release];
         }
@@ -171,12 +175,12 @@ static const int MAX_LEVLE = 6;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        portrate = NO;
-        [entryTable reloadData];
+        _portrate = NO;
+        [self.entryTable reloadData];
     }
     else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        portrate = YES;
-        [entryTable reloadData];
+        _portrate = YES;
+        [self.entryTable reloadData];
     }
     return YES;
 }

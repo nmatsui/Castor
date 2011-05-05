@@ -25,5 +25,5 @@
 - (NSMutableArray *)getGroupList;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page;
 - (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry;
-
+- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId;
 @end

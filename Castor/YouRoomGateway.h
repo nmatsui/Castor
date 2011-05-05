@@ -27,6 +27,7 @@
 - (NSMutableArray *)retrieveGroupList;
 - (NSMutableArray *)retrieveEntryListByRoomId:(NSNumber *)roomId page:(int)page;
 - (NSMutableArray *)retrieveEntryCommentListByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;
+- (void)postEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId;
 
 @end
 

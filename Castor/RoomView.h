@@ -9,24 +9,25 @@
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
 #import "CommentView.h"
+#import "Reloadable.h"
 #import "EditView.h"
 #import "SettingView.h"
 #import "LongTextView.h"
 #import "ImageView.h"
 #import "ViewUtil.h"
 
-@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
-    DataFactory *factory;
-    GroupData *group;
+@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable> {
+    DataFactory *_factory;
+    GroupData *_group;
     
-    UITableView *entryTable;
-    NSMutableArray *entryList;
+    UITableView *_entryTable;
+    NSMutableArray *_entryList;
     
-    int page;
-    BOOL portrate;
+    int _page;
+    BOOL _portrate;
     
-    int tapCount;
-    NSIndexPath *selectedRow;
+    int _tapCount;
+    NSIndexPath *_selectedRow;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -37,6 +38,5 @@
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)editEntry:(id)sender;
-- (IBAction)reloadRoom:(id)sender;
 
 @end

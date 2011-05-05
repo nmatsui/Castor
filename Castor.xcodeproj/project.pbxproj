@@ -70,6 +70,7 @@
 		86628E71136D5C7800C86AFB /* ImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageView.h; sourceTree = "<group>"; };
 		86628E72136D5C7800C86AFB /* ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageView.m; sourceTree = "<group>"; };
 		86628E73136D5C7800C86AFB /* ImageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageView.xib; sourceTree = "<group>"; };
+		866F9E0D1372D6FA006BA19C /* Reloadable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reloadable.h; sourceTree = "<group>"; };
 		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
 		86B04C2E136C0B1600F8BFA1 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
 		86B04C2F136C0B1600F8BFA1 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
@@ -273,6 +274,7 @@
 				86B04C36136C41FE00F8BFA1 /* CommentView.h */,
 				86B04C37136C41FF00F8BFA1 /* CommentView.m */,
 				86B04C38136C41FF00F8BFA1 /* CommentView.xib */,
+				866F9E0D1372D6FA006BA19C /* Reloadable.h */,
 				86CD2353136D3C53005AB366 /* EditView.h */,
 				86CD2354136D3C53005AB366 /* EditView.m */,
 				86CD2355136D3C53005AB366 /* EditView.xib */,

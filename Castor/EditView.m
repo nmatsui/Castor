@@ -11,10 +11,12 @@
 
 @implementation EditView
 
-@synthesize factory;
-@synthesize originEntry;
+@synthesize factory = _factory;
+@synthesize roomId = _roomId;
+@synthesize originEntry = _originEntry;
+@synthesize previousView = _previousView;
 
-@synthesize textView;
+@synthesize textView = _textView;
 
 - (IBAction)postEntry:(id)sender
 {
@@ -28,6 +30,9 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *str = self.textView.text;
     NSLog(@"%@", str);
+    [self.factory sendEntryText:self.textView.text roomId:self.roomId parentId:(self.originEntry != nil) ? self.originEntry.entryId : nil];
+    
+    [self.previousView reload:nil];
     [self.navigationController popViewControllerAnimated:YES];
     [pool release];
 }
@@ -35,7 +40,7 @@
 - (IBAction)doneEntryEdit:(id)sender
 {
     NSLog(@"done Entry editing");
-    [textView resignFirstResponder];
+    [self.textView resignFirstResponder];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -51,6 +56,7 @@
 {
     self.factory = nil;
     self.originEntry = nil;
+    self.previousView = nil;
     
     self.textView = nil;
     [super dealloc];
@@ -78,14 +84,20 @@
     [super viewDidUnload];
     self.factory = nil;
     self.originEntry = nil;
+    self.previousView = nil;
     
     self.textView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
+        _portrate = NO;
+    }
+    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
+        _portrate = YES;
+    }
+    return YES;
 }
 
 @end

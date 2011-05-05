@@ -165,4 +165,19 @@
     [list addObject:[self constructEntryListFromJSONDic:entry roomId:roomId level:[[NSNumber alloc] initWithInt:0]]];
     return list;
 }
+
+- (void)postEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
+{
+    NSLog(@"postEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
+    NSString *body = [NSString stringWithFormat:@"entry[content]=%@", text];
+    if (parentId != nil) {
+        body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId]; 
+    }
+    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
+                              method:@"POST"
+                                body:[body dataUsingEncoding:NSUTF8StringEncoding]
+                         oauth_token:self.oAuthToken
+                  oauth_token_secret:self.oAuthTokenSecret];
+    NSLog(@"response %@", response);
+}
 @end

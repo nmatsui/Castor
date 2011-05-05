@@ -19,7 +19,7 @@
     UITableView *_groupTable;
     NSMutableArray *_groupList;
     
-    BOOL portrate;
+    BOOL _portrate;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -28,6 +28,5 @@
 @property(nonatomic, retain) IBOutlet NSMutableArray *groupList;
 
 - (IBAction)callSetting:(id)sender;
-- (IBAction)reloadGroup:(id)sender;
 
 @end

@@ -8,18 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
+#import "Reloadable.h"
 #import "EditView.h"
 #import "SettingView.h"
 #import "ViewUtil.h"
 
-@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
-    DataFactory *factory;
-    EntryData *originEntry;
+@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable> {
+    DataFactory *_factory;
+    EntryData *_originEntry;
     
-    UITableView *entryTable;
-    NSMutableArray *entryList;
+    UITableView *_entryTable;
+    NSMutableArray *_entryList;
     
-    BOOL portrate;
+    BOOL _portrate;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -30,6 +31,5 @@
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)editEntry:(id)sender;
-- (IBAction)reloadComment:(id)sender;
 
 @end

@@ -11,11 +11,11 @@
 
 @implementation RoomView
 
-@synthesize factory;
-@synthesize group;
+@synthesize factory = _factory;
+@synthesize group = _group;
 
-@synthesize entryTable;
-@synthesize entryList;
+@synthesize entryTable = _entryTable;
+@synthesize entryList = _entryList;
 
 static const double singleTapDelay = 0.2;
 
@@ -23,7 +23,7 @@ static const double singleTapDelay = 0.2;
 {
     NSLog(@"reload entryList[%@] In Background", self.group.roomId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:page];
+    self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:_page];
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
@@ -48,12 +48,14 @@ static const double singleTapDelay = 0.2;
     NSLog(@"move to EditView");
     EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
     editView.factory = self.factory;
+    editView.roomId = self.group.roomId;
     editView.originEntry = nil;
+    editView.previousView = self;
     [self.navigationController pushViewController:editView animated:YES];
     [pool release];
 }
 
-- (IBAction)reloadRoom:(id)sender
+- (IBAction)reload:(id)sender
 {
     NSLog(@"reloadRoom[%@]", self.group.roomId);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -62,8 +64,8 @@ static const double singleTapDelay = 0.2;
 
 - (void)nextPage:(id)sender
 {
-    page++;
-    NSLog(@"nextPage [%d]", page);
+    _page++;
+    NSLog(@"nextPage [%d]", _page);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
@@ -72,7 +74,7 @@ static const double singleTapDelay = 0.2;
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        page = 1;
+        _page = 1;
     }
     return self;
 }
@@ -110,13 +112,13 @@ static const double singleTapDelay = 0.2;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [entryList count];
+    return [self.entryList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < [entryList count] - 2 ) {
-        return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate];
+    if (indexPath.row < [self.entryList count] - 2 ) {
+        return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -129,17 +131,17 @@ static const double singleTapDelay = 0.2;
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
-    if ([entryList count] <= indexPath.row) return cell;
+    if ([self.entryList count] <= indexPath.row) return cell;
     
-    if (indexPath.row < [entryList count] - 2) {
+    if (indexPath.row < [self.entryList count] - 2) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate]];
+        [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate]];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [pool release];
     }
-    else if (indexPath.row == [entryList count] - 2) {
+    else if (indexPath.row == [self.entryList count] - 2) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        [cell.contentView addSubview:[ViewUtil getNextPageCellView:self.view.window.screen.bounds.size portrate:portrate]];
+        [cell.contentView addSubview:[ViewUtil getNextPageCellView:self.view.window.screen.bounds.size portrate:_portrate]];
         [pool release];
     }
 
@@ -149,7 +151,7 @@ static const double singleTapDelay = 0.2;
 - (void)singleTapAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"single Tapped at %d", indexPath.row);
-    tapCount = 0;
+    _tapCount = 0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to CommentView");
     CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" bundle:nil] autorelease];
@@ -162,7 +164,7 @@ static const double singleTapDelay = 0.2;
 - (void)doubleTapAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"double Tapped at %d", indexPath.row);
-    tapCount = 0;
+    _tapCount = 0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
     if ([@"Text" isEqualToString:entry.attachmentType]) {
@@ -184,11 +186,11 @@ static const double singleTapDelay = 0.2;
 {
     NSLog(@"RoomView %d row tapped",indexPath.row);
     
-    if (indexPath.row < [entryList count] - 2) {
-        selectedRow = indexPath;
-        tapCount++;
+    if (indexPath.row < [self.entryList count] - 2) {
+        _selectedRow = indexPath;
+        _tapCount++;
         
-        switch (tapCount)
+        switch (_tapCount)
         {
             case 1: //single tap
                 [self performSelector:@selector(singleTapAtIndexPath:) withObject:indexPath afterDelay:singleTapDelay];
@@ -201,7 +203,7 @@ static const double singleTapDelay = 0.2;
                 break;
         }
     }
-    else if (indexPath.row == [entryList count] - 2) {
+    else if (indexPath.row == [self.entryList count] - 2) {
         [self nextPage:self];
     }
 }
@@ -233,12 +235,12 @@ static const double singleTapDelay = 0.2;
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        portrate = NO;
-        [entryTable reloadData];
+        _portrate = NO;
+        [self.entryTable reloadData];
     }
     else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        portrate = YES;
-        [entryTable reloadData];
+        _portrate = YES;
+        [self.entryTable reloadData];
     }
     return YES;
 }

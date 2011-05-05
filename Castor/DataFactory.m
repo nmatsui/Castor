@@ -178,6 +178,23 @@
     return list;
 }
 
+- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
+{
+    NSLog(@"sendEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
+    @try {
+        [self.gateway postEntryText:text roomId:roomId parentId:parentId];
+    }
+    @catch (...) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
+                                                        message:@"Network Disconnected" 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
+}
+
 - (void)dealloc
 {
     self.authTokenPath = nil;

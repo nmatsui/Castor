@@ -36,7 +36,7 @@
     [pool release];
 }
 
-- (IBAction)reloadGroup:(id)sender
+- (IBAction)reload:(id)sender
 {
     NSLog(@"reloadGroup");
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
@@ -81,7 +81,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [ViewUtil getGroupCellHeight:self.view.window.screen.bounds.size group:[self.groupList objectAtIndex:indexPath.row] portrate:portrate];
+    return [ViewUtil getGroupCellHeight:self.view.window.screen.bounds.size group:[self.groupList objectAtIndex:indexPath.row] portrate:_portrate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -95,7 +95,7 @@
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     GroupData *group = [self.groupList objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:[ViewUtil getGroupCellView:self.view.window.screen.bounds.size group:group portrate:portrate]];
+    [cell.contentView addSubview:[ViewUtil getGroupCellView:self.view.window.screen.bounds.size group:group portrate:_portrate]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
     return cell;
@@ -148,11 +148,11 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        portrate = NO;
+        _portrate = NO;
         [self.groupTable reloadData];
     }
     else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        portrate = YES;
+        _portrate = YES;
         [self.groupTable reloadData];
     }
     return YES;
