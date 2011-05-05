@@ -67,7 +67,6 @@ static const int INDENT_WIDTH     = 6;
 
 + (UIView *)getEntryCellView:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate
 {
-    NSLog(@"level %d", [entry.level intValue]);
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     NSString *str = @"";
     for (int i = 0; i < [entry.level intValue]; i++) {
@@ -79,15 +78,26 @@ static const int INDENT_WIDTH     = 6;
     [v addSubview:icon];
     UILabel *nameLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
+    float w = (portrate) ? size.width - 100 : size.height - 100;
     if (entry.attachmentType != nil) {
-        UILabel *attachmentLabel = [ViewUtil makeLabel:CGRectMake(210, 10, 100, 16) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+        UILabel *attachmentLabel = [ViewUtil makeLabel:CGRectMake(w, 10, 100, 16) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
         [v addSubview:attachmentLabel];
     }
-    float w = (portrate) ? size.width - 100 : size.height - 100;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *contentLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
     return v;
 }
+
++ (UIView *)getNextPageCellView:(CGSize)size portrate:(BOOL)portrate
+{
+    UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+    float w = (portrate) ? size.width - 10 : size.height - 10;
+    UILabel *nextLabel = [ViewUtil makeLabel:CGRectMake(10, 0, w, 40) text:@"<<load next page>>" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    [nextLabel setTextAlignment:UITextAlignmentCenter];
+    [v addSubview:nextLabel];
+    return v;
+}
+
 
 @end

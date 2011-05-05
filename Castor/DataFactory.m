@@ -68,10 +68,10 @@
     }
     @catch (...) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
-                                                  message:@"Network Disconnected" 
-                                                  delegate:nil 
-                                                  cancelButtonTitle:@"OK" 
-                                                  otherButtonTitles:nil];
+                                                        message:@"Network Disconnected" 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles:nil];
         [alert show];
         [alert release];
     }
@@ -89,9 +89,11 @@
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page
 {
     NSLog(@"getRoomEntryListByRoomId[%@]", roomId);
-    NSMutableArray *list;
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     @try {
-        list = [self.gateway retrieveEntryListByRoomId:roomId page:page];
+        for (int i = 1; i <= page; i++) {
+            [list addObjectsFromArray:[self.gateway retrieveEntryListByRoomId:roomId page:i]];
+        }
     }
     @catch (...) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 

@@ -24,6 +24,8 @@ static const double singleTapDelay = 0.2;
     NSLog(@"reload entryList[%@] In Background", self.group.roomId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:page];
+    [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
+    [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [pool release];
@@ -54,6 +56,14 @@ static const double singleTapDelay = 0.2;
 - (IBAction)reloadRoom:(id)sender
 {
     NSLog(@"reloadRoom[%@]", self.group.roomId);
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
+}
+
+- (void)nextPage:(id)sender
+{
+    page++;
+    NSLog(@"nextPage [%d]", page);
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
@@ -105,28 +115,40 @@ static const double singleTapDelay = 0.2;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate];
+    if (indexPath.row < [entryList count] - 2 ) {
+        return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate];
+    }
+    else {
+        return 40;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"EntryCell[%d] rewrite", indexPath.row);
     static NSString *CellIdentifier = @"EntryCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
     if ([entryList count] <= indexPath.row) return cell;
     
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate]];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [pool release];
+    if (indexPath.row < [entryList count] - 2) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[entryList objectAtIndex:indexPath.row] portrate:portrate]];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [pool release];
+    }
+    else if (indexPath.row == [entryList count] - 2) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        [cell.contentView addSubview:[ViewUtil getNextPageCellView:self.view.window.screen.bounds.size portrate:portrate]];
+        [pool release];
+    }
+
     return cell;    
 }
 
 - (void)singleTapAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"single Tap at %d", indexPath.row);
+    NSLog(@"single Tapped at %d", indexPath.row);
     tapCount = 0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to CommentView");
@@ -139,7 +161,7 @@ static const double singleTapDelay = 0.2;
 
 - (void)doubleTapAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"double Tap at %d", indexPath.row);
+    NSLog(@"double Tapped at %d", indexPath.row);
     tapCount = 0;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
@@ -161,20 +183,26 @@ static const double singleTapDelay = 0.2;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"RoomView %d row tapped",indexPath.row);
-    selectedRow = indexPath;
-    tapCount++;
     
-    switch (tapCount)
-    {
-        case 1: //single tap
-            [self performSelector:@selector(singleTapAtIndexPath:) withObject:indexPath afterDelay:singleTapDelay];
-            break;
-        case 2: //double tap
-            [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAtIndexPath:) object:indexPath];
-            [self performSelector:@selector(doubleTapAtIndexPath:) withObject:indexPath];
-            break;
-        default:
-            break;
+    if (indexPath.row < [entryList count] - 2) {
+        selectedRow = indexPath;
+        tapCount++;
+        
+        switch (tapCount)
+        {
+            case 1: //single tap
+                [self performSelector:@selector(singleTapAtIndexPath:) withObject:indexPath afterDelay:singleTapDelay];
+                break;
+            case 2: //double tap
+                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAtIndexPath:) object:indexPath];
+                [self performSelector:@selector(doubleTapAtIndexPath:) withObject:indexPath];
+                break;
+            default:
+                break;
+        }
+    }
+    else if (indexPath.row == [entryList count] - 2) {
+        [self nextPage:self];
     }
 }
 

@@ -18,5 +18,6 @@
 + (UIView *)getGroupCellView:(CGSize)size group:(GroupData *)group portrate:(BOOL)portrate;
 + (CGFloat)getEntryCellHeight:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;
 + (UIView *)getEntryCellView:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;
++ (UIView *)getNextPageCellView:(CGSize)size portrate:(BOOL)portrate;
 
 @end
