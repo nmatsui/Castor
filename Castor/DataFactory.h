@@ -24,6 +24,6 @@
 - (void)clearAuthToken;
 - (NSMutableArray *)getGroupList;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page;
-- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)entryId;
+- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry;
 
 @end

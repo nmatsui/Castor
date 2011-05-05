@@ -88,7 +88,7 @@
 
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page
 {
-    NSLog(@"getRoomEntryListByRoomId[%@]", roomId);
+    NSLog(@"getRoomEntryListByRoomId[%@] page[%d]", roomId, page);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     @try {
         for (int i = 1; i <= page; i++) {
@@ -104,7 +104,6 @@
         [alert show];
         [alert release];
     }
-//    list = [[[NSMutableArray alloc] init] autorelease];
 //    for (int i = 0; i < 20; i++) {
 //        EntryData *entryData = [[[EntryData alloc] init] autorelease];
 //        entryData.entryId = [[NSNumber alloc] initWithInt:i];
@@ -137,23 +136,45 @@
     return list;
 }
 
-- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)entryId
+- (void)appendEntry:(NSMutableArray *)entryList list:(NSMutableArray *)list
 {
-    NSMutableArray *list;
-    list = [[[NSMutableArray alloc] init] autorelease];
-    for (int i = 0; i < 20; i++) {
-        EntryData *entryData = [[[EntryData alloc] init] autorelease];
-        entryData.entryId = [[NSNumber alloc] initWithInt:i];
-        entryData.participationName = @"こめんと";
-        entryData.level = [[NSNumber alloc] initWithInt:i%5+1];
-        entryData.participationIcon = [UIImage imageNamed:@"myrooms.png"];
-        NSString *str = [NSString stringWithFormat:@"[%d] %d comment",[entryId intValue], i];
-        for (int j = 0; j < i; j++) {
-            str = [str stringByAppendingString:@"アイウエオカキクケコ"];
+    for (EntryData *data in entryList) {
+        [list addObject:data];
+        if (data.children != nil && [data.children count] != 0) {
+            [self appendEntry:data.children list:list];
         }
-        entryData.content = str;
-        [list addObject:entryData];
     }
+}
+
+- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry
+{
+    NSLog(@"getEntryCommentListByEntryData[%@]", entry.entryId);
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    @try {
+        [self appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
+    }
+    @catch (...) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
+                                                        message:@"Network Disconnected" 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
+//    for (int i = 0; i < 20; i++) {
+//        EntryData *entryData = [[[EntryData alloc] init] autorelease];
+//        entryData.entryId = [[NSNumber alloc] initWithInt:i];
+//        entryData.participationName = @"こめんと";
+//        entryData.level = [[NSNumber alloc] initWithInt:i%5+1];
+//        entryData.participationIcon = [UIImage imageNamed:@"myrooms.png"];
+//        NSString *str = [NSString stringWithFormat:@"[%d] %d comment",[entryId intValue], i];
+//        for (int j = 0; j < i; j++) {
+//            str = [str stringByAppendingString:@"アイウエオカキクケコ"];
+//        }
+//        entryData.content = str;
+//        [list addObject:entryData];
+//    }
     return list;
 }
 

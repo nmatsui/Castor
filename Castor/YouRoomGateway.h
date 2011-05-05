@@ -26,6 +26,7 @@
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
 - (NSMutableArray *)retrieveGroupList;
 - (NSMutableArray *)retrieveEntryListByRoomId:(NSNumber *)roomId page:(int)page;
+- (NSMutableArray *)retrieveEntryCommentListByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;
 
 @end
 

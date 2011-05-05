@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DataFactory.h"
 #import "EditView.h"
+#import "SettingView.h"
 #import "ViewUtil.h"
 
 @interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
@@ -26,5 +27,9 @@
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
+
+- (IBAction)callSetting:(id)sender;
+- (IBAction)editEntry:(id)sender;
+- (IBAction)reloadComment:(id)sender;
 
 @end

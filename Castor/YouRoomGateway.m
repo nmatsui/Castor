@@ -81,7 +81,7 @@
         groupData.updatedAt = [group objectForKey:@"updated_at"];
         NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", groupData.roomId]]
                                   method:@"GET"
-                                    body:Nil
+                                    body:nil
                             oauth_token:self.oAuthToken
                       oauth_token_secret:self.oAuthTokenSecret];
         groupData.roomIcon  = [[[UIImage alloc] initWithData:response] autorelease];
@@ -111,15 +111,25 @@
         }
         entryData.attachmentFilename    = [[attachment objectForKey:@"filename"] isKindOfClass:[NSString class]] ? [attachment objectForKey:@"filename"] : nil;
     }
-    entryData.createdAt = [entry objectForKey:@"created_at"];
-    entryData.updatedAt = [entry objectForKey:@"updated_at"];
+    if ([entry objectForKey:@"descendants_count"] != nil && [[entry objectForKey:@"descendants_count"] isKindOfClass:[NSNumber class]]) {
+        entryData.descendantsCount      = [entry objectForKey:@"descendants_count"];
+    }
+    entryData.createdAt         = [entry objectForKey:@"created_at"];
+    entryData.updatedAt         = [entry objectForKey:@"updated_at"];
     NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, entryData.participationId]]
                               method:@"GET"
                                 body:nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
     entryData.participationIcon = [[[UIImage alloc] initWithData:response] autorelease];
-    entryData.level = level;
+    entryData.level             = level;
+    if ([entry objectForKey:@"children"] != nil && [[entry objectForKey:@"children"] isKindOfClass:[NSArray class]]) {
+        NSMutableArray *children = [[[NSMutableArray alloc] init] autorelease];
+        for (NSDictionary *dic in [entry objectForKey:@"children"]) {
+            [children addObject:[self constructEntryListFromJSONDic:dic roomId:roomId level:[[NSNumber alloc] initWithInt:[level intValue]+1]]];
+        }
+        entryData.children      = children;
+    }
     
     return entryData;
 }
@@ -130,7 +140,7 @@
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@?format=json&page=%d", roomId, page]]
                               method:@"GET"
-                                body:Nil
+                                body:nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
     NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
@@ -138,6 +148,21 @@
         NSDictionary *entry = [dic objectForKey:@"entry"];
         [list addObject:[self constructEntryListFromJSONDic:entry roomId:roomId level:[[NSNumber alloc] initWithInt:0]]];
     }
+    return list;
+}
+
+- (NSMutableArray *)retrieveEntryCommentListByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId
+{
+    NSLog(@"retrieveEntryCommentListByEntryId[%@] roomId[%@]", entryId, roomId);
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@?format=json", roomId, entryId]]
+                              method:@"GET"
+                                body:nil
+                         oauth_token:self.oAuthToken
+                  oauth_token_secret:self.oAuthTokenSecret];
+    NSDictionary *entry = [[[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"entry"];
+    NSLog(@"%@", entry);
+    [list addObject:[self constructEntryListFromJSONDic:entry roomId:roomId level:[[NSNumber alloc] initWithInt:0]]];
     return list;
 }
 @end

@@ -35,7 +35,8 @@
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
 
-- (IBAction)reloadRoom:(id)sender;
+- (IBAction)callSetting:(id)sender;
 - (IBAction)editEntry:(id)sender;
+- (IBAction)reloadRoom:(id)sender;
 
 @end
