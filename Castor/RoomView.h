@@ -10,6 +10,7 @@
 #import "DataFactory.h"
 #import "CommentView.h"
 #import "EditView.h"
+#import "SettingView.h"
 #import "LongTextView.h"
 #import "ImageView.h"
 #import "ViewUtil.h"
@@ -21,6 +22,7 @@
     UITableView *entryTable;
     NSMutableArray *entryList;
     
+    int page;
     BOOL portrate;
     
     int tapCount;

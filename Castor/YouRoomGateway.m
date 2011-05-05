@@ -69,21 +69,75 @@
                                 body:Nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
-    NSArray *jsonArry = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
-    for (NSDictionary *dic in jsonArry) {
+    NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
+    for (NSDictionary *dic in jsonArray) {
         NSDictionary *group = [dic objectForKey:@"group"];
         GroupData *groupData = [[[GroupData alloc] init] autorelease];
-        groupData.roomId = [[NSNumber alloc] initWithInt:[[group objectForKey:@"id"] intValue]];
-        groupData.roomName = [group objectForKey:@"name"];
+        groupData.roomId    = [group objectForKey:@"id"];
+        groupData.roomName  = [group objectForKey:@"name"];
+        groupData.opend     = [[group objectForKey:@"opened"] boolValue];
+        groupData.toParam   = [[group objectForKey:@"to_param"] isKindOfClass:[NSString class]] ? [group objectForKey:@"to_param"] : nil;
+        groupData.createdAt = [group objectForKey:@"created_at"];
+        groupData.updatedAt = [group objectForKey:@"updated_at"];
         NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", groupData.roomId]]
                                   method:@"GET"
                                     body:Nil
                             oauth_token:self.oAuthToken
                       oauth_token_secret:self.oAuthTokenSecret];
-        groupData.roomIcon = [[[UIImage alloc] initWithData:response] autorelease];
+        groupData.roomIcon  = [[[UIImage alloc] initWithData:response] autorelease];
         [list addObject:groupData];
     }
     return list;
 }
 
+- (EntryData *)constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level
+{
+    EntryData *entryData = [[[EntryData alloc] init] autorelease];
+    entryData.roomId            = roomId;
+    entryData.entryId           = [entry objectForKey:@"id"];
+    entryData.content           = [[entry objectForKey:@"content"] isKindOfClass:[NSString class]] ? [entry objectForKey:@"content"] : nil;
+    entryData.parentId          = [[entry objectForKey:@"parent_id"] isKindOfClass:[NSNumber class]] ? [entry objectForKey:@"parent_id"] : nil;
+    entryData.rootId            = [[entry objectForKey:@"root_id"] isKindOfClass:[NSNumber class]] ? [entry objectForKey:@"root_id"] : nil;
+    entryData.participationId   = [[entry objectForKey:@"participation"] objectForKey:@"id"];
+    entryData.participationName = [[entry objectForKey:@"participation"] objectForKey:@"name"];
+    if ([entry objectForKey:@"attachment"] != nil && [[entry objectForKey:@"attachment"] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *attachment        = [entry objectForKey:@"attachment"];
+        entryData.attachmentType        = [[attachment objectForKey:@"attachment_type"] isKindOfClass:[NSString class]] ? [attachment objectForKey:@"attachment_type"] : nil;
+        entryData.attachmentContentType = [[attachment objectForKey:@"content_type"] isKindOfClass:[NSString class]] ? [attachment objectForKey:@"content_type"] : nil;
+        if ([attachment objectForKey:@"data"] != nil && [[attachment objectForKey:@"data"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *data          = [attachment objectForKey:@"data"];
+            entryData.attachmentText    = [data objectForKey:@"text"];
+            entryData.attachmentURL     = [data objectForKey:@"url"];
+        }
+        entryData.attachmentFilename    = [[attachment objectForKey:@"filename"] isKindOfClass:[NSString class]] ? [attachment objectForKey:@"filename"] : nil;
+    }
+    entryData.createdAt = [entry objectForKey:@"created_at"];
+    entryData.updatedAt = [entry objectForKey:@"updated_at"];
+    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, entryData.participationId]]
+                              method:@"GET"
+                                body:nil
+                         oauth_token:self.oAuthToken
+                  oauth_token_secret:self.oAuthTokenSecret];
+    entryData.participationIcon = [[[UIImage alloc] initWithData:response] autorelease];
+    entryData.level = level;
+    
+    return entryData;
+}
+
+- (NSMutableArray *)retrieveEntryListByRoomId:(NSNumber *)roomId page:(int)page
+{
+    NSLog(@"retrieveEntryListByRoomId[%@] page[%d]", roomId, page);
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@?format=json&page=%d", roomId, page]]
+                              method:@"GET"
+                                body:Nil
+                         oauth_token:self.oAuthToken
+                  oauth_token_secret:self.oAuthTokenSecret];
+    NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
+    for (NSDictionary *dic in jsonArray) {
+        NSDictionary *entry = [dic objectForKey:@"entry"];
+        [list addObject:[self constructEntryListFromJSONDic:entry roomId:roomId level:[[NSNumber alloc] initWithInt:0]]];
+    }
+    return list;
+}
 @end

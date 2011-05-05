@@ -75,10 +75,14 @@ static const int INDENT_WIDTH     = 6;
     }
     UILabel *indentLabel = [ViewUtil makeLabel:CGRectMake(10, 10, 40, 16) text:str font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
     [v addSubview:indentLabel];
-    UIImageView *icon = [ViewUtil makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30) image:entry.participantIcon];
+    UIImageView *icon = [ViewUtil makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30) image:entry.participationIcon];
     [v addSubview:icon];
-    UILabel *nameLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participantName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *nameLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
+    if (entry.attachmentType != nil) {
+        UILabel *attachmentLabel = [ViewUtil makeLabel:CGRectMake(210, 10, 100, 16) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+        [v addSubview:attachmentLabel];
+    }
     float w = (portrate) ? size.width - 100 : size.height - 100;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *contentLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];

@@ -45,7 +45,7 @@
     [super viewDidLoad];
     NSLog(@"ImageView loaded");
     self.title = @"Image";
-    [self.imageView setImage:self.entry.attachmentImage];
+    //[self.imageView setImage:self.entry.attachmentImage];
 }
 
 - (void)viewDidUnload

@@ -16,11 +16,12 @@
 @synthesize groupTable = _groupTable;
 @synthesize groupList = _groupList;
 
-- (void) reloadDataInBackground:(id)arg {
+- (void)reloadGroupListInBackground:(id)arg
+{
     NSLog(@"reload groupList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.groupList = [self.factory getGroupList];
-    [self.groupTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:NO];
+    [self.groupTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [pool release];
 }
@@ -39,7 +40,7 @@
 {
     NSLog(@"reloadGroup");
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [self performSelectorInBackground:@selector(reloadDataInBackground:) withObject:Nil];
+    [self performSelectorInBackground:@selector(reloadGroupListInBackground:) withObject:nil];
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -85,6 +86,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"GroupCell[%d] rewrite", indexPath.row);
     static NSString *CellIdentifier = @"GroupCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
@@ -101,7 +103,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"GroupView %d row clicked",indexPath.row);
+    NSLog(@"GroupView %d row tapped",indexPath.row);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to RoomView");
     RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil] autorelease];
@@ -125,10 +127,13 @@
     [super viewDidLoad];
     NSLog(@"GroupView loaded");
     self.title = @"Group";
+    if (self.factory == nil) {
+        self.factory = [[DataFactory alloc] init];
+    }
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [self performSelectorInBackground:@selector(reloadDataInBackground:) withObject:Nil];
+    [self performSelectorInBackground:@selector(reloadGroupListInBackground:) withObject:nil];
 }
 
 - (void)viewDidUnload

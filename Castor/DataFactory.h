@@ -23,7 +23,7 @@
 - (BOOL)hasAuthToken;
 - (void)clearAuthToken;
 - (NSMutableArray *)getGroupList;
-- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)rId;
-- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)eId;
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page;
+- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)entryId;
 
 @end

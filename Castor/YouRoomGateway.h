@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GroupData.h"
+#import "EntryData.h"
 #import "OAuthCore.h"
 #import "OAuth+Additions.h"
 #import "JSON.h"
@@ -24,6 +25,7 @@
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
 - (NSMutableArray *)retrieveGroupList;
+- (NSMutableArray *)retrieveEntryListByRoomId:(NSNumber *)roomId page:(int)page;
 
 @end
 

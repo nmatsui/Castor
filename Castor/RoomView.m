@@ -19,13 +19,23 @@
 
 static const double singleTapDelay = 0.2;
 
-- (IBAction)reloadRoom:(id)sender
+- (void)reloadEntryListInBackground:(id)arg
 {
-    NSLog(@"reloadRoom");
-    NSLog(@"roomId : %d", [self.group.roomId intValue]);
+    NSLog(@"reload entryList[%@] In Background", self.group.roomId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
-    [entryTable reloadData];
+    self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:page];
+    [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [pool release];
+}
+
+- (IBAction)callSetting:(id)sender
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to SettingView");
+    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil] autorelease];
+    settingView.factory = self.factory;
+    [self.navigationController pushViewController:settingView animated:YES];
     [pool release];
 }
 
@@ -41,11 +51,18 @@ static const double singleTapDelay = 0.2;
     [pool release];
 }
 
+- (IBAction)reloadRoom:(id)sender
+{
+    NSLog(@"reloadRoom[%@]", self.group.roomId);
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+        page = 1;
     }
     return self;
 }
@@ -93,6 +110,7 @@ static const double singleTapDelay = 0.2;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSLog(@"EntryCell[%d] rewrite", indexPath.row);
     static NSString *CellIdentifier = @"EntryCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
@@ -165,16 +183,13 @@ static const double singleTapDelay = 0.2;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"roomView loaded");
-    NSLog(@"roomId : %d", [self.group.roomId intValue]);
+    NSLog(@"roomView[%@] loaded", self.group.roomId);
     self.title = @"Room";
     if (self.factory == nil) {
         self.factory = [[DataFactory alloc] init];
     }
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [factory getRoomEntryListByRoomId:self.group.roomId];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [pool release];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
 
 - (void)viewDidUnload

@@ -86,50 +86,66 @@
     return list;
 }
 
-- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)rId
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page
 {
-    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    for (int i = 0; i < 20; i++) {
-        EntryData *entryData = [[[EntryData alloc] init] autorelease];
-        entryData.entryId = [[NSNumber alloc] initWithInt:i];
-        entryData.roomId = rId;
-        entryData.participantName = @"ほげほげ";
-        entryData.level = [[NSNumber alloc] initWithInt:0];
-        entryData.participantIcon = [UIImage imageNamed:@"myrooms.png"];
-        NSString *str = [NSString stringWithFormat:@"[%d] %d entry",[rId intValue], i];
-        for (int j = 0; j < i; j++) {
-            str = [str stringByAppendingString:@"あいうえおかきくけこ"];
-        }
-        if (i%5==0) {
-            entryData.attachmentType = @"Text";
-            entryData.attachmentText = @"youRoom(ユールーム)は、グループでの情報共有をシンプルに実現できるツールです。友人同士の気軽なコミュニケーションや、企業を超えたプロジェクトでのコラボレーションといった用途で、安全に閉じられた安心感の中で、短いメッセージを共有することができます。";
-            str = [str stringByAppendingFormat:@"\n<Text attached>"];
-        }
-        else if (i%7==0) {
-            entryData.attachmentType = @"Image";
-            entryData.attachmentImage = [UIImage imageNamed:@"test.jpg"];
-            str = [str stringByAppendingFormat:@"\n<Image attached>"];
-        }
-        else if (i%9==0) {
-            entryData.attachmentType = @"File";
-            str = [str stringByAppendingFormat:@"\n<File attached>"];
-        }
-        entryData.content = str;
-        [list addObject:entryData];
+    NSLog(@"getRoomEntryListByRoomId[%@]", roomId);
+    NSMutableArray *list;
+    @try {
+        list = [self.gateway retrieveEntryListByRoomId:roomId page:page];
     }
+    @catch (...) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
+                                                        message:@"Network Disconnected" 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
+//    list = [[[NSMutableArray alloc] init] autorelease];
+//    for (int i = 0; i < 20; i++) {
+//        EntryData *entryData = [[[EntryData alloc] init] autorelease];
+//        entryData.entryId = [[NSNumber alloc] initWithInt:i];
+//        entryData.participationName = @"ほげほげ";
+//        entryData.level = [[NSNumber alloc] initWithInt:0];
+//        entryData.participationIcon = [UIImage imageNamed:@"myrooms.png"];
+//        NSString *str = [NSString stringWithFormat:@"[%d] %d entry",[roomId intValue], i];
+//        for (int j = 0; j < i; j++) {
+//            str = [str stringByAppendingString:@"あいうえおかきくけこ"];
+//        }
+//        if (i%3==0) {
+//            entryData.attachmentText = @"Link";
+//            entryData.attachmentURL = @"http://www.google.co.jp";
+//        }
+//        if (i%5==0) {
+//            entryData.attachmentType = @"Text";
+//            entryData.attachmentText = @"youRoom(ユールーム)は、グループでの情報共有をシンプルに実現できるツールです。友人同士の気軽なコミュニケーションや、企業を超えたプロジェクトでのコラボレーションといった用途で、安全に閉じられた安心感の中で、短いメッセージを共有することができます。";
+//        }
+//        else if (i%7==0) {
+//            entryData.attachmentType = @"Image";
+//            entryData.attachmentFilename = @"DSC_0345.JPG";
+//        }
+//        else if (i%9==0) {
+//            entryData.attachmentType = @"File";
+//            entryData.attachmentFilename = @"HOGE.ppt";
+//        }
+//        entryData.content = str;
+//        [list addObject:entryData];
+//    }
     return list;
 }
 
-- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)eId
+- (NSMutableArray *)getEntryCommentListByEntryId:(NSNumber *)entryId
 {
-    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    NSMutableArray *list;
+    list = [[[NSMutableArray alloc] init] autorelease];
     for (int i = 0; i < 20; i++) {
         EntryData *entryData = [[[EntryData alloc] init] autorelease];
         entryData.entryId = [[NSNumber alloc] initWithInt:i];
-        entryData.participantName = @"こめんと";
+        entryData.participationName = @"こめんと";
         entryData.level = [[NSNumber alloc] initWithInt:i%5+1];
-        entryData.participantIcon = [UIImage imageNamed:@"myrooms.png"];
-        NSString *str = [NSString stringWithFormat:@"[%d] %d comment",[eId intValue], i];
+        entryData.participationIcon = [UIImage imageNamed:@"myrooms.png"];
+        NSString *str = [NSString stringWithFormat:@"[%d] %d comment",[entryId intValue], i];
         for (int j = 0; j < i; j++) {
             str = [str stringByAppendingString:@"アイウエオカキクケコ"];
         }
