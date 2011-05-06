@@ -195,6 +195,25 @@
     }
 }
 
+- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry
+{
+    NSLog(@"getAttachmentImage[%@]", entry.entryId);
+    UIImage *image;
+    @try {
+        image = [self.gateway retrieveEntryAttachmentImageByEntryId:entry.entryId roomId:entry.roomId];
+    }
+    @catch (...) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
+                                                        message:@"Network Disconnected" 
+                                                       delegate:nil 
+                                              cancelButtonTitle:@"OK" 
+                                              otherButtonTitles:nil];
+        [alert show];
+        [alert release];
+    }
+    return image;
+}
+
 - (void)dealloc
 {
     self.authTokenPath = nil;

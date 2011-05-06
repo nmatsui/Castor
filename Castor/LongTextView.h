@@ -11,9 +11,11 @@
 
 
 @interface LongTextView : UIViewController {
-    EntryData *entry;
+    EntryData *_entry;
     
-    UITextView *textView;
+    UITextView *_textView;
+    
+    BOOL _portrate;
 }
 
 @property(nonatomic, retain) EntryData *entry;

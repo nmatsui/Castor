@@ -8,14 +8,19 @@
 
 #import <UIKit/UIKit.h>
 #import "EntryData.h"
+#import "DataFactory.h"
 
 
 @interface ImageView : UIViewController {
-    EntryData *entry;
+    DataFactory *_factory;
+    EntryData *_entry;
     
-    UIImageView *imageView;
+    UIImageView *_imageView;
+    
+    BOOL _portrate;
 }
 
+@property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) EntryData *entry;
 @property(nonatomic, retain) IBOutlet UIImageView *imageView;
 

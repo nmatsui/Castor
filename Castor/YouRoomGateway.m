@@ -180,4 +180,16 @@
                   oauth_token_secret:self.oAuthTokenSecret];
     NSLog(@"response %@", response);
 }
+
+- (UIImage *)retrieveEntryAttachmentImageByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId
+{
+    NSLog(@"retrieveEntryAttachmentImageByEntryId[%@] roomId[%@]", entryId, roomId);
+    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@/attachment", roomId, entryId]]
+                              method:@"GET"
+                                body:nil
+                         oauth_token:self.oAuthToken
+                  oauth_token_secret:self.oAuthTokenSecret];
+    return [[[UIImage alloc] initWithData:response] autorelease];
+}
+
 @end

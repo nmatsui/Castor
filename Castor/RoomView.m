@@ -176,6 +176,7 @@ static const double singleTapDelay = 0.2;
     else if ([@"Image" isEqualToString:entry.attachmentType]) {
         NSLog(@"move to ImageView");
         ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil] autorelease];
+        imageView.factory = self.factory;
         imageView.entry = entry;
         [self.navigationController pushViewController:imageView animated:YES];
     }
