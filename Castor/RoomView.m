@@ -180,6 +180,10 @@ static const double singleTapDelay = 0.2;
         imageView.entry = entry;
         [self.navigationController pushViewController:imageView animated:YES];
     }
+    else if ([@"Link" isEqualToString:entry.attachmentType]) {
+        NSLog(@"open safari with url[%@]", entry.attachmentURL);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:entry.attachmentURL]];
+    }
     [pool release];
 }
 

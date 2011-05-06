@@ -29,6 +29,19 @@ static const int INDENT_WIDTH     = 6;
     return label;
 }
 
++ (UITextView *)makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font
+{
+    UITextView *textView = [[[UITextView alloc] init] autorelease];
+    [textView setFrame:rect];
+    [textView setText:text];
+    [textView setFont:font];
+    [textView setTextColor:[UIColor blackColor]];
+    [textView setBackgroundColor:[UIColor clearColor]];
+    [textView setTextAlignment:UITextAlignmentLeft];
+    [textView setDataDetectorTypes:UIDataDetectorTypeLink];
+    return textView;
+}
+
 + (UIImageView *)makeIcon:(CGRect)rect image:(UIImage *)image
 {
     UIImageView *imageView = [[[UIImageView alloc] init] autorelease];
@@ -85,6 +98,7 @@ static const int INDENT_WIDTH     = 6;
     }
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *contentLabel = [ViewUtil makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+//    UITextView *contentText = [ViewUtil makeTextView:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
     return v;
 }
