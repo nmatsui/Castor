@@ -36,20 +36,24 @@
     return self;
 }
 
-- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password
+- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(id)sender
 {
-    BOOL result = YES;
+    BOOL result = NO;
     @try {
         [self clearAuthToken];
         NSDictionary *dict = [self.gateway retrieveAuthTokenWithEmail:email password:password];
         NSData *data = [NSKeyedArchiver archivedDataWithRootObject:dict];
         [data writeToFile:self.authTokenPath atomically:YES];
         NSLog(@"store token to cache %@:%@", [dict objectForKey:@"oauth_token"], [dict objectForKey:@"oauth_token_secret"]);
+        result = YES;
     }
-    @catch (...) {
-        result = NO;
+    @catch (NSException *exception) {
+        NSLog(@"exception in storeAuthTokenWithEmail[%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
-    return result;
+    @finally {
+        return result;
+    }
 }
 
 - (BOOL)hasAuthToken
@@ -62,11 +66,17 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) [[NSFileManager defaultManager] removeItemAtPath:self.authTokenPath error:nil];
 }
 
-- (NSMutableArray *)getGroupList
+- (NSMutableArray *)getGroupListWithSender:(id)sender
 {
-    NSLog(@"getGroupList");
-    NSMutableArray *list;
-    list = [self.gateway retrieveGroupList];
+    NSLog(@"getGroupListWithSender");
+    NSMutableArray *list = nil;
+    @try {
+        list = [self.gateway retrieveGroupList];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in getGroupListWithSender[%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
 //    list = [[[NSMutableArray alloc] init] autorelease];
 //    for (int i = 0; i < 20; i++) {
 //        GroupData *groupData = [[[GroupData alloc] init] autorelease];
@@ -78,14 +88,19 @@
     return list;
 }
 
-- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(id)sender
 {
     NSLog(@"getRoomEntryListByRoomId[%@] page[%d]", roomId, page);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    for (int i = 1; i <= page; i++) {
-        [list addObjectsFromArray:[self.gateway retrieveEntryListByRoomId:roomId page:i]];
+    @try {
+        for (int i = 1; i <= page; i++) {
+            [list addObjectsFromArray:[self.gateway retrieveEntryListByRoomId:roomId page:i]];
+        }
     }
-
+    @catch (NSException *exception) {
+        NSLog(@"exception in getRoomEntryListByRoomId [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
 //    for (int i = 0; i < 20; i++) {
 //        EntryData *entryData = [[[EntryData alloc] init] autorelease];
 //        entryData.entryId = [[NSNumber alloc] initWithInt:i];
@@ -128,11 +143,17 @@
     }
 }
 
-- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry
+- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(id)sender
 {
     NSLog(@"getEntryCommentListByEntryData[%@]", entry.entryId);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    [self appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
+    @try {
+        [self appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in getEntryCommentListByEntryData [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
 //    for (int i = 0; i < 20; i++) {
 //        EntryData *entryData = [[[EntryData alloc] init] autorelease];
 //        entryData.entryId = [[NSNumber alloc] initWithInt:i];
@@ -149,16 +170,30 @@
     return list;
 }
 
-- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
+- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender
 {
     NSLog(@"sendEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
-    [self.gateway postEntryText:text roomId:roomId parentId:parentId];
+    @try {
+        [self.gateway postEntryText:text roomId:roomId parentId:parentId];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in sendEntryText [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
 }
 
-- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry
+- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(id)sender
 {
     NSLog(@"getAttachmentImage[%@]", entry.entryId);
-    return [self.gateway retrieveEntryAttachmentImageByEntryId:entry.entryId roomId:entry.roomId];
+    UIImage *image = nil;
+    @try {
+        image = [self.gateway retrieveEntryAttachmentImageByEntryId:entry.entryId roomId:entry.roomId];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in getAttachmentImageByEntryData [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
+    return image;
 }
 
 - (void)deleteCache

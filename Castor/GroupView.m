@@ -16,11 +16,21 @@
 @synthesize groupTable = _groupTable;
 @synthesize groupList = _groupList;
 
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
 - (void)reloadGroupListInBackground:(id)arg
 {
     NSLog(@"reload groupList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.groupList = [self.factory getGroupList];
+    self.groupList = [self.factory getGroupListWithSender:self];
     [self.groupTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [pool release];

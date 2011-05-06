@@ -15,12 +15,22 @@
 @synthesize entry = _entry;
 @synthesize imageView = _imageView;
 
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
 - (void)loadAttachmentImageInBackground:(id)arg
 {
     NSLog(@"load Attachment Image In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
-    self.imageView.image = [self.factory getAttachmentImageByEntryData:self.entry];
+    self.imageView.image = [self.factory getAttachmentImageByEntryData:self.entry sender:self];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [pool release];
 }

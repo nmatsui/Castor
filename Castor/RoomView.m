@@ -20,6 +20,16 @@
 @synthesize target = _target;
 @synthesize selectors = _selectors;
 
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
 - (void)moveToCommentViewWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"move to CommentView");
@@ -74,7 +84,7 @@
 {
     NSLog(@"reload entryList[%@] In Background", self.group.roomId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:_page];
+    self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:_page sender:self];
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];

@@ -22,13 +22,13 @@
 @property(nonatomic, retain) YouRoomGateway *gateway;
 @property(nonatomic, retain) CacheManager *cacheManager;
 
-- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
+- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(id)sender;
 - (BOOL)hasAuthToken;
 - (void)clearAuthToken;
-- (NSMutableArray *)getGroupList;
-- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page;
-- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry;
-- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId;
-- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry;
+- (NSMutableArray *)getGroupListWithSender:(id)sender;
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(id)sender;
+- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(id)sender;
+- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender;
+- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(id)sender;
 - (void)deleteCache;
 @end

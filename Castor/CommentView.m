@@ -22,6 +22,16 @@
 
 static const int MAX_LEVLE = 6;
 
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
 - (void)editEntryWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"editEntry");
@@ -79,7 +89,7 @@ static const int MAX_LEVLE = 6;
 {
     NSLog(@"reload CommentList [%@] In Background", self.originEntry.entryId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [self.factory getEntryCommentListByEntryData:self.originEntry];
+    self.entryList = [self.factory getEntryCommentListByEntryData:self.originEntry sender:self];
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -176,25 +186,6 @@ static const int MAX_LEVLE = 6;
     }
     return cell;    
 }
-
-//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    NSLog(@"GroupView %d row clicked",indexPath.row);
-//    if (indexPath.row < [self.entryList count] - 1) {
-//        EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
-//        if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
-//            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//            NSLog(@"move to RoomView");
-//            EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
-//            editView.factory = self.factory;
-//            editView.roomId = self.originEntry.roomId;
-//            editView.originEntry = [self.entryList objectAtIndex:indexPath.row];
-//            editView.previousView = self;
-//            [self.navigationController pushViewController:editView animated:YES];
-//            [pool release];
-//        }
-//    }
-//}
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {

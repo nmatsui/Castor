@@ -18,6 +18,16 @@
 
 @synthesize textView = _textView;
 
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
 - (IBAction)postEntry:(id)sender
 {
     NSLog(@"post entry");
@@ -30,7 +40,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSString *str = self.textView.text;
     NSLog(@"%@", str);
-    [self.factory sendEntryText:self.textView.text roomId:self.roomId parentId:(self.originEntry != nil) ? self.originEntry.entryId : nil];
+    [self.factory sendEntryText:self.textView.text roomId:self.roomId parentId:(self.originEntry != nil) ? self.originEntry.entryId : nil sender:self];
     
     [self.previousView reload:nil];
     [self.navigationController popViewControllerAnimated:YES];

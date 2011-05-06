@@ -17,23 +17,26 @@
 @synthesize password = _password;
 @synthesize loginButton = _loginButton;
 
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
 - (void)authenticateInBackground:(id)arg
 {
     NSLog(@"authenticate In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text];
+    BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text sender:self];
     if (result) {
         NSLog(@"move to GroupView");
         GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
         groupView.factory = self.factory;
         [self.navigationController pushViewController:groupView animated:YES];
-    }
-    else {
-        [[[[UIAlertView alloc] initWithTitle:@"" 
-                               message:@"Login Failed" 
-                               delegate:nil 
-                               cancelButtonTitle:@"OK" 
-                               otherButtonTitles:nil] autorelease] show];
     }
     [pool release];
 }

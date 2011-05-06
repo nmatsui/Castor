@@ -32,7 +32,8 @@
     [super dealloc];
 }
 
-- (NSData *)request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret {
+- (NSData *)request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret
+{
     NSLog(@"request(%@) to %@ [body:%@]", method, url, [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease]);
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
@@ -40,8 +41,13 @@
     [request setValue:header forHTTPHeaderField:@"Authorization"];
     [request setHTTPBody:body];
     NSURLResponse *response = nil;
-    NSError       *error    = nil;
-    return [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSError *error = nil;
+    NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if (error != nil) {
+        NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"network disconnected" userInfo:nil];
+        [exception raise];
+    }
+    return data;
 }
 
 - (NSData *)getXAuthParamStringWithUsername:(NSString *)username password:(NSString *)password
@@ -61,7 +67,7 @@
     NSString *oAuthToken = [dict objectForKey:@"oauth_token"];
     NSString *oAuthTokenSecret = [dict objectForKey:@"oauth_token_secret"];
     if (oAuthToken == nil || [@"" isEqualToString:oAuthToken] || oAuthTokenSecret == nil || [@"" isEqualToString:oAuthTokenSecret]) {
-        NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"can't get token" userInfo:nil];
+        NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"can't get oAuth token" userInfo:nil];
         [exception raise];
     }
     self.oAuthToken = oAuthToken;
@@ -71,6 +77,7 @@
 
 - (NSData *)getGroupIconAtRoomId:(NSNumber *)roomId
 {
+    NSLog(@"getGroupIconAtRoomId[%@]", roomId);
     NSData *icon = [self.cacheManager selectGroupIconAtRoomId:roomId];
     if (icon == nil) {
         icon = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", roomId]]
@@ -116,6 +123,7 @@
 
 - (NSData *)getParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId
 {
+    NSLog(@"getParticipationIconAtRoomId[%@] participationId[%@]", roomId, participationId);
     NSData *icon = [self.cacheManager selectParticipationIconAtRoomId:roomId participationId:participationId];
     if (icon == nil) {
         icon = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, participationId]]
@@ -219,7 +227,7 @@
                           oauth_token:self.oAuthToken
                    oauth_token_secret:self.oAuthTokenSecret];
     if (response == nil || [response length] == 0) {
-        return NO;
+        return NO; // ステータスコードまで見るべきか？
     }
     return YES;
 }
