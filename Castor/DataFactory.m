@@ -66,18 +66,7 @@
 {
     NSLog(@"getGroupList");
     NSMutableArray *list;
-    @try {
-        list = [self.gateway retrieveGroupList];
-    }
-    @catch (...) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
-                                                        message:@"Network Disconnected" 
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
+    list = [self.gateway retrieveGroupList];
 //    list = [[[NSMutableArray alloc] init] autorelease];
 //    for (int i = 0; i < 20; i++) {
 //        GroupData *groupData = [[[GroupData alloc] init] autorelease];
@@ -93,20 +82,10 @@
 {
     NSLog(@"getRoomEntryListByRoomId[%@] page[%d]", roomId, page);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    @try {
-        for (int i = 1; i <= page; i++) {
-            [list addObjectsFromArray:[self.gateway retrieveEntryListByRoomId:roomId page:i]];
-        }
+    for (int i = 1; i <= page; i++) {
+        [list addObjectsFromArray:[self.gateway retrieveEntryListByRoomId:roomId page:i]];
     }
-    @catch (...) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
-                                                        message:@"Network Disconnected" 
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
+
 //    for (int i = 0; i < 20; i++) {
 //        EntryData *entryData = [[[EntryData alloc] init] autorelease];
 //        entryData.entryId = [[NSNumber alloc] initWithInt:i];
@@ -153,18 +132,7 @@
 {
     NSLog(@"getEntryCommentListByEntryData[%@]", entry.entryId);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
-    @try {
-        [self appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
-    }
-    @catch (...) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
-                                                        message:@"Network Disconnected" 
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
+    [self appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
 //    for (int i = 0; i < 20; i++) {
 //        EntryData *entryData = [[[EntryData alloc] init] autorelease];
 //        entryData.entryId = [[NSNumber alloc] initWithInt:i];
@@ -184,37 +152,13 @@
 - (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
 {
     NSLog(@"sendEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
-    @try {
-        [self.gateway postEntryText:text roomId:roomId parentId:parentId];
-    }
-    @catch (...) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
-                                                        message:@"Network Disconnected" 
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
+    [self.gateway postEntryText:text roomId:roomId parentId:parentId];
 }
 
 - (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry
 {
     NSLog(@"getAttachmentImage[%@]", entry.entryId);
-    UIImage *image;
-    @try {
-        image = [self.gateway retrieveEntryAttachmentImageByEntryId:entry.entryId roomId:entry.roomId];
-    }
-    @catch (...) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" 
-                                                        message:@"Network Disconnected" 
-                                                       delegate:nil 
-                                              cancelButtonTitle:@"OK" 
-                                              otherButtonTitles:nil];
-        [alert show];
-        [alert release];
-    }
-    return image;
+    return [self.gateway retrieveEntryAttachmentImageByEntryId:entry.entryId roomId:entry.roomId];
 }
 
 - (void)deleteCache

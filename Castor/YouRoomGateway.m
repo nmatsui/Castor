@@ -78,6 +78,9 @@
                         body:nil
                  oauth_token:self.oAuthToken
           oauth_token_secret:self.oAuthTokenSecret];
+        if (icon == nil || [icon length] == 0) {
+            return nil;
+        }
         [self.cacheManager insertOrReplaceGroupIconAtRoomId:roomId icon:icon];
     }
     return icon;
@@ -92,6 +95,9 @@
                                 body:Nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return list;
+    }
     NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
     for (NSDictionary *dic in jsonArray) {
         NSDictionary *group = [dic objectForKey:@"group"];
@@ -117,6 +123,9 @@
                         body:nil
                  oauth_token:self.oAuthToken
           oauth_token_secret:self.oAuthTokenSecret];
+        if (icon == nil || [icon length] == 0) {
+            return nil;
+        }
         [self.cacheManager insertOrReplaceParticipationIconAtRoomId:roomId participationId:participationId icon:icon];
     }
     return icon;
@@ -169,6 +178,9 @@
                                 body:nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return list;
+    }
     NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
     for (NSDictionary *dic in jsonArray) {
         NSDictionary *entry = [dic objectForKey:@"entry"];
@@ -186,23 +198,30 @@
                                 body:nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return list;
+    }
     NSDictionary *entry = [[[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"entry"];
     [list addObject:[self constructEntryListFromJSONDic:entry roomId:roomId level:[[NSNumber alloc] initWithInt:0]]];
     return list;
 }
 
-- (void)postEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
+- (BOOL)postEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
 {
     NSLog(@"postEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
     NSString *body = [NSString stringWithFormat:@"entry[content]=%@", text];
     if (parentId != nil) {
         body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId]; 
     }
-    [self        request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
-                  method:@"POST"
-                    body:[body dataUsingEncoding:NSUTF8StringEncoding]
-             oauth_token:self.oAuthToken
-      oauth_token_secret:self.oAuthTokenSecret];
+    NSData * response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
+                               method:@"POST"
+                                 body:[body dataUsingEncoding:NSUTF8StringEncoding]
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return NO;
+    }
+    return YES;
 }
 
 - (UIImage *)retrieveEntryAttachmentImageByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId
@@ -213,6 +232,9 @@
                                 body:nil
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return [[[UIImage alloc] init] autorelease];
+    }
     return [[[UIImage alloc] initWithData:response] autorelease];
 }
 
