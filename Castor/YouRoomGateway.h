@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "GroupData.h"
 #import "EntryData.h"
+#import "CacheManager.h"
 #import "OAuthCore.h"
 #import "OAuth+Additions.h"
 #import "JSON.h"
@@ -17,10 +18,12 @@
 @interface YouRoomGateway : NSObject {
     NSString *_oAuthToken;
     NSString *_oAuthTokenSecret;
+    CacheManager *_cacheManager;
 }
 
 @property(nonatomic, retain) NSString *oAuthToken;
 @property(nonatomic, retain) NSString *oAuthTokenSecret;
+@property(nonatomic, retain) CacheManager *cacheManager;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;

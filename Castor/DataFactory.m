@@ -13,6 +13,7 @@
 
 @synthesize authTokenPath = _authTokenPath;
 @synthesize gateway = _gateway;
+@synthesize cacheManager = _cacheManager;
 
 - (id)init
 {
@@ -29,6 +30,8 @@
             NSLog(@"can't find token from cache");
             self.gateway = [[YouRoomGateway alloc] init];
         }
+        self.cacheManager = [[CacheManager alloc] init];
+        self.gateway.cacheManager = self.cacheManager;
     }
     return self;
 }
@@ -214,10 +217,17 @@
     return image;
 }
 
+- (void)deleteCache
+{
+    [self.cacheManager deleteAllGroupIcon];
+    [self.cacheManager deleteAllParticipationIcon];
+}
+
 - (void)dealloc
 {
     self.authTokenPath = nil;
     self.gateway = nil;
+    self.cacheManager = nil;
     [super dealloc];
 }
 @end

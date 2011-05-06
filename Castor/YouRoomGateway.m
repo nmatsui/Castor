@@ -12,6 +12,7 @@
 
 @synthesize oAuthToken = _oAuthToken;
 @synthesize oAuthTokenSecret = _oAuthTokenSecret;
+@synthesize cacheManager = _cacheManager;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret
 {
@@ -21,6 +22,14 @@
         self.oAuthTokenSecret = oAuthTokenSecret;
     }
     return self;
+}
+
+- (void)dealloc
+{
+    self.oAuthToken = nil;
+    self.oAuthTokenSecret = nil;
+    self.cacheManager = nil;
+    [super dealloc];
 }
 
 - (NSData *)request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret {
@@ -60,6 +69,20 @@
     return dict;
 }
 
+- (NSData *)getGroupIconAtRoomId:(NSNumber *)roomId
+{
+    NSData *icon = [self.cacheManager selectGroupIconAtRoomId:roomId];
+    if (icon == nil) {
+        icon = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", roomId]]
+                      method:@"GET"
+                        body:nil
+                 oauth_token:self.oAuthToken
+          oauth_token_secret:self.oAuthTokenSecret];
+        [self.cacheManager insertOrReplaceGroupIconAtRoomId:roomId icon:icon];
+    }
+    return icon;
+}
+
 - (NSMutableArray *)retrieveGroupList
 {
     NSLog(@"retrieveGroupList");
@@ -79,15 +102,24 @@
         groupData.toParam   = [[group objectForKey:@"to_param"] isKindOfClass:[NSString class]] ? [group objectForKey:@"to_param"] : nil;
         groupData.createdAt = [group objectForKey:@"created_at"];
         groupData.updatedAt = [group objectForKey:@"updated_at"];
-        NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", groupData.roomId]]
-                                  method:@"GET"
-                                    body:nil
-                            oauth_token:self.oAuthToken
-                      oauth_token_secret:self.oAuthTokenSecret];
-        groupData.roomIcon  = [[[UIImage alloc] initWithData:response] autorelease];
+        groupData.roomIcon  = [[[UIImage alloc] initWithData:[self getGroupIconAtRoomId:groupData.roomId]] autorelease];
         [list addObject:groupData];
     }
     return list;
+}
+
+- (NSData *)getParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId
+{
+    NSData *icon = [self.cacheManager selectParticipationIconAtRoomId:roomId participationId:participationId];
+    if (icon == nil) {
+        icon = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, participationId]]
+                      method:@"GET"
+                        body:nil
+                 oauth_token:self.oAuthToken
+          oauth_token_secret:self.oAuthTokenSecret];
+        [self.cacheManager insertOrReplaceParticipationIconAtRoomId:roomId participationId:participationId icon:icon];
+    }
+    return icon;
 }
 
 - (EntryData *)constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level
@@ -116,12 +148,7 @@
     }
     entryData.createdAt         = [entry objectForKey:@"created_at"];
     entryData.updatedAt         = [entry objectForKey:@"updated_at"];
-    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, entryData.participationId]]
-                              method:@"GET"
-                                body:nil
-                         oauth_token:self.oAuthToken
-                  oauth_token_secret:self.oAuthTokenSecret];
-    entryData.participationIcon = [[[UIImage alloc] initWithData:response] autorelease];
+    entryData.participationIcon = [[[UIImage alloc] initWithData:[self getParticipationIconAtRoomId:roomId participationId:entryData.participationId]] autorelease];
     entryData.level             = level;
     if ([entry objectForKey:@"children"] != nil && [[entry objectForKey:@"children"] isKindOfClass:[NSArray class]]) {
         NSMutableArray *children = [[[NSMutableArray alloc] init] autorelease];
@@ -130,7 +157,6 @@
         }
         entryData.children      = children;
     }
-    
     return entryData;
 }
 
@@ -161,7 +187,6 @@
                          oauth_token:self.oAuthToken
                   oauth_token_secret:self.oAuthTokenSecret];
     NSDictionary *entry = [[[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"entry"];
-    NSLog(@"%@", entry);
     [list addObject:[self constructEntryListFromJSONDic:entry roomId:roomId level:[[NSNumber alloc] initWithInt:0]]];
     return list;
 }
@@ -173,12 +198,11 @@
     if (parentId != nil) {
         body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId]; 
     }
-    NSData *response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
-                              method:@"POST"
-                                body:[body dataUsingEncoding:NSUTF8StringEncoding]
-                         oauth_token:self.oAuthToken
-                  oauth_token_secret:self.oAuthTokenSecret];
-    NSLog(@"response %@", response);
+    [self        request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
+                  method:@"POST"
+                    body:[body dataUsingEncoding:NSUTF8StringEncoding]
+             oauth_token:self.oAuthToken
+      oauth_token_secret:self.oAuthTokenSecret];
 }
 
 - (UIImage *)retrieveEntryAttachmentImageByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId

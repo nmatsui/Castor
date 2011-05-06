@@ -13,6 +13,19 @@
 
 @synthesize factory = _factory;
 
+- (IBAction)cacheDeleteClick:(id)sender
+{
+    NSLog(@"cache Delete");
+    [self.factory deleteCache];
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//    CacheManager *cacheManager = [[[CacheManager alloc] init] autorelease];
+//    UIImage *image1 = [UIImage imageNamed:@"myrooms.png"];
+//    [cacheManager selectGroupIconAtRoomId:[[NSNumber alloc] initWithInt:1]];
+//    [cacheManager insertOrReplaceGroupIconAtRoomId:[[NSNumber alloc] initWithInt:1] icon:image1];
+//    [cacheManager selectGroupIconAtRoomId:[[NSNumber alloc] initWithInt:1]];
+//    [pool release];
+}
+
 - (IBAction)logoutClick:(id)sender
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];

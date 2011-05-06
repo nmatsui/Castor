@@ -10,6 +10,8 @@
 #import "LoginView.h"
 #import "DataFactory.h"
 
+#import "CacheManager.h"
+
 @interface SettingView : UIViewController {
     DataFactory *_factory;
 }
@@ -17,4 +19,6 @@
 @property(nonatomic, retain) DataFactory *factory;
 
 - (IBAction)logoutClick:(id)sender;
+- (IBAction)cacheDeleteClick:(id)sender;
+
 @end
