@@ -16,7 +16,7 @@
 #import "ImageView.h"
 #import "ViewUtil.h"
 
-@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable> {
+@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable> {
     DataFactory *_factory;
     GroupData *_group;
     
@@ -26,8 +26,8 @@
     int _page;
     BOOL _portrate;
     
-    int _tapCount;
-    NSIndexPath *_selectedRow;
+    EntryData *_target;
+    NSMutableArray *_selectors;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -35,6 +35,9 @@
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
+
+@property(nonatomic, retain) EntryData *target;
+@property(nonatomic, retain) NSMutableArray *selectors;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)editEntry:(id)sender;

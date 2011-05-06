@@ -13,7 +13,7 @@
 #import "SettingView.h"
 #import "ViewUtil.h"
 
-@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable> {
+@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable> {
     DataFactory *_factory;
     EntryData *_originEntry;
     
@@ -21,6 +21,9 @@
     NSMutableArray *_entryList;
     
     BOOL _portrate;
+    
+    EntryData *_target;
+    NSMutableArray *_selectors;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -28,6 +31,9 @@
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
+
+@property(nonatomic, retain) EntryData *target;
+@property(nonatomic, retain) NSMutableArray *selectors;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)editEntry:(id)sender;

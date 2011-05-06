@@ -17,7 +17,58 @@
 @synthesize entryTable = _entryTable;
 @synthesize entryList = _entryList;
 
-static const double singleTapDelay = 0.2;
+@synthesize target = _target;
+@synthesize selectors = _selectors;
+
+- (void)moveToCommentViewWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"move to CommentView");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" bundle:nil] autorelease];
+    commentView.factory = self.factory;
+    commentView.originEntry = originEntry;
+    [self.navigationController pushViewController:commentView animated:YES];
+    [pool release];
+}
+
+- (void)viewAttachmentWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"View Attachment [%@]", originEntry.entryId);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    if ([@"Text" isEqualToString:originEntry.attachmentType]) {
+        NSLog(@"move to LongTextView");
+        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil] autorelease];
+        longTextView.entry = originEntry;
+        [self.navigationController pushViewController:longTextView animated:YES];
+    }
+    else if ([@"Image" isEqualToString:originEntry.attachmentType]) {
+        NSLog(@"move to ImageView");
+        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil] autorelease];
+        imageView.factory = self.factory;
+        imageView.entry = originEntry;
+        [self.navigationController pushViewController:imageView animated:YES];
+    }
+    else if ([@"Link" isEqualToString:self.target.attachmentType]) {
+        NSLog(@"open safari with url[%@]", originEntry.attachmentURL);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.target.attachmentURL]];
+    }
+    [pool release];
+}
+
+- (void)updateEntryWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"update entry [%@]", originEntry.entryId);
+}
+
+- (void)deleteEntryWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"delete entry [%@]", originEntry.entryId);
+}
+
+- (void)cancelWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"cancel entry [%@]", originEntry.entryId);
+}
 
 - (void)reloadEntryListInBackground:(id)arg
 {
@@ -75,6 +126,7 @@ static const double singleTapDelay = 0.2;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         _page = 1;
+        self.selectors = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -86,6 +138,9 @@ static const double singleTapDelay = 0.2;
     
     self.entryList = nil;
     self.entryTable = nil;
+    
+    self.target = nil;
+    self.selectors = nil;
     [super dealloc];
 }
 
@@ -136,7 +191,7 @@ static const double singleTapDelay = 0.2;
     if (indexPath.row < [self.entryList count] - 2) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate]];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         [pool release];
     }
     else if (indexPath.row == [self.entryList count] - 2) {
@@ -148,69 +203,47 @@ static const double singleTapDelay = 0.2;
     return cell;    
 }
 
-- (void)singleTapAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"single Tapped at %d", indexPath.row);
-    _tapCount = 0;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to CommentView");
-    CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" bundle:nil] autorelease];
-    commentView.factory = self.factory;
-    commentView.originEntry = [self.entryList objectAtIndex:indexPath.row];
-    [self.navigationController pushViewController:commentView animated:YES];
-    [pool release];
-}
-
-- (void)doubleTapAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"double Tapped at %d", indexPath.row);
-    _tapCount = 0;
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
-    if ([@"Text" isEqualToString:entry.attachmentType]) {
-        NSLog(@"move to LongTextView");
-        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil] autorelease];
-        longTextView.entry = entry;
-        [self.navigationController pushViewController:longTextView animated:YES];
-    }
-    else if ([@"Image" isEqualToString:entry.attachmentType]) {
-        NSLog(@"move to ImageView");
-        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil] autorelease];
-        imageView.factory = self.factory;
-        imageView.entry = entry;
-        [self.navigationController pushViewController:imageView animated:YES];
-    }
-    else if ([@"Link" isEqualToString:entry.attachmentType]) {
-        NSLog(@"open safari with url[%@]", entry.attachmentURL);
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:entry.attachmentURL]];
-    }
-    [pool release];
-}
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"RoomView %d row tapped",indexPath.row);
-    
+    NSLog(@"RoomView %d row clicked",indexPath.row);
     if (indexPath.row < [self.entryList count] - 2) {
-        _selectedRow = indexPath;
-        _tapCount++;
-        
-        switch (_tapCount)
-        {
-            case 1: //single tap
-                [self performSelector:@selector(singleTapAtIndexPath:) withObject:indexPath afterDelay:singleTapDelay];
-                break;
-            case 2: //double tap
-                [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(singleTapAtIndexPath:) object:indexPath];
-                [self performSelector:@selector(doubleTapAtIndexPath:) withObject:indexPath];
-                break;
-            default:
-                break;
+        [self.selectors removeAllObjects];
+        if (self.target != nil) self.target = nil;
+        self.target = [self.entryList objectAtIndex:indexPath.row];
+        UIActionSheet *menu = [[UIActionSheet alloc] init];
+        [menu setDelegate:self];
+        [menu addButtonWithTitle:@"View Comments"];
+        [self.selectors addObject:@"moveToCommentViewWithOriginEntry:"];
+        [menu addButtonWithTitle:@"Update"];
+        [self.selectors addObject:@"updateEntryWithOriginEntry:"];
+        [menu addButtonWithTitle:@"Delete"];
+        [self.selectors addObject:@"deleteEntryWithOriginEntry:"];
+        if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
+            [menu addButtonWithTitle:@"View Attachment"];
+            [self.selectors addObject:@"viewAttachmentWithOriginEntry:"];
         }
+        [menu addButtonWithTitle:@"Cancel"];
+        [self.selectors addObject:@"cancelWithOriginEntry:"];
+        [menu showInView:self.view];
+        [menu release];
     }
     else if (indexPath.row == [self.entryList count] - 2) {
         [self nextPage:self];
     }
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"accessory button clicked[%d]", indexPath.row);
+    [self performSelector:@selector(moveToCommentViewWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
+}
+
+-(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"actionSheet button clicked[%d]", buttonIndex);
+    [self performSelector:NSSelectorFromString([self.selectors objectAtIndex:buttonIndex]) withObject:self.target];
+    self.target = nil;
+    [self.selectors removeAllObjects];
 }
 
 #pragma mark - View lifecycle
@@ -235,6 +268,8 @@ static const double singleTapDelay = 0.2;
     
     self.entryList = nil;
     self.entryTable = nil;
+    
+    self.target = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

@@ -17,7 +17,63 @@
 @synthesize entryTable = _entryTable;
 @synthesize entryList = _entryList;
 
+@synthesize target = _target;
+@synthesize selectors = _selectors;
+
 static const int MAX_LEVLE = 6;
+
+- (void)editEntryWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"editEntry");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to EditView");
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+    editView.factory = self.factory;
+    editView.roomId = self.originEntry.roomId;
+    editView.originEntry = originEntry;
+    editView.previousView = self;
+    [self.navigationController pushViewController:editView animated:YES];
+    [pool release];
+}
+
+- (void)viewAttachmentWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"View Attachment [%@]", originEntry.entryId);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    if ([@"Text" isEqualToString:originEntry.attachmentType]) {
+        NSLog(@"move to LongTextView");
+        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil] autorelease];
+        longTextView.entry = originEntry;
+        [self.navigationController pushViewController:longTextView animated:YES];
+    }
+    else if ([@"Image" isEqualToString:originEntry.attachmentType]) {
+        NSLog(@"move to ImageView");
+        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil] autorelease];
+        imageView.factory = self.factory;
+        imageView.entry = originEntry;
+        [self.navigationController pushViewController:imageView animated:YES];
+    }
+    else if ([@"Link" isEqualToString:self.target.attachmentType]) {
+        NSLog(@"open safari with url[%@]", originEntry.attachmentURL);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:self.target.attachmentURL]];
+    }
+    [pool release];
+}
+
+- (void)updateEntryWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"update entry [%@]", originEntry.entryId);
+}
+
+- (void)deleteEntryWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"delete entry [%@]", originEntry.entryId);
+}
+
+- (void)cancelWithOriginEntry:(EntryData *)originEntry
+{
+    NSLog(@"cancel entry [%@]", originEntry.entryId);
+}
 
 - (void)reloadCommentListInBackground:(id)arg
 {
@@ -42,16 +98,7 @@ static const int MAX_LEVLE = 6;
 
 - (IBAction)editEntry:(id)sender
 {
-    NSLog(@"editEntry");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to EditView");
-    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
-    editView.factory = self.factory;
-    editView.roomId = self.originEntry.roomId;
-    editView.originEntry = self.originEntry;
-    editView.previousView = self;
-    [self.navigationController pushViewController:editView animated:YES];
-    [pool release];
+    [self performSelector:@selector(editEntryWithOriginEntry:) withObject:self.originEntry];
 }
 
 - (IBAction)reload:(id)sender
@@ -61,12 +108,11 @@ static const int MAX_LEVLE = 6;
     [self performSelectorInBackground:@selector(reloadCommentListInBackground:) withObject:nil];
 }
 
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.selectors = [[NSMutableArray alloc] init];
     }
     return self;
 }
@@ -78,6 +124,8 @@ static const int MAX_LEVLE = 6;
     
     self.entryList = nil;
     self.entryTable = nil;
+    self.target = nil;
+    self.selectors = nil;
     [super dealloc];
 }
 
@@ -129,23 +177,65 @@ static const int MAX_LEVLE = 6;
     return cell;    
 }
 
+//- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+//{
+//    NSLog(@"GroupView %d row clicked",indexPath.row);
+//    if (indexPath.row < [self.entryList count] - 1) {
+//        EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
+//        if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
+//            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//            NSLog(@"move to RoomView");
+//            EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+//            editView.factory = self.factory;
+//            editView.roomId = self.originEntry.roomId;
+//            editView.originEntry = [self.entryList objectAtIndex:indexPath.row];
+//            editView.previousView = self;
+//            [self.navigationController pushViewController:editView animated:YES];
+//            [pool release];
+//        }
+//    }
+//}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"GroupView %d row clicked",indexPath.row);
+    NSLog(@"CommentView %d row clicked",indexPath.row);
     if (indexPath.row < [self.entryList count] - 1) {
-        EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
-        if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
-            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-            NSLog(@"move to RoomView");
-            EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
-            editView.factory = self.factory;
-            editView.roomId = self.originEntry.roomId;
-            editView.originEntry = [self.entryList objectAtIndex:indexPath.row];
-            editView.previousView = self;
-            [self.navigationController pushViewController:editView animated:YES];
-            [pool release];
+        [self.selectors removeAllObjects];
+        if (self.target != nil) self.target = nil;
+        self.target = [self.entryList objectAtIndex:indexPath.row];
+        UIActionSheet *menu = [[UIActionSheet alloc] init];
+        [menu setDelegate:self];
+        if (indexPath.row != 0 && [self.target.level intValue] < MAX_LEVLE) {
+            [menu addButtonWithTitle:@"Add Comment"];
+            [self.selectors addObject:@"editEntryWithOriginEntry:"];
         }
+        [menu addButtonWithTitle:@"Update"];
+        [self.selectors addObject:@"updateEntryWithOriginEntry:"];
+        [menu addButtonWithTitle:@"Delete"];
+        [self.selectors addObject:@"deleteEntryWithOriginEntry:"];
+        if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
+            [menu addButtonWithTitle:@"View Attachment"];
+            [self.selectors addObject:@"viewAttachmentWithOriginEntry:"];
+        }
+        [menu addButtonWithTitle:@"Cancel"];
+        [self.selectors addObject:@"cancelWithOriginEntry:"];
+        [menu showInView:self.view];
+        [menu release];
     }
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"accessory button clicked[%d]", indexPath.row);
+    [self performSelector:@selector(editEntryWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
+}
+
+-(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"actionSheet button clicked[%d]", buttonIndex);
+    [self performSelector:NSSelectorFromString([self.selectors objectAtIndex:buttonIndex]) withObject:self.target];
+    self.target = nil;
+    [self.selectors removeAllObjects];
 }
 
 #pragma mark - View lifecycle
@@ -170,6 +260,8 @@ static const int MAX_LEVLE = 6;
     
     self.entryList = nil;
     self.entryTable = nil;
+    
+    self.target = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
