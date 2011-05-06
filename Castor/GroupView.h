@@ -20,12 +20,16 @@
     NSMutableArray *_groupList;
     
     BOOL _portrate;
+    
+    UIActivityIndicatorView *_indicator;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
 
 @property(nonatomic, retain) IBOutlet UITableView *groupTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *groupList;
+
+@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (IBAction)callSetting:(id)sender;
 

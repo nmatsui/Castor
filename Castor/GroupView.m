@@ -16,6 +16,8 @@
 @synthesize groupTable = _groupTable;
 @synthesize groupList = _groupList;
 
+@synthesize indicator = _indicator;
+
 - (void)alertException:(NSString *)message
 {
     UIAlertView *alert = [[UIAlertView alloc] init];
@@ -26,6 +28,14 @@
 	[alert release];
 }
 
+- (void)startIndicator:(id)sender
+{
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
 - (void)reloadGroupListInBackground:(id)arg
 {
     NSLog(@"reload groupList In Background");
@@ -33,6 +43,7 @@
     self.groupList = [self.factory getGroupListWithSender:self];
     [self.groupTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
     [pool release];
 }
 
@@ -49,7 +60,7 @@
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadGroup");
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadGroupListInBackground:) withObject:nil];
 }
 
@@ -57,7 +68,8 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -68,6 +80,8 @@
     
     self.groupList = nil;
     self.groupTable = nil;
+    
+    self.indicator = nil;
     [super dealloc];
 }
 
@@ -141,7 +155,7 @@
     }
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadGroupListInBackground:) withObject:nil];
 }
 

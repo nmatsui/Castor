@@ -20,6 +20,8 @@
 @synthesize target = _target;
 @synthesize selectors = _selectors;
 
+@synthesize indicator = _indicator;
+
 - (void)alertException:(NSString *)message
 {
     UIAlertView *alert = [[UIAlertView alloc] init];
@@ -80,6 +82,14 @@
     NSLog(@"cancel entry [%@]", originEntry.entryId);
 }
 
+- (void)startIndicator:(id)sender
+{
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
 - (void)reloadEntryListInBackground:(id)arg
 {
     NSLog(@"reload entryList[%@] In Background", self.group.roomId);
@@ -89,6 +99,7 @@
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
     [pool release];
 }
 
@@ -119,7 +130,7 @@
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadRoom[%@]", self.group.roomId);
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
 
@@ -127,7 +138,7 @@
 {
     _page++;
     NSLog(@"nextPage [%d]", _page);
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
 
@@ -137,6 +148,8 @@
     if (self) {
         _page = 1;
         self.selectors = [[NSMutableArray alloc] init];
+        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -151,6 +164,7 @@
     
     self.target = nil;
     self.selectors = nil;
+    self.indicator = nil;
     [super dealloc];
 }
 
@@ -266,7 +280,7 @@
     if (self.factory == nil) {
         self.factory = [[DataFactory alloc] init];
     }
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
 

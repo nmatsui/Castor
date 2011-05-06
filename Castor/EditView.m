@@ -38,10 +38,7 @@
         NSLog(@"no parent");
     }
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSString *str = self.textView.text;
-    NSLog(@"%@", str);
     [self.factory sendEntryText:self.textView.text roomId:self.roomId parentId:(self.originEntry != nil) ? self.originEntry.entryId : nil sender:self];
-    
     [self.previousView reload:nil];
     [self.navigationController popViewControllerAnimated:YES];
     [pool release];

@@ -28,6 +28,8 @@
     
     EntryData *_target;
     NSMutableArray *_selectors;
+    
+    UIActivityIndicatorView *_indicator;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
@@ -38,6 +40,8 @@
 
 @property(nonatomic, retain) EntryData *target;
 @property(nonatomic, retain) NSMutableArray *selectors;
+
+@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)editEntry:(id)sender;

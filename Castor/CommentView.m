@@ -20,6 +20,8 @@
 @synthesize target = _target;
 @synthesize selectors = _selectors;
 
+@synthesize indicator = _indicator;
+
 static const int MAX_LEVLE = 6;
 
 - (void)alertException:(NSString *)message
@@ -85,6 +87,14 @@ static const int MAX_LEVLE = 6;
     NSLog(@"cancel entry [%@]", originEntry.entryId);
 }
 
+- (void)startIndicator:(id)sender
+{
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
 - (void)reloadCommentListInBackground:(id)arg
 {
     NSLog(@"reload CommentList [%@] In Background", self.originEntry.entryId);
@@ -93,6 +103,7 @@ static const int MAX_LEVLE = 6;
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
     [pool release];
 }
 
@@ -114,7 +125,7 @@ static const int MAX_LEVLE = 6;
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadComment[%@]", self.originEntry.entryId);
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadCommentListInBackground:) withObject:nil];
 }
 
@@ -123,6 +134,8 @@ static const int MAX_LEVLE = 6;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.selectors = [[NSMutableArray alloc] init];
+        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -136,6 +149,7 @@ static const int MAX_LEVLE = 6;
     self.entryTable = nil;
     self.target = nil;
     self.selectors = nil;
+    self.indicator = nil;
     [super dealloc];
 }
 
@@ -239,7 +253,7 @@ static const int MAX_LEVLE = 6;
     if (self.factory == nil) {
         self.factory = [[DataFactory alloc] init];
     }
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadCommentListInBackground:) withObject:nil];
 }
 
