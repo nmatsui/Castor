@@ -6,7 +6,7 @@
   Copyright 2011 __MyCompanyName__. All rights reserved.
 */
 
-create table group_icon_cache (
+create table room_icon_cache (
   room_id          integer not null,
   icon             blob    not null,
   size             integer not null,

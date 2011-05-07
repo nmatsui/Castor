@@ -50,22 +50,22 @@ static const int INDENT_WIDTH     = 6;
     return imageView;
 }
 
-+ (CGFloat)getGroupCellHeight:(CGSize)size group:(GroupData *)group portrate:(BOOL)portrate
++ (CGFloat)getRoomCellHeight:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
 {
     float w = (portrate) ? size.width - 70 : size.height - 70;
-    CGSize s = [group.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+    CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 10 + s.height + 10;
     return (height<40)?40:height;
 }
 
-+ (UIView *)getGroupCellView:(CGSize)size group:(GroupData *)group portrate:(BOOL)portrate
++ (UIView *)getRoomCellView:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
 {
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-    UIImageView *icon = [ViewUtil makeIcon:CGRectMake(20, 5, 30, 30) image:group.roomIcon];
+    UIImageView *icon = [ViewUtil makeIcon:CGRectMake(20, 5, 30, 30) image:room.roomIcon];
     [v addSubview:icon];
     float w = (portrate) ? size.width - 70 : size.height - 70;
-    CGSize s = [group.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    UILabel *nameLabel = [ViewUtil makeLabel:CGRectMake(60, 10, w, s.height) text:group.roomName font:[UIFont systemFontOfSize:GROUP_FONT_SIZE]];
+    CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+    UILabel *nameLabel = [ViewUtil makeLabel:CGRectMake(60, 10, w, s.height) text:room.roomName font:[UIFont systemFontOfSize:GROUP_FONT_SIZE]];
     [v addSubview:nameLabel];
     return v;
 }

@@ -75,10 +75,10 @@
     return dict;
 }
 
-- (NSData *)getGroupIconAtRoomId:(NSNumber *)roomId
+- (NSData *)getRoomIconAtRoomId:(NSNumber *)roomId
 {
-    NSLog(@"getGroupIconAtRoomId[%@]", roomId);
-    NSData *icon = [self.cacheManager selectGroupIconAtRoomId:roomId];
+    NSLog(@"getRoomIconAtRoomId[%@]", roomId);
+    NSData *icon = [self.cacheManager selectRoomIconAtRoomId:roomId];
     if (icon == nil) {
         icon = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", roomId]]
                       method:@"GET"
@@ -88,14 +88,14 @@
         if (icon == nil || [icon length] == 0) {
             return nil;
         }
-        [self.cacheManager insertOrReplaceGroupIconAtRoomId:roomId icon:icon];
+        [self.cacheManager insertOrReplaceRoomIconAtRoomId:roomId icon:icon];
     }
     return icon;
 }
 
-- (NSMutableArray *)retrieveGroupList
+- (NSMutableArray *)retrieveRoomList
 {
-    NSLog(@"retrieveGroupList");
+    NSLog(@"retrieveRoomList");
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     NSData *response = [self request:[NSURL URLWithString:@"https://www.youroom.in/groups/my?format=json"]
                               method:@"GET"
@@ -108,15 +108,15 @@
     NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
     for (NSDictionary *dic in jsonArray) {
         NSDictionary *group = [dic objectForKey:@"group"];
-        GroupData *groupData = [[[GroupData alloc] init] autorelease];
-        groupData.roomId    = [group objectForKey:@"id"];
-        groupData.roomName  = [group objectForKey:@"name"];
-        groupData.opend     = [[group objectForKey:@"opened"] boolValue];
-        groupData.toParam   = [[group objectForKey:@"to_param"] isKindOfClass:[NSString class]] ? [group objectForKey:@"to_param"] : nil;
-        groupData.createdAt = [group objectForKey:@"created_at"];
-        groupData.updatedAt = [group objectForKey:@"updated_at"];
-        groupData.roomIcon  = [[[UIImage alloc] initWithData:[self getGroupIconAtRoomId:groupData.roomId]] autorelease];
-        [list addObject:groupData];
+        RoomData *roomData = [[[RoomData alloc] init] autorelease];
+        roomData.roomId    = [group objectForKey:@"id"];
+        roomData.roomName  = [group objectForKey:@"name"];
+        roomData.opend     = [[group objectForKey:@"opened"] boolValue];
+        roomData.toParam   = [[group objectForKey:@"to_param"] isKindOfClass:[NSString class]] ? [group objectForKey:@"to_param"] : nil;
+        roomData.createdAt = [group objectForKey:@"created_at"];
+        roomData.updatedAt = [group objectForKey:@"updated_at"];
+        roomData.roomIcon  = [[[UIImage alloc] initWithData:[self getRoomIconAtRoomId:roomData.roomId]] autorelease];
+        [list addObject:roomData];
     }
     return list;
 }

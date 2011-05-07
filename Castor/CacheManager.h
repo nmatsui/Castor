@@ -13,9 +13,9 @@
     sqlite3 *_db;
 }
 
-- (NSData *)selectGroupIconAtRoomId:(NSNumber *)roomId;
-- (void)insertOrReplaceGroupIconAtRoomId:(NSNumber *)roomId icon:(NSData *)icon;
-- (void)deleteAllGroupIcon;
+- (NSData *)selectRoomIconAtRoomId:(NSNumber *)roomId;
+- (void)insertOrReplaceRoomIconAtRoomId:(NSNumber *)roomId icon:(NSData *)icon;
+- (void)deleteAllRoomIcon;
 
 - (NSData *)selectParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
 - (void)insertOrReplaceParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId icon:(NSData *)icon;

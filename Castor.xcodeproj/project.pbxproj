@@ -10,10 +10,10 @@
 		860620341370F3B400E6A841 /* YouRoomGateway.m in Sources */ = {isa = PBXBuildFile; fileRef = 860620331370F3B400E6A841 /* YouRoomGateway.m */; };
 		86062038137103D200E6A841 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86062036137103D100E6A841 /* SettingView.m */; };
 		86062039137103D200E6A841 /* SettingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86062037137103D100E6A841 /* SettingView.xib */; };
+		8614C63E1374F95100AFBC39 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63D1374F95100AFBC39 /* database.sqlite */; };
 		865DD8921373916F0008EB9F /* create_table.sql in Resources */ = {isa = PBXBuildFile; fileRef = 865DD8901373916F0008EB9F /* create_table.sql */; };
 		865DD895137392C10008EB9F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 865DD894137392C10008EB9F /* libsqlite3.dylib */; };
 		865DD8981373981A0008EB9F /* CacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 865DD8971373981A0008EB9F /* CacheManager.m */; };
-		865DD8DE1373DF2A0008EB9F /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 865DD8DD1373DF2A0008EB9F /* database.sqlite */; };
 		86628E6E136D543100C86AFB /* LongTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86628E6C136D543100C86AFB /* LongTextView.m */; };
 		86628E6F136D543100C86AFB /* LongTextView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86628E6D136D543100C86AFB /* LongTextView.xib */; };
 		86628E74136D5C7800C86AFB /* ImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86628E72136D5C7800C86AFB /* ImageView.m */; };
@@ -45,7 +45,7 @@
 		86DA6CCF13715AD700DD923D /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CCB13715AD700DD923D /* OAuth+Additions.m */; };
 		86DA6CD013715AD700DD923D /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CCD13715AD700DD923D /* OAuthCore.m */; };
 		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
-		86EE1B07136BBCB200B94192 /* GroupData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* GroupData.m */; };
+		86EE1B07136BBCB200B94192 /* RoomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* RoomData.m */; };
 		86EE1B0B136BD46800B94192 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B09136BD46700B94192 /* RoomView.m */; };
 		86EE1B0C136BD46800B94192 /* RoomView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86EE1B0A136BD46700B94192 /* RoomView.xib */; };
 		86EE1B14136BF4E000B94192 /* EntryData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B13136BF4E000B94192 /* EntryData.m */; };
@@ -68,11 +68,11 @@
 		86062035137103D100E6A841 /* SettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingView.h; sourceTree = "<group>"; };
 		86062036137103D100E6A841 /* SettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingView.m; sourceTree = "<group>"; };
 		86062037137103D100E6A841 /* SettingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingView.xib; sourceTree = "<group>"; };
+		8614C63D1374F95100AFBC39 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
 		865DD8901373916F0008EB9F /* create_table.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = create_table.sql; sourceTree = "<group>"; };
 		865DD894137392C10008EB9F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		865DD8961373981A0008EB9F /* CacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheManager.h; sourceTree = "<group>"; };
 		865DD8971373981A0008EB9F /* CacheManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CacheManager.m; sourceTree = "<group>"; };
-		865DD8DD1373DF2A0008EB9F /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
 		86628E6B136D543100C86AFB /* LongTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LongTextView.h; sourceTree = "<group>"; };
 		86628E6C136D543100C86AFB /* LongTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LongTextView.m; sourceTree = "<group>"; };
 		86628E6D136D543100C86AFB /* LongTextView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LongTextView.xib; sourceTree = "<group>"; };
@@ -80,7 +80,7 @@
 		86628E72136D5C7800C86AFB /* ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageView.m; sourceTree = "<group>"; };
 		86628E73136D5C7800C86AFB /* ImageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageView.xib; sourceTree = "<group>"; };
 		866F9E0D1372D6FA006BA19C /* Reloadable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reloadable.h; sourceTree = "<group>"; };
-		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
+		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GroupView.h; sourceTree = "<group>"; };
 		86B04C2E136C0B1600F8BFA1 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
 		86B04C2F136C0B1600F8BFA1 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
 		86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtil.h; sourceTree = "<group>"; };
@@ -126,8 +126,8 @@
 		86DA6CCD13715AD700DD923D /* OAuthCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthCore.m; sourceTree = "<group>"; };
 		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
 		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
-		86EE1B05136BBCB100B94192 /* GroupData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupData.h; sourceTree = "<group>"; };
-		86EE1B06136BBCB200B94192 /* GroupData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupData.m; sourceTree = "<group>"; };
+		86EE1B05136BBCB100B94192 /* RoomData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomData.h; sourceTree = "<group>"; };
+		86EE1B06136BBCB200B94192 /* RoomData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomData.m; sourceTree = "<group>"; };
 		86EE1B08136BD46700B94192 /* RoomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomView.h; sourceTree = "<group>"; };
 		86EE1B09136BD46700B94192 /* RoomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RoomView.m; sourceTree = "<group>"; };
 		86EE1B0A136BD46700B94192 /* RoomView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RoomView.xib; sourceTree = "<group>"; };
@@ -170,7 +170,7 @@
 		865DD88F1373916F0008EB9F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				865DD8DD1373DF2A0008EB9F /* database.sqlite */,
+				8614C63D1374F95100AFBC39 /* database.sqlite */,
 				865DD8901373916F0008EB9F /* create_table.sql */,
 			);
 			path = Resources;
@@ -312,8 +312,8 @@
 				860620321370F3B300E6A841 /* YouRoomGateway.h */,
 				860620331370F3B400E6A841 /* YouRoomGateway.m */,
 				86DA6C66137131E100DD923D /* YouRoomGateway+ConsumerKey.m */,
-				86EE1B05136BBCB100B94192 /* GroupData.h */,
-				86EE1B06136BBCB200B94192 /* GroupData.m */,
+				86EE1B05136BBCB100B94192 /* RoomData.h */,
+				86EE1B06136BBCB200B94192 /* RoomData.m */,
 				86EE1B12136BF4DF00B94192 /* EntryData.h */,
 				86EE1B13136BF4E000B94192 /* EntryData.m */,
 				865DD8961373981A0008EB9F /* CacheManager.h */,
@@ -398,7 +398,7 @@
 				86DA6C731371592600DD923D /* myrooms.png in Resources */,
 				86DA6C741371592600DD923D /* test.jpg in Resources */,
 				865DD8921373916F0008EB9F /* create_table.sql in Resources */,
-				865DD8DE1373DF2A0008EB9F /* database.sqlite in Resources */,
+				8614C63E1374F95100AFBC39 /* database.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,7 +414,7 @@
 				86F85B9F136ACEB10031F3B2 /* RootViewController.m in Sources */,
 				86F85BAB136AD1110031F3B2 /* LoginView.m in Sources */,
 				86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */,
-				86EE1B07136BBCB200B94192 /* GroupData.m in Sources */,
+				86EE1B07136BBCB200B94192 /* RoomData.m in Sources */,
 				86EE1B0B136BD46800B94192 /* RoomView.m in Sources */,
 				86EE1B14136BF4E000B94192 /* EntryData.m in Sources */,
 				86B04C30136C0B1600F8BFA1 /* GroupView.m in Sources */,

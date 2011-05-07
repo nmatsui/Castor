@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GroupData.h"
+#import "RoomData.h"
 #import "EntryData.h"
 #import "CacheManager.h"
 #import "OAuthCore.h"
@@ -27,7 +27,7 @@
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
-- (NSMutableArray *)retrieveGroupList;
+- (NSMutableArray *)retrieveRoomList;
 - (NSMutableArray *)retrieveEntryListByRoomId:(NSNumber *)roomId page:(int)page;
 - (NSMutableArray *)retrieveEntryCommentListByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;
 - (BOOL)postEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId;

@@ -66,15 +66,15 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) [[NSFileManager defaultManager] removeItemAtPath:self.authTokenPath error:nil];
 }
 
-- (NSMutableArray *)getGroupListWithSender:(id)sender
+- (NSMutableArray *)getRoomListWithSender:(id)sender
 {
-    NSLog(@"getGroupListWithSender");
+    NSLog(@"getRoomListWithSender");
     NSMutableArray *list = nil;
     @try {
-        list = [self.gateway retrieveGroupList];
+        list = [self.gateway retrieveRoomList];
     }
     @catch (NSException *exception) {
-        NSLog(@"exception in getGroupListWithSender[%@]", [exception reason]);
+        NSLog(@"exception in getRoomListWithSender[%@]", [exception reason]);
         [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
 //    list = [[[NSMutableArray alloc] init] autorelease];
@@ -198,7 +198,7 @@
 
 - (void)deleteCache
 {
-    [self.cacheManager deleteAllGroupIcon];
+    [self.cacheManager deleteAllRoomIcon];
     [self.cacheManager deleteAllParticipationIcon];
 }
 

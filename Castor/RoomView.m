@@ -12,7 +12,7 @@
 @implementation RoomView
 
 @synthesize factory = _factory;
-@synthesize group = _group;
+@synthesize room = _room;
 
 @synthesize entryTable = _entryTable;
 @synthesize entryList = _entryList;
@@ -92,9 +92,9 @@
 
 - (void)reloadEntryListInBackground:(id)arg
 {
-    NSLog(@"reload entryList[%@] In Background", self.group.roomId);
+    NSLog(@"reload entryList[%@] In Background", self.room.roomId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [self.factory getRoomEntryListByRoomId:self.group.roomId page:_page sender:self];
+    self.entryList = [self.factory getRoomEntryListByRoomId:self.room.roomId page:_page sender:self];
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
     [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
     [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
@@ -120,7 +120,7 @@
     NSLog(@"move to EditView");
     EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
     editView.factory = self.factory;
-    editView.roomId = self.group.roomId;
+    editView.roomId = self.room.roomId;
     editView.originEntry = nil;
     editView.previousView = self;
     [self.navigationController pushViewController:editView animated:YES];
@@ -129,7 +129,7 @@
 
 - (IBAction)reload:(id)sender
 {
-    NSLog(@"reloadRoom[%@]", self.group.roomId);
+    NSLog(@"reloadRoom[%@]", self.room.roomId);
     [self performSelector:@selector(startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
 }
@@ -157,7 +157,7 @@
 - (void)dealloc
 {
     self.factory = nil;
-    self.group = nil;
+    self.room = nil;
     
     self.entryList = nil;
     self.entryTable = nil;
@@ -184,7 +184,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     switch(section) {
-        case 0: return self.group.roomName;
+        case 0: return self.room.roomName;
         default: return nil;
     }
 }
@@ -275,7 +275,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"roomView[%@] loaded", self.group.roomId);
+    NSLog(@"roomView[%@] loaded", self.room.roomId);
     self.title = @"Room";
     if (self.factory == nil) {
         self.factory = [[DataFactory alloc] init];
@@ -288,7 +288,7 @@
 {
     [super viewDidUnload];
     self.factory = nil;
-    self.group = nil;
+    self.room = nil;
     
     self.entryList = nil;
     self.entryTable = nil;

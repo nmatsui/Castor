@@ -16,8 +16,8 @@
 @interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate> {
     DataFactory *_factory;
     
-    UITableView *_groupTable;
-    NSMutableArray *_groupList;
+    UITableView *_roomTable;
+    NSMutableArray *_roomList;
     
     BOOL _portrate;
     
@@ -26,8 +26,8 @@
 
 @property(nonatomic, retain) DataFactory *factory;
 
-@property(nonatomic, retain) IBOutlet UITableView *groupTable;
-@property(nonatomic, retain) IBOutlet NSMutableArray *groupList;
+@property(nonatomic, retain) IBOutlet UITableView *roomTable;
+@property(nonatomic, retain) IBOutlet NSMutableArray *roomList;
 
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 

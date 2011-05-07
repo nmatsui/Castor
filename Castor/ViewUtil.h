@@ -7,15 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GroupData.h"
+#import "RoomData.h"
 #import "EntryData.h"
 
 @interface ViewUtil : NSObject {
     
 }
 
-+ (CGFloat)getGroupCellHeight:(CGSize)size group:(GroupData *)group portrate:(BOOL)portrate;
-+ (UIView *)getGroupCellView:(CGSize)size group:(GroupData *)group portrate:(BOOL)portrate;
++ (CGFloat)getRoomCellHeight:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate;
++ (UIView *)getRoomCellView:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate;
 + (CGFloat)getEntryCellHeight:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;
 + (UIView *)getEntryCellView:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;
 + (UIView *)getNextPageCellView:(CGSize)size portrate:(BOOL)portrate;

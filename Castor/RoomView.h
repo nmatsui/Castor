@@ -18,7 +18,7 @@
 
 @interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable> {
     DataFactory *_factory;
-    GroupData *_group;
+    RoomData *_room;
     
     UITableView *_entryTable;
     NSMutableArray *_entryList;
@@ -33,7 +33,7 @@
 }
 
 @property(nonatomic, retain) DataFactory *factory;
-@property(nonatomic, retain) GroupData *group;
+@property(nonatomic, retain) RoomData *room;
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;

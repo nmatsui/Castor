@@ -37,13 +37,13 @@
     [super dealloc];
 }
 
-- (NSData *)selectGroupIconAtRoomId:(NSNumber *)roomId
+- (NSData *)selectRoomIconAtRoomId:(NSNumber *)roomId
 {
-    NSLog(@"selectGroupIconAtRoomId[%@]", roomId);
-    NSString *sql = @"select icon, size from group_icon_cache where room_id = @roomId";
+    NSLog(@"selectRoomIconAtRoomId[%@]", roomId);
+    NSString *sql = @"select icon, size from room_icon_cache where room_id = @roomId";
     sqlite3_stmt *statement = nil;
     if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
-        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectGroupIconAtRoomId" userInfo:nil];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectRoomIconAtRoomId" userInfo:nil];
         [exception raise];
     };
     sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"), [roomId intValue]);
@@ -55,13 +55,13 @@
     return image;
 }
 
-- (void)insertOrReplaceGroupIconAtRoomId:(NSNumber *)roomId icon:(NSData *)icon
+- (void)insertOrReplaceRoomIconAtRoomId:(NSNumber *)roomId icon:(NSData *)icon
 {
-    NSLog(@"insertOrReplaceGroupIconAtRoomId[%@]", roomId);
-    NSString *sql = @"insert or replace into group_icon_cache(room_id, icon, size, cached_at) values(@roomId, @icon, @size, @cachedAt)";
+    NSLog(@"insertOrReplaceRoomIconAtRoomId[%@]", roomId);
+    NSString *sql = @"insert or replace into room_icon_cache(room_id, icon, size, cached_at) values(@roomId, @icon, @size, @cachedAt)";
     sqlite3_stmt *statement = nil;
     if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
-        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at insertOrReplaceGroupIconAtRoomId" userInfo:nil];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at insertOrReplaceRoomIconAtRoomId" userInfo:nil];
         [exception raise];
     };
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@roomId"),   [roomId intValue]);
@@ -69,23 +69,23 @@
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),     [icon length]);
     sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"), [[NSDate date] timeIntervalSince1970]);
     if (sqlite3_step(statement) == SQLITE_ERROR) {
-        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"insert or replace error at insertOrReplaceGroupIconAtRoomId" userInfo:nil];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"insert or replace error at insertOrReplaceRoomIconAtRoomId" userInfo:nil];
         [exception raise];
     }
     sqlite3_finalize(statement);
 }
 
-- (void)deleteAllGroupIcon
+- (void)deleteAllRoomIcon
 {
-    NSLog(@"deleteAllGroupIcon");
-    NSString *sql = @"delete from group_icon_cache";
+    NSLog(@"deleteAllRoomIcon");
+    NSString *sql = @"delete from room_icon_cache";
     sqlite3_stmt *statement = nil;
     if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
-        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at deleteAllGroupIcon" userInfo:nil];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at deleteAllRoomIcon" userInfo:nil];
         [exception raise];
     };
     if (sqlite3_step(statement) == SQLITE_ERROR) {
-        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllGroupIcon" userInfo:nil];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllRoomIcon" userInfo:nil];
         [exception raise];
     }
     sqlite3_finalize(statement);

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "GroupData.h"
+#import "RoomData.h"
 #import "EntryData.h"
 #import "YouRoomGateway.h"
 #import "CacheManager.h"
@@ -25,7 +25,7 @@
 - (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(id)sender;
 - (BOOL)hasAuthToken;
 - (void)clearAuthToken;
-- (NSMutableArray *)getGroupListWithSender:(id)sender;
+- (NSMutableArray *)getRoomListWithSender:(id)sender;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(id)sender;
 - (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(id)sender;
 - (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender;

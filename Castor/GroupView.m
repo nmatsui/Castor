@@ -13,8 +13,8 @@
 
 @synthesize factory = _factory;
 
-@synthesize groupTable = _groupTable;
-@synthesize groupList = _groupList;
+@synthesize roomTable = _roomTable;
+@synthesize roomList = _roomList;
 
 @synthesize indicator = _indicator;
 
@@ -40,8 +40,8 @@
 {
     NSLog(@"reload groupList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.groupList = [self.factory getGroupListWithSender:self];
-    [self.groupTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    self.roomList = [self.factory getRoomListWithSender:self];
+    [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.indicator stopAnimating];
     [pool release];
@@ -78,8 +78,8 @@
 {
     self.factory = nil;
     
-    self.groupList = nil;
-    self.groupTable = nil;
+    self.roomList = nil;
+    self.roomTable = nil;
     
     self.indicator = nil;
     [super dealloc];
@@ -100,12 +100,12 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.groupList count];
+    return [self.roomList count];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [ViewUtil getGroupCellHeight:self.view.window.screen.bounds.size group:[self.groupList objectAtIndex:indexPath.row] portrate:_portrate];
+    return [ViewUtil getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -114,11 +114,11 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
-    if ([self.groupList count] <= indexPath.row) return cell;
+    if ([self.roomList count] <= indexPath.row) return cell;
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    GroupData *group = [self.groupList objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:[ViewUtil getGroupCellView:self.view.window.screen.bounds.size group:group portrate:_portrate]];
+    RoomData *room = [self.roomList objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:[ViewUtil getRoomCellView:self.view.window.screen.bounds.size room:room portrate:_portrate]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
     return cell;
@@ -131,7 +131,7 @@
     NSLog(@"move to RoomView");
     RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil] autorelease];
     roomView.factory = self.factory;
-    roomView.group = [self.groupList objectAtIndex:indexPath.row];
+    roomView.room = [self.roomList objectAtIndex:indexPath.row];
     [self.navigationController pushViewController:roomView animated:YES];
     [pool release];
 }
@@ -164,19 +164,19 @@
     [super viewDidUnload];
     self.factory = nil;
     
-    self.groupList = nil;
-    self.groupTable = nil;
+    self.roomList = nil;
+    self.roomTable = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
         _portrate = NO;
-        [self.groupTable reloadData];
+        [self.roomTable reloadData];
     }
     else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
         _portrate = YES;
-        [self.groupTable reloadData];
+        [self.roomTable reloadData];
     }
     return YES;
 }

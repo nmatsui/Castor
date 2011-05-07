@@ -6,10 +6,10 @@
 //  Copyright 2011 __MyCompanyName__. All rights reserved.
 //
 
-#import "GroupData.h"
+#import "RoomData.h"
 
 
-@implementation GroupData
+@implementation RoomData
 
 @synthesize roomId    = _roomId;
 @synthesize roomName  = _roomName;
