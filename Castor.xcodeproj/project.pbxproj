@@ -11,6 +11,7 @@
 		86062038137103D200E6A841 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86062036137103D100E6A841 /* SettingView.m */; };
 		86062039137103D200E6A841 /* SettingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86062037137103D100E6A841 /* SettingView.xib */; };
 		8614C63E1374F95100AFBC39 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63D1374F95100AFBC39 /* database.sqlite */; };
+		8614C6401375335100AFBC39 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63F1375335000AFBC39 /* README */; };
 		865DD8921373916F0008EB9F /* create_table.sql in Resources */ = {isa = PBXBuildFile; fileRef = 865DD8901373916F0008EB9F /* create_table.sql */; };
 		865DD895137392C10008EB9F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 865DD894137392C10008EB9F /* libsqlite3.dylib */; };
 		865DD8981373981A0008EB9F /* CacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 865DD8971373981A0008EB9F /* CacheManager.m */; };
@@ -69,6 +70,7 @@
 		86062036137103D100E6A841 /* SettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingView.m; sourceTree = "<group>"; };
 		86062037137103D100E6A841 /* SettingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingView.xib; sourceTree = "<group>"; };
 		8614C63D1374F95100AFBC39 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
+		8614C63F1375335000AFBC39 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		865DD8901373916F0008EB9F /* create_table.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = create_table.sql; sourceTree = "<group>"; };
 		865DD894137392C10008EB9F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		865DD8961373981A0008EB9F /* CacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheManager.h; sourceTree = "<group>"; };
@@ -80,7 +82,7 @@
 		86628E72136D5C7800C86AFB /* ImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageView.m; sourceTree = "<group>"; };
 		86628E73136D5C7800C86AFB /* ImageView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ImageView.xib; sourceTree = "<group>"; };
 		866F9E0D1372D6FA006BA19C /* Reloadable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Reloadable.h; sourceTree = "<group>"; };
-		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; path = GroupView.h; sourceTree = "<group>"; };
+		86B04C2D136C0B1600F8BFA1 /* GroupView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GroupView.h; sourceTree = "<group>"; };
 		86B04C2E136C0B1600F8BFA1 /* GroupView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GroupView.m; sourceTree = "<group>"; };
 		86B04C2F136C0B1600F8BFA1 /* GroupView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GroupView.xib; sourceTree = "<group>"; };
 		86B04C33136C2F0F00F8BFA1 /* ViewUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewUtil.h; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 		86F85B79136ACEB00031F3B2 = {
 			isa = PBXGroup;
 			children = (
+				8614C63F1375335000AFBC39 /* README */,
 				865DD894137392C10008EB9F /* libsqlite3.dylib */,
 				86DA6CA813715A8100DD923D /* lib */,
 				86F85B8E136ACEB00031F3B2 /* Castor */,
@@ -399,6 +402,7 @@
 				86DA6C741371592600DD923D /* test.jpg in Resources */,
 				865DD8921373916F0008EB9F /* create_table.sql in Resources */,
 				8614C63E1374F95100AFBC39 /* database.sqlite in Resources */,
+				8614C6401375335100AFBC39 /* README in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,0 +1,7 @@
+Castorは youRoom( http://youroom.in/ )のiPhoneネイティブクライアントです。
+iOS4.2以降で動作します。
+
+注意）
+ビルドする前にyouRoomに開発者登録を行い、youRoomから consumer key と consumer secret key を入手してください。
+YouRoomGateway+ConsumerKey.m に、入手した consumer key と consumer secret key を設定してからビルドしてください。
+（keyが設定されていなくてもビルドは成功しますが、youRoomにログインできません）
