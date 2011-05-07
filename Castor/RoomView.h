@@ -27,6 +27,7 @@
     BOOL _portrate;
     
     EntryData *_target;
+    EntryData *_willDelete;
     NSMutableArray *_selectors;
     
     UIActivityIndicatorView *_indicator;
@@ -39,11 +40,12 @@
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
 
 @property(nonatomic, retain) EntryData *target;
+@property(nonatomic, retain) EntryData *willDelete;
 @property(nonatomic, retain) NSMutableArray *selectors;
 
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (IBAction)callSetting:(id)sender;
-- (IBAction)editEntry:(id)sender;
+- (IBAction)addEntry:(id)sender;
 
 @end

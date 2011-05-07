@@ -96,6 +96,20 @@
 - (NSMutableArray *)retrieveRoomList
 {
     NSLog(@"retrieveRoomList");
+    NSData *credentials = [self request:[NSURL URLWithString:@"https://www.youroom.in/verify_credentials?format=json"]
+                                 method:@"GET"
+                                   body:Nil
+                            oauth_token:self.oAuthToken
+                     oauth_token_secret:self.oAuthTokenSecret];
+    NSArray *pList = [[[[[[NSString alloc] initWithData:credentials encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"user"] objectForKey:@"participations"];
+    NSMutableDictionary *pDic = [[[NSMutableDictionary alloc] init] autorelease];
+    for (NSDictionary *participation in pList) {
+        NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
+        [dic setObject:[participation objectForKey:@"admin"] forKey:@"admin"];
+        [dic setObject:[participation objectForKey:@"id"] forKey:@"myId"];
+        [pDic setObject:dic forKey:[[participation objectForKey:@"group"] objectForKey:@"id"]];
+    }
+    
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     NSData *response = [self request:[NSURL URLWithString:@"https://www.youroom.in/groups/my?format=json"]
                               method:@"GET"
@@ -115,6 +129,8 @@
         roomData.toParam   = [[group objectForKey:@"to_param"] isKindOfClass:[NSString class]] ? [group objectForKey:@"to_param"] : nil;
         roomData.createdAt = [group objectForKey:@"created_at"];
         roomData.updatedAt = [group objectForKey:@"updated_at"];
+        roomData.admin     = [[[pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
+        roomData.myId      = [[pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
         roomData.roomIcon  = [[[UIImage alloc] initWithData:[self getRoomIconAtRoomId:roomData.roomId]] autorelease];
         [list addObject:roomData];
     }
@@ -224,6 +240,40 @@
     NSData * response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
                                method:@"POST"
                                  body:[body dataUsingEncoding:NSUTF8StringEncoding]
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return NO; // ステータスコードまで見るべきか？
+    }
+    return YES;
+}
+
+- (BOOL)putEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId
+{
+//    NSLog(@"putEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
+//    NSString *body = [NSString stringWithFormat:@"_method=put&entry[content]=%@", text];
+//    NSData * response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@", roomId, entryId]]
+//                               method:@"POST"
+//                                 body:[body dataUsingEncoding:NSUTF8StringEncoding]
+//                          oauth_token:self.oAuthToken
+//                   oauth_token_secret:self.oAuthTokenSecret];
+//    NSLog(@"%@", [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue]);
+//    if (response == nil || [response length] == 0) {
+//        return NO; // ステータスコードまで見るべきか？
+//    }
+//    return YES;
+    NSException* exception = [NSException exceptionWithName:@"UnSupportedMethodException" reason:@"youRoom ENTRY PUT ResAPI has'nt prepared yet" userInfo:nil];
+    [exception raise];
+    return NO;
+}
+
+- (BOOL)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId
+{
+    NSLog(@"deleteEntryByEntryId[%@] roomId[%@]", entryId, roomId);
+    //NSString *body = [NSString stringWithFormat:@"_method=delete"];
+    NSData * response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@?format=json", roomId, entryId]]
+                               method:@"DELETE"
+                                 body:nil
                           oauth_token:self.oAuthToken
                    oauth_token_secret:self.oAuthTokenSecret];
     if (response == nil || [response length] == 0) {

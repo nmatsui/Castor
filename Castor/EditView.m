@@ -13,7 +13,8 @@
 
 @synthesize factory = _factory;
 @synthesize roomId = _roomId;
-@synthesize originEntry = _originEntry;
+@synthesize parentId = _parentId;
+@synthesize targetEntry = _targetEntry;
 @synthesize previousView = _previousView;
 
 @synthesize textView = _textView;
@@ -30,18 +31,23 @@
 
 - (IBAction)postEntry:(id)sender
 {
-    NSLog(@"post entry");
-    if (self.originEntry != nil) {
-        NSLog(@"parent entryId [%d]", [self.originEntry.entryId intValue]);
+    if (self.targetEntry == nil) {
+        NSLog(@"add entry (parentId[%@])", self.parentId);
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        [self.factory addEntryText:self.textView.text roomId:self.roomId parentId:self.parentId sender:self];
+        [self.previousView reload:nil];
+        [self.navigationController popViewControllerAnimated:YES];
+        [pool release];
     }
     else {
-        NSLog(@"no parent");
+        UIAlertView *alert = [[UIAlertView alloc] init];
+        [alert setDelegate:self];
+        [alert setTitle:@"Can't execution"];
+        [alert setMessage:@"更新APIがまだ提供されていません"];
+        [alert addButtonWithTitle:@"OK"];
+        [alert show];
+        [alert release];
     }
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [self.factory sendEntryText:self.textView.text roomId:self.roomId parentId:(self.originEntry != nil) ? self.originEntry.entryId : nil sender:self];
-    [self.previousView reload:nil];
-    [self.navigationController popViewControllerAnimated:YES];
-    [pool release];
 }
 
 - (IBAction)doneEntryEdit:(id)sender
@@ -62,7 +68,8 @@
 - (void)dealloc
 {
     self.factory = nil;
-    self.originEntry = nil;
+    self.parentId = nil;
+    self.targetEntry = nil;
     self.previousView = nil;
     
     self.textView = nil;
@@ -83,14 +90,21 @@
 {
     [super viewDidLoad];
     NSLog(@"EditView loaded");
-    self.title = @"Edit";
+    if (self.targetEntry == nil) {
+        self.title = @"Add Entry";
+    }
+    else {
+        self.title = @"Update Entry";
+        self.textView.text = self.targetEntry.content;
+    }
 }
 
 - (void)viewDidUnload
 {
     [super viewDidUnload];
     self.factory = nil;
-    self.originEntry = nil;
+    self.parentId = nil;
+    self.targetEntry = nil;
     self.previousView = nil;
     
     self.textView = nil;

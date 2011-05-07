@@ -170,14 +170,38 @@
     return list;
 }
 
-- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender
+- (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender
 {
-    NSLog(@"sendEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
+    NSLog(@"addEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
     @try {
         [self.gateway postEntryText:text roomId:roomId parentId:parentId];
     }
     @catch (NSException *exception) {
-        NSLog(@"exception in sendEntryText [%@]", [exception reason]);
+        NSLog(@"exception in addEntryText [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
+}
+
+- (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(id)sender
+{
+    NSLog(@"updateEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
+    @try {
+        [self.gateway putEntryText:text roomId:roomId entryId:entryId];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in updateEntryText [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
+}
+
+- (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(id)sender
+{
+    NSLog(@"deleteEntryByEntryId[%@] roomId[%@]", entryId, roomId);
+    @try {
+        [self.gateway deleteEntryByEntryId:entryId roomId:roomId];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in deleteEntryByEntryId [%@]", [exception reason]);
         [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
 }

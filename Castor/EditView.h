@@ -15,7 +15,8 @@
 @interface EditView : UIViewController {
     DataFactory *_factory;
     NSNumber *_roomId;
-    EntryData *_originEntry;
+    NSNumber *_parentId;
+    EntryData *_targetEntry;
     UIViewController <Reloadable> *_previousView;
     
     UITextView *_textView;
@@ -25,7 +26,8 @@
 
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) NSNumber *roomId;
-@property(nonatomic, retain) EntryData *originEntry;
+@property(nonatomic, retain) NSNumber *parentId;
+@property(nonatomic, retain) EntryData *targetEntry;
 @property(nonatomic, retain) UIViewController <Reloadable> *previousView;
 @property(nonatomic, retain) IBOutlet UITextView *textView;
 

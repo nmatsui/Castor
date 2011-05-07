@@ -18,6 +18,7 @@
 @synthesize entryList = _entryList;
 
 @synthesize target = _target;
+@synthesize willDelete = _willDelete;
 @synthesize selectors = _selectors;
 
 @synthesize indicator = _indicator;
@@ -38,7 +39,9 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" bundle:nil] autorelease];
     commentView.factory = self.factory;
+    commentView.room = self.room;
     commentView.originEntry = originEntry;
+    commentView.previousView = self;
     [self.navigationController pushViewController:commentView animated:YES];
     [pool release];
 }
@@ -70,11 +73,42 @@
 - (void)updateEntryWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"update entry [%@]", originEntry.entryId);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to EditView");
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+    editView.factory = self.factory;
+    editView.roomId = self.room.roomId;
+    editView.parentId = nil;
+    editView.targetEntry = originEntry;
+    editView.previousView = self;
+    [self.navigationController pushViewController:editView animated:YES];
+    [pool release];
 }
 
 - (void)deleteEntryWithOriginEntry:(EntryData *)originEntry
 {
-    NSLog(@"delete entry [%@]", originEntry.entryId);
+    self.willDelete = originEntry;
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    alert.delegate = self;
+    alert.title = @"確認";
+    alert.message = @"削除してもよろしいですか？";
+    [alert addButtonWithTitle:@"いいえ"];
+    [alert addButtonWithTitle:@"はい"];
+    [alert show];
+}
+
+-(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (buttonIndex) {
+        case 0:
+            break;
+        case 1:
+            NSLog(@"delete entry [%@]", self.willDelete.entryId);
+            [self.factory deleteEntryByEntryId:self.willDelete.entryId roomId:self.room.roomId sender:self];
+            [self performSelector:@selector(startIndicator:) withObject:self];
+            [self performSelectorInBackground:@selector(reloadEntryListInBackground:) withObject:nil];
+            break;
+    }
 }
 
 - (void)cancelWithOriginEntry:(EntryData *)originEntry
@@ -113,7 +147,7 @@
     [pool release];
 }
 
-- (IBAction)editEntry:(id)sender
+- (IBAction)addEntry:(id)sender
 {
     NSLog(@"editEntry");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -121,7 +155,8 @@
     EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
     editView.factory = self.factory;
     editView.roomId = self.room.roomId;
-    editView.originEntry = nil;
+    editView.parentId = nil;
+    editView.targetEntry = nil;
     editView.previousView = self;
     [self.navigationController pushViewController:editView animated:YES];
     [pool release];
@@ -163,6 +198,7 @@
     self.entryTable = nil;
     
     self.target = nil;
+    self.willDelete = nil;
     self.selectors = nil;
     self.indicator = nil;
     [super dealloc];
@@ -236,18 +272,34 @@
         self.target = [self.entryList objectAtIndex:indexPath.row];
         UIActionSheet *menu = [[UIActionSheet alloc] init];
         [menu setDelegate:self];
+        
+        // View Commentsボタンは必ず表示
         [menu addButtonWithTitle:@"View Comments"];
         [self.selectors addObject:@"moveToCommentViewWithOriginEntry:"];
-        [menu addButtonWithTitle:@"Update"];
-        [self.selectors addObject:@"updateEntryWithOriginEntry:"];
-        [menu addButtonWithTitle:@"Delete"];
-        [self.selectors addObject:@"deleteEntryWithOriginEntry:"];
+        
+        // Updateボタンの表示判定
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            [menu addButtonWithTitle:@"Update"];
+            [self.selectors addObject:@"updateEntryWithOriginEntry:"];
+        }
+        
+        // Deleteボタンの表示判定(RoomViewのエントリは全てrootエントリ)
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            [menu addButtonWithTitle:@"Delete"];
+            [self.selectors addObject:@"deleteEntryWithOriginEntry:"];
+        }
+        
+        // View Attachmentボタンの表示判定
         if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
             [menu addButtonWithTitle:@"View Attachment"];
             [self.selectors addObject:@"viewAttachmentWithOriginEntry:"];
         }
+        
+        // Cancelボタンは必ず表示
         [menu addButtonWithTitle:@"Cancel"];
         [self.selectors addObject:@"cancelWithOriginEntry:"];
+        
+        
         [menu showInView:self.view];
         [menu release];
     }
@@ -294,6 +346,7 @@
     self.entryTable = nil;
     
     self.target = nil;
+    self.willDelete = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

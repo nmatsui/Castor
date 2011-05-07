@@ -17,6 +17,8 @@
     NSString *_toParam;
     NSString *_createdAt;
     NSString *_updatedAt;
+    BOOL     _admin;
+    NSNumber *_myId;
 }
 
 @property(nonatomic, retain) NSNumber *roomId;
@@ -26,5 +28,7 @@
 @property(nonatomic, retain) NSString *toParam;
 @property(nonatomic, retain) NSString *createdAt;
 @property(nonatomic, retain) NSString *updatedAt;
+@property(nonatomic, assign) BOOL     admin;
+@property(nonatomic, retain) NSNumber *myId;
 
 @end

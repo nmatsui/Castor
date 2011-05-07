@@ -12,13 +12,17 @@
 @implementation CommentView
 
 @synthesize factory = _factory;
+@synthesize room = _room;
 @synthesize originEntry = _originEntry;
 
 @synthesize entryTable = _entryTable;
 @synthesize entryList = _entryList;
 
 @synthesize target = _target;
+@synthesize willDelete = _willDelete;
 @synthesize selectors = _selectors;
+
+@synthesize previousView = _previousView;
 
 @synthesize indicator = _indicator;
 
@@ -34,7 +38,7 @@ static const int MAX_LEVLE = 6;
 	[alert release];
 }
 
-- (void)editEntryWithOriginEntry:(EntryData *)originEntry
+- (void)addEntryWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"editEntry");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -42,7 +46,8 @@ static const int MAX_LEVLE = 6;
     EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
     editView.factory = self.factory;
     editView.roomId = self.originEntry.roomId;
-    editView.originEntry = originEntry;
+    editView.parentId = originEntry.entryId;
+    editView.targetEntry = nil;
     editView.previousView = self;
     [self.navigationController pushViewController:editView animated:YES];
     [pool release];
@@ -75,11 +80,52 @@ static const int MAX_LEVLE = 6;
 - (void)updateEntryWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"update entry [%@]", originEntry.entryId);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to EditView");
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+    editView.factory = self.factory;
+    editView.roomId = self.originEntry.roomId;
+    editView.parentId = originEntry.entryId;
+    editView.targetEntry = originEntry;
+    editView.previousView = self;
+    [self.navigationController pushViewController:editView animated:YES];
+    [pool release];
 }
 
 - (void)deleteEntryWithOriginEntry:(EntryData *)originEntry
 {
-    NSLog(@"delete entry [%@]", originEntry.entryId);
+    self.willDelete = originEntry;
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    alert.delegate = self;
+    alert.title = @"確認";
+    alert.message = @"削除してもよろしいですか？";
+    [alert addButtonWithTitle:@"いいえ"];
+    [alert addButtonWithTitle:@"はい"];
+    [alert show];
+}
+
+-(void)alertView:(UIAlertView*)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    
+    switch (buttonIndex) {
+        case 0:
+            break;
+        case 1:
+            NSLog(@"delete entry [%@]", self.willDelete.entryId);
+            BOOL rootFlg = NO;
+            if ([self.willDelete.entryId intValue] == [self.willDelete.rootId intValue]) {
+                rootFlg = YES;
+            }
+            [self.factory deleteEntryByEntryId:self.willDelete.entryId roomId:self.room.roomId sender:self];
+            [self performSelector:@selector(startIndicator:) withObject:self];
+            if (rootFlg) {
+                [self.previousView reload:nil];
+                [self.navigationController popViewControllerAnimated:YES];
+            }
+            else {
+                [self performSelectorInBackground:@selector(reloadCommentListInBackground:) withObject:nil];
+            }
+            break;
+    }
 }
 
 - (void)cancelWithOriginEntry:(EntryData *)originEntry
@@ -117,9 +163,9 @@ static const int MAX_LEVLE = 6;
     [pool release];
 }
 
-- (IBAction)editEntry:(id)sender
+- (IBAction)addEntry:(id)sender
 {
-    [self performSelector:@selector(editEntryWithOriginEntry:) withObject:self.originEntry];
+    [self performSelector:@selector(addEntryWithOriginEntry:) withObject:self.originEntry];
 }
 
 - (IBAction)reload:(id)sender
@@ -143,6 +189,7 @@ static const int MAX_LEVLE = 6;
 - (void)dealloc
 {
     self.factory = nil;
+    self.room = nil;
     self.originEntry = nil;
     
     self.entryList = nil;
@@ -150,6 +197,7 @@ static const int MAX_LEVLE = 6;
     self.target = nil;
     self.selectors = nil;
     self.indicator = nil;
+    self.previousView = nil;
     [super dealloc];
 }
 
@@ -210,20 +258,38 @@ static const int MAX_LEVLE = 6;
         self.target = [self.entryList objectAtIndex:indexPath.row];
         UIActionSheet *menu = [[UIActionSheet alloc] init];
         [menu setDelegate:self];
+        
+        // Add Commentボタンの表示判定
         if (indexPath.row != 0 && [self.target.level intValue] < MAX_LEVLE) {
             [menu addButtonWithTitle:@"Add Comment"];
-            [self.selectors addObject:@"editEntryWithOriginEntry:"];
+            [self.selectors addObject:@"addEntryWithOriginEntry:"];
         }
-        [menu addButtonWithTitle:@"Update"];
-        [self.selectors addObject:@"updateEntryWithOriginEntry:"];
-        [menu addButtonWithTitle:@"Delete"];
-        [self.selectors addObject:@"deleteEntryWithOriginEntry:"];
+        
+        // Updateボタンの表示判定
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            [menu addButtonWithTitle:@"Update"];
+            [self.selectors addObject:@"updateEntryWithOriginEntry:"];
+        }
+        
+        // Delteボタンの表示判定
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            if ([self.target.entryId intValue] == [self.target.rootId intValue] || self.target.children == nil || [self.target.children count] == 0) {
+                [menu addButtonWithTitle:@"Delete"];
+                [self.selectors addObject:@"deleteEntryWithOriginEntry:"];
+            }
+        }
+        
+        // View Attachmentボタンの表示判定
         if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
             [menu addButtonWithTitle:@"View Attachment"];
             [self.selectors addObject:@"viewAttachmentWithOriginEntry:"];
         }
+        
+        // Cancelボタンは必ず表示
         [menu addButtonWithTitle:@"Cancel"];
         [self.selectors addObject:@"cancelWithOriginEntry:"];
+        
+        
         [menu showInView:self.view];
         [menu release];
     }
@@ -232,7 +298,7 @@ static const int MAX_LEVLE = 6;
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"accessory button clicked[%d]", indexPath.row);
-    [self performSelector:@selector(editEntryWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
+    [self performSelector:@selector(addEntryWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
 }
 
 -(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
@@ -261,12 +327,14 @@ static const int MAX_LEVLE = 6;
 {
     [super viewDidUnload];
     self.factory = nil;
+    self.room = nil;
     self.originEntry = nil;
     
     self.entryList = nil;
     self.entryTable = nil;
     
     self.target = nil;
+    self.previousView = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

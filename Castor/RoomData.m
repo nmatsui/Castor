@@ -18,6 +18,8 @@
 @synthesize toParam   = _toParam;
 @synthesize createdAt = _createdAt;
 @synthesize updatedAt = _updatedAt;
+@synthesize admin     = _admin;
+@synthesize myId      = _myId;
 
 - (void)dealloc
 {
@@ -27,6 +29,7 @@
     self.toParam = nil;
     self.createdAt = nil;
     self.updatedAt = nil;
+    self.myId = nil;
     [super dealloc];
 }
 @end

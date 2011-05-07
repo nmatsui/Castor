@@ -28,7 +28,9 @@
 - (NSMutableArray *)getRoomListWithSender:(id)sender;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(id)sender;
 - (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(id)sender;
-- (void)sendEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender;
+- (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender;
+- (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(id)sender;
+- (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(id)sender;
 - (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(id)sender;
 - (void)deleteCache;
 @end
