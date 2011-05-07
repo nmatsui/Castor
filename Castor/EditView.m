@@ -40,13 +40,12 @@
         [pool release];
     }
     else {
-        UIAlertView *alert = [[UIAlertView alloc] init];
-        [alert setDelegate:self];
-        [alert setTitle:@"Can't execution"];
-        [alert setMessage:@"更新APIがまだ提供されていません"];
-        [alert addButtonWithTitle:@"OK"];
-        [alert show];
-        [alert release];
+        NSLog(@"edit entry (entryId[%@])", self.targetEntry.entryId);
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        [self.factory updateEntryText:self.textView.text roomId:self.roomId entryId:self.targetEntry.entryId sender:self];
+        [self.previousView reload:nil];
+        [self.navigationController popViewControllerAnimated:YES];
+        [pool release];
     }
 }
 

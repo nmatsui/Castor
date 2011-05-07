@@ -72,17 +72,25 @@
 
 - (void)updateEntryWithOriginEntry:(EntryData *)originEntry
 {
-    NSLog(@"update entry [%@]", originEntry.entryId);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to EditView");
-    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
-    editView.factory = self.factory;
-    editView.roomId = self.room.roomId;
-    editView.parentId = nil;
-    editView.targetEntry = originEntry;
-    editView.previousView = self;
-    [self.navigationController pushViewController:editView animated:YES];
-    [pool release];
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setTitle:@"更新できません"];
+    [alert setMessage:@"更新APIがまだ提供されていません"];
+    [alert addButtonWithTitle:@"OK"];
+    [alert show];
+    [alert release];
+    
+//    NSLog(@"update entry [%@]", originEntry.entryId);
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//    NSLog(@"move to EditView");
+//    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
+//    editView.factory = self.factory;
+//    editView.roomId = self.room.roomId;
+//    editView.parentId = nil;
+//    editView.targetEntry = originEntry;
+//    editView.previousView = self;
+//    [self.navigationController pushViewController:editView animated:YES];
+//    [pool release];
 }
 
 - (void)deleteEntryWithOriginEntry:(EntryData *)originEntry

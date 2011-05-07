@@ -250,21 +250,18 @@
 
 - (BOOL)putEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId
 {
-//    NSLog(@"putEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
-//    NSString *body = [NSString stringWithFormat:@"_method=put&entry[content]=%@", text];
-//    NSData * response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@", roomId, entryId]]
-//                               method:@"POST"
-//                                 body:[body dataUsingEncoding:NSUTF8StringEncoding]
-//                          oauth_token:self.oAuthToken
-//                   oauth_token_secret:self.oAuthTokenSecret];
-//    NSLog(@"%@", [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue]);
-//    if (response == nil || [response length] == 0) {
-//        return NO; // ステータスコードまで見るべきか？
-//    }
-//    return YES;
-    NSException* exception = [NSException exceptionWithName:@"UnSupportedMethodException" reason:@"youRoom ENTRY PUT ResAPI has'nt prepared yet" userInfo:nil];
-    [exception raise];
-    return NO;
+    NSLog(@"putEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
+    NSString *body = [NSString stringWithFormat:@"entry[content]=%@", text];
+    NSData * response = [self request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@?format=json", roomId, entryId]]
+                               method:@"PUT"
+                                 body:[body dataUsingEncoding:NSUTF8StringEncoding]
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
+    NSLog(@"%@", [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue]);
+    if (response == nil || [response length] == 0) {
+        return NO; // ステータスコードまで見るべきか？
+    }
+    return YES;
 }
 
 - (BOOL)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId
