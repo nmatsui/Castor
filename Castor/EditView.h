@@ -12,7 +12,7 @@
 #import "EntryData.h"
 
 
-@interface EditView : UIViewController {
+@interface EditView : UIViewController <UITextViewDelegate> {
     DataFactory *_factory;
     NSNumber *_roomId;
     NSNumber *_parentId;
@@ -20,6 +20,7 @@
     UIViewController <Reloadable> *_previousView;
     
     UITextView *_textView;
+    UILabel *_letterCount;
     
     BOOL _portrate;
 }
@@ -30,6 +31,7 @@
 @property(nonatomic, retain) EntryData *targetEntry;
 @property(nonatomic, retain) UIViewController <Reloadable> *previousView;
 @property(nonatomic, retain) IBOutlet UITextView *textView;
+@property(nonatomic, retain) IBOutlet UILabel *letterCount;
 
 - (IBAction)postEntry:(id)sender;
 - (IBAction)doneEntryEdit:(id)sender;

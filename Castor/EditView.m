@@ -18,6 +18,9 @@
 @synthesize previousView = _previousView;
 
 @synthesize textView = _textView;
+@synthesize letterCount = _letterCount;
+
+static const int MAX_LETTER = 140;
 
 - (void)alertException:(NSString *)message
 {
@@ -31,6 +34,15 @@
 
 - (IBAction)postEntry:(id)sender
 {
+    if ([self.textView.text length] > MAX_LETTER) {
+        UIAlertView *alert = [[UIAlertView alloc] init];
+        [alert setDelegate:self];
+        [alert setMessage:@"140文字を越えています"];
+        [alert addButtonWithTitle:@"OK"];
+        [alert show];
+        [alert release];
+        return;
+    }
     if (self.targetEntry == nil) {
         NSLog(@"add entry (parentId[%@])", self.parentId);
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -55,11 +67,23 @@
     [self.textView resignFirstResponder];
 }
 
+- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
+{
+    int textcount = MAX_LETTER - ([textView.text length] + [text length] - range.length);
+    if (textcount < 0) {
+        self.letterCount.textColor=[UIColor redColor];
+    }else{
+        self.letterCount.textColor=[UIColor blackColor];
+    }
+    self.letterCount.text = [NSString stringWithFormat:@"%d", textcount];
+    return YES;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+
     }
     return self;
 }
@@ -91,10 +115,12 @@
     NSLog(@"EditView loaded");
     if (self.targetEntry == nil) {
         self.title = @"Add Entry";
+        self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER];
     }
     else {
         self.title = @"Update Entry";
         self.textView.text = self.targetEntry.content;
+        self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER - [self.targetEntry.content length]];
     }
 }
 
