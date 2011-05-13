@@ -36,13 +36,16 @@
 {
     NSLog(@"request(%@) to %@ [body:%@]", method, url, [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease]);
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
+    NSLog(@"request header : %@", header);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:method];
     [request setValue:header forHTTPHeaderField:@"Authorization"];
     [request setHTTPBody:body];
-    NSURLResponse *response = nil;
+    NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    NSLog(@"statusCode : %d", [response statusCode]);
+    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
     if (error != nil) {
         NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"network disconnected" userInfo:nil];
         [exception raise];
