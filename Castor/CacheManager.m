@@ -1,4 +1,4 @@
-//
+    //
 //  CacheManager.m
 //  Castor
 //
@@ -32,12 +32,14 @@
             [exception raise];
         }
         NSLog(@"database open");
+        _lock = [[NSLock alloc] init];
     }
     return self;
 }
 
 - (void)dealloc
 {
+    [_lock release];
     sqlite3_close(_db);
     NSLog(@"database close");
     [super dealloc];
@@ -46,6 +48,7 @@
 - (NSData *)selectRoomIconAtRoomId:(NSNumber *)roomId
 {
     NSLog(@"selectRoomIconAtRoomId[%@]", roomId);
+    [_lock lock];
     [self beginTransaction];
     NSString *sql = @"select icon, size from room_icon_cache where room_id = @roomId";
     sqlite3_stmt *statement = nil;
@@ -61,12 +64,14 @@
     }
     sqlite3_finalize(statement);
     [self commit];
+    [_lock unlock];
     return image;
 }
 
 - (void)insertOrReplaceRoomIconAtRoomId:(NSNumber *)roomId icon:(NSData *)icon
 {
     NSLog(@"insertOrReplaceRoomIconAtRoomId[%@]", roomId);
+    [_lock lock];
     [self beginTransaction];
     NSString *sql = @"insert or replace into room_icon_cache(room_id, icon, size, cached_at) values(@roomId, @icon, @size, @cachedAt)";
     sqlite3_stmt *statement = nil;
@@ -76,7 +81,7 @@
         [exception raise];
     };
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@roomId"),   [roomId intValue]);
-    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@icon"),     [icon bytes], [icon length], NULL);
+    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@icon"),     [icon bytes], [icon length], SQLITE_TRANSIENT);
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),     [icon length]);
     sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"), [[NSDate date] timeIntervalSince1970]);
     if (sqlite3_step(statement) == SQLITE_ERROR) {
@@ -86,11 +91,13 @@
     }
     sqlite3_finalize(statement);
     [self commit];
+    [_lock unlock];
 }
 
 - (void)deleteAllRoomIcon
 {
     NSLog(@"deleteAllRoomIcon");
+    [_lock lock];
     [self beginTransaction];
     NSString *sql = @"delete from room_icon_cache";
     sqlite3_stmt *statement = nil;
@@ -106,11 +113,13 @@
     }
     sqlite3_finalize(statement);
     [self commit];
+    [_lock unlock];
 }
 
 - (NSData *)selectParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId
 {
     NSLog(@"selectParticipationIconAtRoomId[%@] participationId[%@]", roomId, participationId);
+    [_lock lock];
     [self beginTransaction];
     NSString *sql = @"select icon, size from participation_icon_cache where room_id = @roomId and participation_id = @participationId";
     sqlite3_stmt *statement = nil;
@@ -127,12 +136,14 @@
     }
     sqlite3_finalize(statement);
     [self commit];
+    [_lock unlock];
     return image;
 }
 
 - (void)insertOrReplaceParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId icon:(NSData *)icon
 {
     NSLog(@"insertOrReplaceParticipationIconAtRoomId[%@] participationId[%@]", roomId, participationId);
+    [_lock lock];
     [self beginTransaction];
     NSString *sql = @"insert or replace into participation_icon_cache(room_id, participation_id, icon, size, cached_at) values(@roomId, @participationId, @icon, @size, @cachedAt)";
     sqlite3_stmt *statement = nil;
@@ -143,7 +154,7 @@
     };
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@roomId"),          [roomId intValue]);
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@participationId"), [participationId intValue]);
-    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@icon"),            [icon bytes], [icon length], NULL);
+    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@icon"),            [icon bytes], [icon length], SQLITE_TRANSIENT);
     sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),            [icon length]);
     sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"),        [[NSDate date] timeIntervalSince1970]);
     if (sqlite3_step(statement) == SQLITE_ERROR) {
@@ -153,11 +164,13 @@
     }
     sqlite3_finalize(statement);
     [self commit];
+    [_lock unlock];
 }
 
 - (void)deleteAllParticipationIcon
 {
     NSLog(@"deleteAllParticipationIcon");
+    [_lock lock];
     [self beginTransaction];
     NSString *sql = @"delete from participation_icon_cache";
     sqlite3_stmt *statement = nil;
@@ -173,6 +186,7 @@
     }
     sqlite3_finalize(statement);
     [self commit];
+    [_lock unlock];
 }
 
 //// Private

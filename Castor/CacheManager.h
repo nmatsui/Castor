@@ -11,6 +11,7 @@
 
 @interface CacheManager : NSObject {
     sqlite3 *_db;
+    NSLock *_lock;
 }
 
 - (NSData *)selectRoomIconAtRoomId:(NSNumber *)roomId;

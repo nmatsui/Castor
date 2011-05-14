@@ -55,13 +55,14 @@ static const int INDENT_WIDTH     = 6;
     CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *nameLabel = [self _makeLabel:CGRectMake(60, 10, w, s.height) text:room.roomName font:[UIFont systemFontOfSize:GROUP_FONT_SIZE]];
     [v addSubview:nameLabel];
+    [nameLabel release];
     UIImageView *icon = [self _makeIcon:CGRectMake(20, 5, 30, 30)];
     [v addSubview:icon];
     if (room.roomIcon != nil) {
         [icon setImage:room.roomIcon];
+        [icon release];
     }
     else {
-        [icon retain];
         [room retain];
         dispatch_async(_globalQueue, ^{
             UIActivityIndicatorView *indicator;
@@ -108,23 +109,27 @@ static const int INDENT_WIDTH     = 6;
     }
     UILabel *indentLabel = [self _makeLabel:CGRectMake(10, 10, 40, 16) text:str font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
     [v addSubview:indentLabel];
+    [indentLabel release];
     UILabel *nameLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
+    [nameLabel release];
     float w = (portrate) ? size.width - 100 : size.height - 100;
     if (entry.attachmentType != nil) {
         UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 10, 100, 16) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
         [v addSubview:attachmentLabel];
+        [attachmentLabel release];
     }
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
+    [contentLabel release];
     UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [v addSubview:icon];
     if (entry.participationIcon != nil) {
         [icon setImage:entry.participationIcon];
+        [icon release];
     }
     else {
-        [icon retain];
         [entry retain];
         dispatch_async(_globalQueue, ^{
             UIActivityIndicatorView *indicator;
@@ -161,13 +166,14 @@ static const int INDENT_WIDTH     = 6;
     UILabel *nextLabel = [self _makeLabel:CGRectMake(10, 0, w, 40) text:@"<<load next page>>" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [nextLabel setTextAlignment:UITextAlignmentCenter];
     [v addSubview:nextLabel];
+    [nextLabel release];
     return v;
 }
 
 //// Private
 - (UILabel *)_makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font
 {
-    UILabel *label = [[[UILabel alloc] init] autorelease];
+    UILabel *label = [[UILabel alloc] init];
     [label setFrame:rect];
     [label setText:text];
     [label setFont:font];
@@ -181,7 +187,7 @@ static const int INDENT_WIDTH     = 6;
 
 - (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font
 {
-    UITextView *textView = [[[UITextView alloc] init] autorelease];
+    UITextView *textView = [[UITextView alloc] init];
     [textView setFrame:rect];
     [textView setText:text];
     [textView setFont:font];
@@ -194,7 +200,7 @@ static const int INDENT_WIDTH     = 6;
 
 - (UIImageView *)_makeIcon:(CGRect)rect
 {
-    UIImageView *imageView = [[[UIImageView alloc] init] autorelease];
+    UIImageView *imageView = [[UIImageView alloc] init];
     [imageView setFrame:rect];
     return imageView;
 }

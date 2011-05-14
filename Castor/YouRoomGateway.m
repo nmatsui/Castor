@@ -241,8 +241,8 @@
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSLog(@"statusCode : %d", [response statusCode]);
-    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
+    //NSLog(@"statusCode : %d", [response statusCode]);
+    //NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
     if (error != nil) {
         if ([@"Email/Password combination is not valid" isEqualToString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]]) {
             NSException* exception = [NSException exceptionWithName:@"AuthenticationException" 
