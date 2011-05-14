@@ -28,14 +28,15 @@ static const int INDENT_WIDTH     = 6;
     self = [super init];
     if(self){
         self.factory = factory;
-        _globalQueue = dispatch_get_global_queue(0, 0);
-        _localQueue  = dispatch_get_main_queue();
+        _localQueue = dispatch_queue_create("cube.Castor", NULL);
+        _mainQueue = dispatch_get_main_queue();
     }
     return self;
 }
 
 - (void)dealloc
 {
+    dispatch_release(_localQueue);
     self.factory = nil;
     [super dealloc];
 }
@@ -64,7 +65,7 @@ static const int INDENT_WIDTH     = 6;
     }
     else {
         [room retain];
-        dispatch_async(_globalQueue, ^{
+        dispatch_async(_localQueue, ^{
             UIActivityIndicatorView *indicator;
             indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             indicator.frame = icon.bounds;
@@ -72,19 +73,20 @@ static const int INDENT_WIDTH     = 6;
             indicator.contentMode = UIViewContentModeCenter;
             [indicator startAnimating];
             
-            dispatch_async(_localQueue, ^{
+            dispatch_async(_mainQueue, ^{
                 [icon setImage:nil];
                 [icon addSubview:indicator];
             });
-        
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             room.roomIcon = [self.factory getRoomIconByRoomId:room.roomId];
         
-            dispatch_async(_localQueue, ^{
+            dispatch_async(_mainQueue, ^{
                 [icon setImage:room.roomIcon];
                 [indicator removeFromSuperview];
                 [indicator release];
             });
         
+            [pool release];
             [room release];
             [icon release];
         });
@@ -131,7 +133,7 @@ static const int INDENT_WIDTH     = 6;
     }
     else {
         [entry retain];
-        dispatch_async(_globalQueue, ^{
+        dispatch_async(_localQueue, ^{
             UIActivityIndicatorView *indicator;
             indicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
             indicator.frame = icon.bounds;
@@ -139,19 +141,19 @@ static const int INDENT_WIDTH     = 6;
             indicator.contentMode = UIViewContentModeCenter;
             [indicator startAnimating];
             
-            dispatch_async(_localQueue, ^{
+            dispatch_async(_mainQueue, ^{
                 [icon setImage:nil];
                 [icon addSubview:indicator];
             });
-            
+            NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
             entry.participationIcon = [self.factory getParticipationIconByRoomId:entry.roomId participationId:entry.participationId];
             
-            dispatch_async(_localQueue, ^{
+            dispatch_async(_mainQueue, ^{
                 [icon setImage:entry.participationIcon];
                 [indicator removeFromSuperview];
                 [indicator release];
             });
-            
+            [pool release];
             [entry release];
             [icon release];
         });

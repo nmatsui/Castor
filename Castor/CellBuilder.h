@@ -12,8 +12,8 @@
 
 @interface CellBuilder : NSObject {
     DataFactory *_factory;
-    dispatch_queue_t _globalQueue;
     dispatch_queue_t _localQueue;
+    dispatch_queue_t _mainQueue;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
