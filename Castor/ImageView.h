@@ -7,16 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Alertable.h"
 #import "EntryData.h"
 #import "DataFactory.h"
 
 
-@interface ImageView : UIViewController {
+@interface ImageView : UIViewController <Alertable> {
+    UIImageView *_imageView;
     DataFactory *_factory;
     EntryData *_entry;
-    
-    UIImageView *_imageView;
-    
     BOOL _portrate;
 }
 

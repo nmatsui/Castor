@@ -11,10 +11,8 @@
 
 
 @interface LongTextView : UIViewController {
-    EntryData *_entry;
-    
     UITextView *_textView;
-    
+    EntryData *_entry;
     BOOL _portrate;
 }
 

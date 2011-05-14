@@ -7,23 +7,22 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Alertable.h"
 #import "DataFactory.h"
 #import "GroupView.h"
 
 
-@interface LoginView : UIViewController {
-    DataFactory *_factory;
-    
+@interface LoginView : UIViewController <Alertable>  {
     UITextField *_email;
     UITextField *_password;
     UIButton    *_loginButton;
+    DataFactory *_factory;
 }
-
-@property(nonatomic, retain) DataFactory *factory;
 
 @property(nonatomic, retain) IBOutlet UITextField *email;
 @property(nonatomic, retain) IBOutlet UITextField *password;
 @property(nonatomic, retain) IBOutlet UIButton    *loginButton;
+@property(nonatomic, retain) DataFactory *factory;
 
 - (IBAction)loginClick:(id)sender;
 - (IBAction)doneEmailEdit:(id)sender;

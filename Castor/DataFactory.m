@@ -8,6 +8,9 @@
 
 #import "DataFactory.h"
 
+@interface DataFactory (Private)
+- (void)_appendEntry:(NSMutableArray *)entryList list:(NSMutableArray *)list;
+@end
 
 @implementation DataFactory
 
@@ -36,7 +39,15 @@
     return self;
 }
 
-- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(id)sender
+- (void)dealloc
+{
+    self.authTokenPath = nil;
+    self.gateway = nil;
+    self.cacheManager = nil;
+    [super dealloc];
+}
+
+- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(UIViewController <Alertable> *)sender
 {
     BOOL result = NO;
     @try {
@@ -66,7 +77,7 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) [[NSFileManager defaultManager] removeItemAtPath:self.authTokenPath error:nil];
 }
 
-- (NSMutableArray *)getRoomListWithSender:(id)sender
+- (NSMutableArray *)getRoomListWithSender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getRoomListWithSender");
     NSMutableArray *list = nil;
@@ -77,18 +88,10 @@
         NSLog(@"exception in getRoomListWithSender[%@]", [exception reason]);
         [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
-//    list = [[[NSMutableArray alloc] init] autorelease];
-//    for (int i = 0; i < 20; i++) {
-//        GroupData *groupData = [[[GroupData alloc] init] autorelease];
-//        groupData.roomId = [[NSNumber alloc] initWithInt:i];
-//        groupData.roomName = [NSString stringWithFormat:@"%d room",i];
-//        groupData.roomIcon = [UIImage imageNamed:@"myrooms.png"];
-//        [list addObject:groupData];
-//    }
     return list;
 }
 
-- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(id)sender
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getRoomEntryListByRoomId[%@] page[%d]", roomId, page);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
@@ -101,76 +104,24 @@
         NSLog(@"exception in getRoomEntryListByRoomId [%@]", [exception reason]);
         [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
-//    for (int i = 0; i < 20; i++) {
-//        EntryData *entryData = [[[EntryData alloc] init] autorelease];
-//        entryData.entryId = [[NSNumber alloc] initWithInt:i];
-//        entryData.participationName = @"ほげほげ";
-//        entryData.level = [[NSNumber alloc] initWithInt:0];
-//        entryData.participationIcon = [UIImage imageNamed:@"myrooms.png"];
-//        NSString *str = [NSString stringWithFormat:@"[%d] %d entry",[roomId intValue], i];
-//        for (int j = 0; j < i; j++) {
-//            str = [str stringByAppendingString:@"あいうえおかきくけこ"];
-//        }
-//        if (i%3==0) {
-//            entryData.attachmentText = @"Link";
-//            entryData.attachmentURL = @"http://www.google.co.jp";
-//        }
-//        if (i%5==0) {
-//            entryData.attachmentType = @"Text";
-//            entryData.attachmentText = @"youRoom(ユールーム)は、グループでの情報共有をシンプルに実現できるツールです。友人同士の気軽なコミュニケーションや、企業を超えたプロジェクトでのコラボレーションといった用途で、安全に閉じられた安心感の中で、短いメッセージを共有することができます。";
-//        }
-//        else if (i%7==0) {
-//            entryData.attachmentType = @"Image";
-//            entryData.attachmentFilename = @"DSC_0345.JPG";
-//        }
-//        else if (i%9==0) {
-//            entryData.attachmentType = @"File";
-//            entryData.attachmentFilename = @"HOGE.ppt";
-//        }
-//        entryData.content = str;
-//        [list addObject:entryData];
-//    }
     return list;
 }
 
-- (void)appendEntry:(NSMutableArray *)entryList list:(NSMutableArray *)list
-{
-    for (EntryData *data in entryList) {
-        [list addObject:data];
-        if (data.children != nil && [data.children count] != 0) {
-            [self appendEntry:data.children list:list];
-        }
-    }
-}
-
-- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(id)sender
+- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getEntryCommentListByEntryData[%@]", entry.entryId);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     @try {
-        [self appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
+        [self _appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
     }
     @catch (NSException *exception) {
         NSLog(@"exception in getEntryCommentListByEntryData [%@]", [exception reason]);
         [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
-//    for (int i = 0; i < 20; i++) {
-//        EntryData *entryData = [[[EntryData alloc] init] autorelease];
-//        entryData.entryId = [[NSNumber alloc] initWithInt:i];
-//        entryData.participationName = @"こめんと";
-//        entryData.level = [[NSNumber alloc] initWithInt:i%5+1];
-//        entryData.participationIcon = [UIImage imageNamed:@"myrooms.png"];
-//        NSString *str = [NSString stringWithFormat:@"[%d] %d comment",[entryId intValue], i];
-//        for (int j = 0; j < i; j++) {
-//            str = [str stringByAppendingString:@"アイウエオカキクケコ"];
-//        }
-//        entryData.content = str;
-//        [list addObject:entryData];
-//    }
     return list;
 }
 
-- (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(id)sender
+- (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"addEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
     @try {
@@ -182,7 +133,7 @@
     }
 }
 
-- (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(id)sender
+- (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"updateEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
     @try {
@@ -194,7 +145,7 @@
     }
 }
 
-- (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(id)sender
+- (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"deleteEntryByEntryId[%@] roomId[%@]", entryId, roomId);
     @try {
@@ -206,7 +157,7 @@
     }
 }
 
-- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(id)sender
+- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getAttachmentImage[%@]", entry.entryId);
     UIImage *image = nil;
@@ -226,11 +177,15 @@
     [self.cacheManager deleteAllParticipationIcon];
 }
 
-- (void)dealloc
+//// Private
+- (void)_appendEntry:(NSMutableArray *)entryList list:(NSMutableArray *)list
 {
-    self.authTokenPath = nil;
-    self.gateway = nil;
-    self.cacheManager = nil;
-    [super dealloc];
+    for (EntryData *data in entryList) {
+        [list addObject:data];
+        if (data.children != nil && [data.children count] != 0) {
+            [self _appendEntry:data.children list:list];
+        }
+    }
 }
+
 @end

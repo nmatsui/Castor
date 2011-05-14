@@ -8,64 +8,22 @@
 
 #import "LoginView.h"
 
+@interface LoginView (Private)
+- (void)_authenticateInBackground:(id)arg;
+@end
 
 @implementation LoginView
-
-@synthesize factory = _factory;
 
 @synthesize email = _email;
 @synthesize password = _password;
 @synthesize loginButton = _loginButton;
-
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
-}
-
-- (void)authenticateInBackground:(id)arg
-{
-    NSLog(@"authenticate In Background");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text sender:self];
-    if (result) {
-        NSLog(@"move to GroupView");
-        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
-        groupView.factory = self.factory;
-        [self.navigationController pushViewController:groupView animated:YES];
-    }
-    [pool release];
-}
-
-- (IBAction)loginClick:(id)sender
-{
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    NSLog(@"%@:%@",self.email.text, self.password.text);
-    [self performSelectorInBackground:@selector(authenticateInBackground:) withObject:Nil];
-}
-- (IBAction)doneEmailEdit:(id)sender
-{
-    [sender resignFirstResponder];
-}
-- (IBAction)donePasswordEdit:(id)sender
-{
-    [sender resignFirstResponder];
-}
-- (IBAction)backTap:(id)sender
-{
-    [self.email resignFirstResponder];
-    [self.password resignFirstResponder];
-}
+@synthesize factory = _factory;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
+        // Nothing to do
     }
     return self;
 }
@@ -73,7 +31,6 @@
 - (void)dealloc
 {
     self.factory = nil;
-    
     self.email = nil;
     self.password = nil;
     self.loginButton = nil;
@@ -110,7 +67,6 @@
 {
     [super viewDidUnload];
     self.factory = nil;
-    
     self.email = nil;
     self.password = nil;
     self.loginButton = nil;
@@ -119,7 +75,54 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     // Return YES for supported orientations
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
+    return YES;
+}
+
+//// Alertable
+- (void)alertException:(NSString *)message
+{
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
+}
+
+/// IBAction
+- (IBAction)loginClick:(id)sender
+{
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    NSLog(@"%@:%@",self.email.text, self.password.text);
+    [self performSelectorInBackground:@selector(_authenticateInBackground:) withObject:Nil];
+}
+- (IBAction)doneEmailEdit:(id)sender
+{
+    [sender resignFirstResponder];
+}
+- (IBAction)donePasswordEdit:(id)sender
+{
+    [sender resignFirstResponder];
+}
+- (IBAction)backTap:(id)sender
+{
+    [self.email resignFirstResponder];
+    [self.password resignFirstResponder];
+}
+
+//// Private
+- (void)_authenticateInBackground:(id)arg
+{
+    NSLog(@"authenticate In Background");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text sender:self];
+    if (result) {
+        NSLog(@"move to GroupView");
+        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
+        groupView.factory = self.factory;
+        [self.navigationController pushViewController:groupView animated:YES];
+    }
+    [pool release];
 }
 
 @end

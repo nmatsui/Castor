@@ -38,8 +38,6 @@
 @end
 
 @interface YouRoomGateway (YouRoomGateway_ConsumerKey)
-
 - (NSString *)getConsumerKey;
 - (NSString *)getConsumerSecret;
-
 @end

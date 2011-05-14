@@ -11,21 +11,22 @@
 
 @implementation LongTextView
 
-@synthesize entry = _entry;
 @synthesize textView = _textView;
+@synthesize entry = _entry;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        // Nothing to do
     }
     return self;
 }
 
 - (void)dealloc
 {
-    self.entry = nil;
     self.textView = nil;
+    self.entry = nil;
     [super dealloc];
 }
 
@@ -36,8 +37,6 @@
     
     // Release any cached data, images, etc that aren't in use.
 }
-
-#pragma mark - View lifecycle
 
 - (void)viewDidLoad
 {
@@ -50,8 +49,8 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.entry = nil;
     self.textView = nil;
+    self.entry = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

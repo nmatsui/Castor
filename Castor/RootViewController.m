@@ -8,37 +8,21 @@
 
 #import "RootViewController.h"
 
+@interface RootViewController (Private)
+- (void)_checkAuthorizedInBackground:(id)arg;
+@end
+
+
 @implementation RootViewController
 
 @synthesize factory = _factory;
-
-- (void)checkAuthorizedInBackground:(id)arg
-{
-    NSLog(@"checkAuthorized In Background");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [NSThread sleepForTimeInterval:1];
-    self.factory = [[DataFactory alloc] init];
-    if ([self.factory hasAuthToken]) {
-        NSLog(@"move to GroupView");
-        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
-        groupView.factory = self.factory;
-        [self.navigationController pushViewController:groupView animated:YES];
-    }
-    else {
-        NSLog(@"move to LoginView");
-        LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
-        loginView.factory = self.factory;
-        [self.navigationController pushViewController:loginView animated:YES];
-    }
-    [pool release];
-}
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSLog(@"RootView Loaded");
     self.navigationController.navigationBar.hidden = YES;
-    [self performSelectorInBackground:@selector(checkAuthorizedInBackground:) withObject:Nil];
+    [self performSelectorInBackground:@selector(_checkAuthorizedInBackground:) withObject:Nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -86,8 +70,30 @@
 - (void)dealloc
 {
     self.factory = nil;
-    
     [super dealloc];
 }
+
+//// Private
+- (void)_checkAuthorizedInBackground:(id)arg
+{
+    NSLog(@"checkAuthorized In Background");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [NSThread sleepForTimeInterval:1];
+    self.factory = [[DataFactory alloc] init];
+    if ([self.factory hasAuthToken]) {
+        NSLog(@"move to GroupView");
+        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
+        groupView.factory = self.factory;
+        [self.navigationController pushViewController:groupView animated:YES];
+    }
+    else {
+        NSLog(@"move to LoginView");
+        LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
+        loginView.factory = self.factory;
+        [self.navigationController pushViewController:loginView animated:YES];
+    }
+    [pool release];
+}
+
 
 @end

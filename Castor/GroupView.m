@@ -8,61 +8,18 @@
 
 #import "GroupView.h"
 
+@interface GroupView (Private)
+- (void)_startIndicator:(id)sender;
+- (void)_reloadGroupListInBackground:(id)arg;
+- (void)_alertException:(NSString *)message;
+@end
 
 @implementation GroupView
 
-@synthesize factory = _factory;
-
 @synthesize roomTable = _roomTable;
 @synthesize roomList = _roomList;
-
+@synthesize factory = _factory;
 @synthesize indicator = _indicator;
-
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
-}
-
-- (void)startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
-- (void)reloadGroupListInBackground:(id)arg
-{
-    NSLog(@"reload groupList In Background");
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.roomList = [self.factory getRoomListWithSender:self];
-    [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
-    [self.indicator stopAnimating];
-    [pool release];
-}
-
-- (IBAction)callSetting:(id)sender
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to SettingView");
-    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil] autorelease];
-    settingView.factory = self.factory;
-    [self.navigationController pushViewController:settingView animated:YES];
-    [pool release];
-}
-
-- (IBAction)reload:(id)sender
-{
-    NSLog(@"reloadGroup");
-    [self performSelector:@selector(startIndicator:) withObject:self];
-    [self performSelectorInBackground:@selector(reloadGroupListInBackground:) withObject:nil];
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -77,11 +34,9 @@
 - (void)dealloc
 {
     self.factory = nil;
-    
+    self.indicator = nil;
     self.roomList = nil;
     self.roomTable = nil;
-    
-    self.indicator = nil;
     [super dealloc];
 }
 
@@ -93,6 +48,50 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"GroupView Will appear");
+    self.navigationController.navigationBar.hidden = NO;
+}
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    NSLog(@"GroupView loaded");
+    self.title = @"Group";
+    if (self.factory == nil) {
+        self.factory = [[DataFactory alloc] init];
+    }
+    [self.navigationItem.backBarButtonItem setEnabled:NO];
+    self.navigationItem.hidesBackButton = YES;
+    [self performSelector:@selector(_startIndicator:) withObject:self];
+    [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
+}
+
+- (void)viewDidUnload
+{
+    [super viewDidUnload];
+    self.factory = nil;
+    self.indicator = nil;
+    self.roomList = nil;
+    self.roomTable = nil;
+}
+
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+{
+    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
+        _portrate = NO;
+        [self.roomTable reloadData];
+    }
+    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
+        _portrate = YES;
+        [self.roomTable reloadData];
+    }
+    return YES;
+}
+
+//// UITableViewDelegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -136,49 +135,54 @@
     [pool release];
 }
 
-#pragma mark - View lifecycle
-
-- (void)viewWillAppear:(BOOL)animated
+//// Reloadable
+- (IBAction)reload:(id)sender
 {
-    [super viewWillAppear:animated];
-    NSLog(@"GroupView Will appear");
-    self.navigationController.navigationBar.hidden = NO;
+    NSLog(@"reloadGroup");
+    [self performSelector:@selector(_startIndicator:) withObject:self];
+    [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
 }
 
-- (void)viewDidLoad
+//// Alertable
+- (void)alertException:(NSString *)message
 {
-    [super viewDidLoad];
-    NSLog(@"GroupView loaded");
-    self.title = @"Group";
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
-    [self.navigationItem.backBarButtonItem setEnabled:NO];
-    self.navigationItem.hidesBackButton = YES;
-    [self performSelector:@selector(startIndicator:) withObject:self];
-    [self performSelectorInBackground:@selector(reloadGroupListInBackground:) withObject:nil];
+    UIAlertView *alert = [[UIAlertView alloc] init];
+    [alert setDelegate:self];
+    [alert setMessage:message];
+    [alert addButtonWithTitle:@"OK"];
+	[alert show];
+	[alert release];
 }
 
-- (void)viewDidUnload
+//// IBAction
+- (IBAction)callSetting:(id)sender
 {
-    [super viewDidUnload];
-    self.factory = nil;
-    
-    self.roomList = nil;
-    self.roomTable = nil;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to SettingView");
+    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil] autorelease];
+    settingView.factory = self.factory;
+    [self.navigationController pushViewController:settingView animated:YES];
+    [pool release];
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
+//// Private
+- (void)_startIndicator:(id)sender
 {
-    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        _portrate = NO;
-        [self.roomTable reloadData];
-    }
-    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        _portrate = YES;
-        [self.roomTable reloadData];
-    }
-    return YES;
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+- (void)_reloadGroupListInBackground:(id)arg
+{
+    NSLog(@"reload groupList In Background");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.roomList = [self.factory getRoomListWithSender:self];
+    [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
+    [pool release];
 }
 
 @end

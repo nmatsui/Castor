@@ -8,33 +8,15 @@
 
 #import "SettingView.h"
 
-
 @implementation SettingView
 
 @synthesize factory = _factory;
-
-- (IBAction)cacheDeleteClick:(id)sender
-{
-    NSLog(@"cache Delete");
-    [self.factory deleteCache];
-}
-
-- (IBAction)logoutClick:(id)sender
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    [self.factory clearAuthToken];
-    NSLog(@"move to LoginView");
-    LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
-    loginView.factory = self.factory;
-    [self.navigationController pushViewController:loginView animated:YES];
-    [pool release];
-}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        // Notiong to do
     }
     return self;
 }
@@ -72,6 +54,24 @@
 {
     // Return YES for supported orientations
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+//// IBAction
+- (IBAction)logoutClick:(id)sender
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [self.factory clearAuthToken];
+    NSLog(@"move to LoginView");
+    LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
+    loginView.factory = self.factory;
+    [self.navigationController pushViewController:loginView animated:YES];
+    [pool release];
+}
+
+- (IBAction)cacheDeleteClick:(id)sender
+{
+    NSLog(@"cache Delete");
+    [self.factory deleteCache];
 }
 
 @end

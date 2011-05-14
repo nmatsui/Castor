@@ -69,6 +69,7 @@
 		86062035137103D100E6A841 /* SettingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingView.h; sourceTree = "<group>"; };
 		86062036137103D100E6A841 /* SettingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingView.m; sourceTree = "<group>"; };
 		86062037137103D100E6A841 /* SettingView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SettingView.xib; sourceTree = "<group>"; };
+		860E534A137E18C700A97B5C /* Alertable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alertable.h; sourceTree = "<group>"; };
 		8614C63D1374F95100AFBC39 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
 		8614C63F1375335000AFBC39 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		865DD8901373916F0008EB9F /* create_table.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = create_table.sql; sourceTree = "<group>"; };
@@ -283,6 +284,8 @@
 				86F85B9D136ACEB10031F3B2 /* RootViewController.h */,
 				86F85B9E136ACEB10031F3B2 /* RootViewController.m */,
 				86F85BA0136ACEB10031F3B2 /* RootViewController.xib */,
+				866F9E0D1372D6FA006BA19C /* Reloadable.h */,
+				860E534A137E18C700A97B5C /* Alertable.h */,
 				86F85BA8136AD1110031F3B2 /* LoginView.h */,
 				86F85BA9136AD1110031F3B2 /* LoginView.m */,
 				86F85BAA136AD1110031F3B2 /* LoginView.xib */,
@@ -298,7 +301,6 @@
 				86B04C36136C41FE00F8BFA1 /* CommentView.h */,
 				86B04C37136C41FF00F8BFA1 /* CommentView.m */,
 				86B04C38136C41FF00F8BFA1 /* CommentView.xib */,
-				866F9E0D1372D6FA006BA19C /* Reloadable.h */,
 				86CD2353136D3C53005AB366 /* EditView.h */,
 				86CD2354136D3C53005AB366 /* EditView.m */,
 				86CD2355136D3C53005AB366 /* EditView.xib */,
@@ -480,8 +482,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Nobuyuki Matsui";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nobuyuki Matsui";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
@@ -489,9 +491,9 @@
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
+				PROVISIONING_PROFILE = "9EC0F717-79B0-451B-AC60-07FA54B3DE96";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9EC0F717-79B0-451B-AC60-07FA54B3DE96";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -500,16 +502,16 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Nobuyuki Matsui";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nobuyuki Matsui";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				PROVISIONING_PROFILE = "";
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
+				PROVISIONING_PROFILE = "9EC0F717-79B0-451B-AC60-07FA54B3DE96";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "9EC0F717-79B0-451B-AC60-07FA54B3DE96";
 				SDKROOT = iphoneos;
 			};
 			name = Release;
