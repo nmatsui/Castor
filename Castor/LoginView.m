@@ -93,6 +93,8 @@
 /// IBAction
 - (IBAction)loginClick:(id)sender
 {
+    [self.email resignFirstResponder];
+    [self.password resignFirstResponder];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     NSLog(@"%@:%@",self.email.text, self.password.text);
     [self performSelectorInBackground:@selector(_authenticateInBackground:) withObject:Nil];
