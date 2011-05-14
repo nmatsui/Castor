@@ -17,13 +17,15 @@
     UIImageView *_imageView;
     DataFactory *_factory;
     EntryData *_entry;
+    UIActivityIndicatorView *_indicator;
     BOOL _portrate;
 }
 
-@property(nonatomic, retain) DataFactory *factory;
-@property(nonatomic, retain) EntryData *entry;
 @property(nonatomic, retain) IBOutlet UIImageView *imageView;
 @property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
+@property(nonatomic, retain) DataFactory *factory;
+@property(nonatomic, retain) EntryData *entry;
+@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry 

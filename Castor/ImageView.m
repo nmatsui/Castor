@@ -9,6 +9,7 @@
 #import "ImageView.h"
 
 @interface ImageView (Private)
+- (void)_startIndicator:(id)sender;
 - (void)_loadAttachmentImageInBackground:(id)arg;
 @end
 
@@ -16,6 +17,7 @@
 
 @synthesize imageView = _imageView;
 @synthesize scrollView = _scrollView;
+@synthesize indicator = _indicator;
 @synthesize factory = _factory;
 @synthesize entry = _entry;
 
@@ -30,6 +32,8 @@ static const float MIN_SCALE = 1.0;
     if (self) {
         self.entry = entry;
         self.factory = factory;
+        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -38,6 +42,7 @@ static const float MIN_SCALE = 1.0;
 {
     self.imageView = nil;
     self.scrollView = nil;
+    self.indicator = nil;
     self.factory = nil;
     self.entry = nil;
     [super dealloc];
@@ -59,6 +64,7 @@ static const float MIN_SCALE = 1.0;
     self.scrollView.maximumZoomScale = MAX_SCALE;
     self.scrollView.minimumZoomScale = MIN_SCALE;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+    [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
 }
 
@@ -67,6 +73,7 @@ static const float MIN_SCALE = 1.0;
     [super viewDidUnload];
     self.imageView = nil;
     self.scrollView = nil;
+    self.indicator = nil;
     self.factory = nil;
     self.entry = nil;
 }
@@ -99,6 +106,14 @@ static const float MIN_SCALE = 1.0;
 }
 
 //// Private
+- (void)_startIndicator:(id)sender
+{
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
 - (void)_loadAttachmentImageInBackground:(id)arg
 {
     NSLog(@"load Attachment Image In Background");
@@ -106,6 +121,7 @@ static const float MIN_SCALE = 1.0;
     self.imageView.contentMode = UIViewContentModeScaleAspectFit;
     self.imageView.image = [self.factory getAttachmentImageByEntryData:self.entry sender:self];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
     [pool release];
 }
 
