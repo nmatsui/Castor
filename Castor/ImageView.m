@@ -15,8 +15,12 @@
 @implementation ImageView
 
 @synthesize imageView = _imageView;
+@synthesize scrollView = _scrollView;
 @synthesize factory = _factory;
 @synthesize entry = _entry;
+
+static const float MAX_SCALE = 5.0;
+static const float MIN_SCALE = 1.0;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry 
@@ -33,6 +37,7 @@
 - (void)dealloc
 {
     self.imageView = nil;
+    self.scrollView = nil;
     self.factory = nil;
     self.entry = nil;
     [super dealloc];
@@ -51,6 +56,8 @@
     [super viewDidLoad];
     NSLog(@"ImageView loaded");
     self.title = @"Image";
+    self.scrollView.maximumZoomScale = MAX_SCALE;
+    self.scrollView.minimumZoomScale = MIN_SCALE;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
 }
@@ -59,6 +66,7 @@
 {
     [super viewDidUnload];
     self.imageView = nil;
+    self.scrollView = nil;
     self.factory = nil;
     self.entry = nil;
 }
@@ -73,6 +81,11 @@
     }
     return YES;
 }
+
+//// UIScrollViewDelegate
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {  
+    return self.imageView;  
+} 
 
 //// Alertable
 - (void)alertException:(NSString *)message

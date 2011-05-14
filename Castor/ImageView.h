@@ -12,7 +12,8 @@
 #import "DataFactory.h"
 
 
-@interface ImageView : UIViewController <Alertable> {
+@interface ImageView : UIViewController <UIScrollViewDelegate, Alertable> {
+    UIScrollView *_scrollView;
     UIImageView *_imageView;
     DataFactory *_factory;
     EntryData *_entry;
@@ -22,6 +23,7 @@
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) EntryData *entry;
 @property(nonatomic, retain) IBOutlet UIImageView *imageView;
+@property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry 
