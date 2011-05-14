@@ -27,7 +27,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.factory = factory;
-        self.cellBuilder = [[CellBuilder alloc] init];
+        self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
     }

@@ -47,7 +47,7 @@ static const int MAX_LEVLE = 6;
         self.previousView = previousView;
         self.factory = factory;
         self.selectors = [[NSMutableArray alloc] init];
-        self.cellBuilder = [[CellBuilder alloc] init];
+        self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
     }

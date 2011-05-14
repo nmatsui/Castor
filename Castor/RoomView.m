@@ -43,7 +43,7 @@
         self.selectors = [[NSMutableArray alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
-        self.cellBuilder = [[CellBuilder alloc] init];
+        self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
     }
     return self;
 }

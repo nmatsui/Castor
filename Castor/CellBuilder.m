@@ -23,11 +23,11 @@ static const int ENTRY_FONT_SIZE  = 12;
 static const int INDENT_FONT_SIZE = 10;
 static const int INDENT_WIDTH     = 6;
 
-- (id)init
+- (id)initWithDataFactory:(DataFactory *)factory
 {
     self = [super init];
     if(self){
-        self.factory = [[DataFactory alloc] init];
+        self.factory = factory;
         _globalQueue = dispatch_get_global_queue(0, 0);
         _localQueue  = dispatch_get_main_queue();
     }

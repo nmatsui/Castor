@@ -23,5 +23,6 @@
 - (CGFloat)getEntryCellHeight:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;
 - (UIView *)getEntryCellView:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;
 - (UIView *)getNextPageCellView:(CGSize)size portrate:(BOOL)portrate;
+- (id)initWithDataFactory:(DataFactory *)factory;
 
 @end
