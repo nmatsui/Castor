@@ -106,8 +106,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    return [ViewUtil getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
-    return [self.cellBuilder getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+    if (indexPath.row < [self.roomList count] - 1) {
+        return [self.cellBuilder getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+    }
+    else {
+        return 40;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -118,24 +122,28 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.roomList count] <= indexPath.row) return cell;
     
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    RoomData *room = [self.roomList objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:[self.cellBuilder getRoomCellView:self.view.window.screen.bounds.size room:room portrate:_portrate]];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [pool release];
+    if (indexPath.row < [self.roomList count] - 1) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        RoomData *room = [self.roomList objectAtIndex:indexPath.row];
+        [cell.contentView addSubview:[self.cellBuilder getRoomCellView:self.view.window.screen.bounds.size room:room portrate:_portrate]];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [pool release];
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"GroupView %d row tapped",indexPath.row);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"%@",[self.roomList objectAtIndex:indexPath.row]);
-    RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
-                                                       room:[self.roomList objectAtIndex:indexPath.row] 
-                                                    factory:self.factory] autorelease];
-    [self.navigationController pushViewController:roomView animated:YES];
-    [pool release];
+    if (indexPath.row < [self.roomList count] - 1) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        NSLog(@"%@",[self.roomList objectAtIndex:indexPath.row]);
+        RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
+                                                           room:[self.roomList objectAtIndex:indexPath.row] 
+                                                        factory:self.factory] autorelease];
+        [self.navigationController pushViewController:roomView animated:YES];
+        [pool release];
+    }
 }
 
 //// Reloadable
@@ -182,6 +190,7 @@
     NSLog(@"reload groupList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.roomList = [self.factory getRoomListWithSender:self];
+    [self.roomList addObject:[[[RoomData alloc] init] autorelease]]; // 最後の空白行用
     [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.indicator stopAnimating];
