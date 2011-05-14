@@ -42,7 +42,6 @@ static const int INDENT_WIDTH     = 6;
 
 - (CGFloat)getRoomCellHeight:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
 {
-    NSLog(@"getRoomCellHeight [%@]", room.roomId);
     float w = (portrate) ? size.width - 70 : size.height - 70;
     CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 10 + s.height + 10;
@@ -51,7 +50,6 @@ static const int INDENT_WIDTH     = 6;
 
 - (UIView *)getRoomCellView:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
 {
-    NSLog(@"getRoomCellView [%@]", room.roomId);
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     float w = (portrate) ? size.width - 70 : size.height - 70;
     CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];

@@ -241,11 +241,21 @@
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-//    NSLog(@"statusCode : %d", [response statusCode]);
-//    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
+    NSLog(@"statusCode : %d", [response statusCode]);
+    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
     if (error != nil) {
-        NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"network disconnected" userInfo:nil];
-        [exception raise];
+        if ([@"Email/Password combination is not valid" isEqualToString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]]) {
+            NSException* exception = [NSException exceptionWithName:@"AuthenticationException" 
+                                                             reason:@"Email/Password combination is invalid" 
+                                                           userInfo:nil];
+            [exception raise];
+        }
+        else {
+            NSException* exception = [NSException exceptionWithName:@"NetworkException" 
+                                                             reason:@"network connection error" 
+                                                           userInfo:nil];
+            [exception raise];
+        }
     }
     return data;
 }
