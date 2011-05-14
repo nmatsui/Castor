@@ -18,11 +18,14 @@
 @synthesize factory = _factory;
 @synthesize entry = _entry;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                entry:(EntryData *)entry 
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Nothing to do
+        self.entry = entry;
+        self.factory = factory;
     }
     return self;
 }
@@ -48,9 +51,6 @@
     [super viewDidLoad];
     NSLog(@"ImageView loaded");
     self.title = @"Image";
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
     [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
 }

@@ -23,4 +23,7 @@
 @property(nonatomic, retain) EntryData *entry;
 @property(nonatomic, retain) IBOutlet UIImageView *imageView;
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                entry:(EntryData *)entry 
+              factory:(DataFactory *)factory;
 @end

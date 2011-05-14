@@ -30,14 +30,24 @@
 @synthesize selectors = _selectors;
 @synthesize previousView = _previousView;
 @synthesize indicator = _indicator;
+@synthesize cellBuilder = _cellBuilder;
 
 static const int MAX_LEVLE = 6;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                 room:(RoomData *)room 
+          originEntry:(EntryData *)originEntry 
+         previousView:(UIViewController <Reloadable> *)previousView 
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.room = room;
+        self.originEntry = originEntry;
+        self.previousView = previousView;
+        self.factory = factory;
         self.selectors = [[NSMutableArray alloc] init];
+        self.cellBuilder = [[CellBuilder alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
     }
@@ -56,6 +66,7 @@ static const int MAX_LEVLE = 6;
     self.selectors = nil;
     self.indicator = nil;
     self.previousView = nil;
+    self.cellBuilder = nil;
     [super dealloc];
 }
 
@@ -72,9 +83,6 @@ static const int MAX_LEVLE = 6;
     [super viewDidLoad];
     NSLog(@"commentView loaded[%@]", self.originEntry.entryId);
     self.title = @"Comments";
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadCommentListInBackground:) withObject:nil];
 }
@@ -92,6 +100,7 @@ static const int MAX_LEVLE = 6;
     self.selectors = nil;
     self.indicator = nil;
     self.previousView = nil;
+    self.cellBuilder = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -121,7 +130,7 @@ static const int MAX_LEVLE = 6;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.entryList count] - 1) {
-        return [ViewUtil getEntryCellHeight:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
+        return [self.cellBuilder getEntryCellHeight:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -139,7 +148,7 @@ static const int MAX_LEVLE = 6;
     if (indexPath.row < [self.entryList count] - 1) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
-        [cell.contentView addSubview:[ViewUtil getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:_portrate]];
+        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:_portrate]];
         if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
             cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         }
@@ -258,8 +267,8 @@ static const int MAX_LEVLE = 6;
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to SettingView");
-    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil] autorelease];
-    settingView.factory = self.factory;
+    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
+                                                             factory:self.factory] autorelease];
     [self.navigationController pushViewController:settingView animated:YES];
     [pool release];
 }
@@ -295,12 +304,12 @@ static const int MAX_LEVLE = 6;
     NSLog(@"editEntry");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to EditView");
-    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
-    editView.factory = self.factory;
-    editView.roomId = self.originEntry.roomId;
-    editView.parentId = originEntry.entryId;
-    editView.targetEntry = nil;
-    editView.previousView = self;
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil 
+                                                     roomId:self.originEntry.roomId 
+                                                   parentId:originEntry.entryId 
+                                                targetEntry:nil 
+                                               previousView:self 
+                                                    factory:self.factory] autorelease];
     [self.navigationController pushViewController:editView animated:YES];
     [pool release];
 }
@@ -315,17 +324,17 @@ static const int MAX_LEVLE = 6;
     [alert show];
     [alert release];
     
-    //    NSLog(@"update entry [%@]", originEntry.entryId);
-    //    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    //    NSLog(@"move to EditView");
-    //    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil] autorelease];
-    //    editView.factory = self.factory;
-    //    editView.roomId = self.originEntry.roomId;
-    //    editView.parentId = originEntry.entryId;
-    //    editView.targetEntry = originEntry;
-    //    editView.previousView = self;
-    //    [self.navigationController pushViewController:editView animated:YES];
-    //    [pool release];
+    NSLog(@"update entry [%@]", originEntry.entryId);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to EditView");
+    EditView *editView = [[[EditView alloc] initWithNibName:@"EditView" bundle:nil 
+                                                     roomId:self.originEntry.roomId 
+                                                   parentId:originEntry.entryId 
+                                                targetEntry:originEntry 
+                                               previousView:self 
+                                                    factory:self.factory] autorelease];
+    [self.navigationController pushViewController:editView animated:YES];
+    [pool release];
 }
 
 - (void)_deleteEntryWithOriginEntry:(EntryData *)originEntry
@@ -346,15 +355,15 @@ static const int MAX_LEVLE = 6;
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     if ([@"Text" isEqualToString:originEntry.attachmentType]) {
         NSLog(@"move to LongTextView");
-        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil] autorelease];
-        longTextView.entry = originEntry;
+        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil 
+                                                                      entry:originEntry] autorelease];
         [self.navigationController pushViewController:longTextView animated:YES];
     }
     else if ([@"Image" isEqualToString:originEntry.attachmentType]) {
         NSLog(@"move to ImageView");
-        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil] autorelease];
-        imageView.factory = self.factory;
-        imageView.entry = originEntry;
+        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil 
+                                                             entry:originEntry 
+                                                           factory:self.factory] autorelease];
         [self.navigationController pushViewController:imageView animated:YES];
     }
     else if ([@"Link" isEqualToString:self.target.attachmentType]) {

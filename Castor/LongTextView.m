@@ -14,11 +14,12 @@
 @synthesize textView = _textView;
 @synthesize entry = _entry;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                entry:(EntryData *)entry
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Nothing to do
+        self.entry = entry;
     }
     return self;
 }

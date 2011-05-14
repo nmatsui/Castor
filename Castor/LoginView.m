@@ -19,11 +19,12 @@
 @synthesize loginButton = _loginButton;
 @synthesize factory = _factory;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Nothing to do
+        self.factory = factory;
     }
     return self;
 }
@@ -118,8 +119,8 @@
     BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text sender:self];
     if (result) {
         NSLog(@"move to GroupView");
-        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil] autorelease];
-        groupView.factory = self.factory;
+        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
+                                                           factory:self.factory] autorelease];
         [self.navigationController pushViewController:groupView animated:YES];
     }
     [pool release];

@@ -12,7 +12,7 @@
 #import "DataFactory.h"
 #import "EditView.h"
 #import "SettingView.h"
-#import "ViewUtil.h"
+#import "CellBuilder.h"
 
 @interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
     UITableView *_entryTable;
@@ -25,6 +25,7 @@
     NSMutableArray *_selectors;
     UIViewController <Reloadable> *_previousView;
     UIActivityIndicatorView *_indicator;
+    CellBuilder *_cellBuilder;
     BOOL _portrate;
 }
 
@@ -38,8 +39,14 @@
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIViewController <Reloadable> *previousView;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
+@property(nonatomic, retain) CellBuilder *cellBuilder;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)addEntry:(id)sender;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                 room:(RoomData *)room 
+          originEntry:(EntryData *)originEntry 
+         previousView:(UIViewController <Reloadable> *)previousView 
+              factory:(DataFactory *)factory;
 
 @end

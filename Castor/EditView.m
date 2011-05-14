@@ -21,11 +21,20 @@
 
 static const int MAX_LETTER = 140;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+               roomId:(NSNumber *)roomId 
+             parentId:(NSNumber *)parentId 
+          targetEntry:(EntryData *)targetEntry 
+         previousView:(UIViewController <Reloadable> *)previousView 
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-
+        self.roomId = roomId;
+        self.parentId = parentId;
+        self.targetEntry = targetEntry;
+        self.previousView = previousView;
+        self.factory = factory;
     }
     return self;
 }

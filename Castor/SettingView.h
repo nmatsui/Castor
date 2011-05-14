@@ -20,5 +20,6 @@
 
 - (IBAction)logoutClick:(id)sender;
 - (IBAction)cacheDeleteClick:(id)sender;
-
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+              factory:(DataFactory *)factory;
 @end

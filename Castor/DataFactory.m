@@ -34,7 +34,6 @@
             self.gateway = [[YouRoomGateway alloc] init];
         }
         self.cacheManager = [[CacheManager alloc] init];
-        self.gateway.cacheManager = self.cacheManager;
     }
     return self;
 }
@@ -169,6 +168,40 @@
         [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
     }
     return image;
+}
+
+- (UIImage *)getRoomIconByRoomId:(NSNumber *)roomId
+{
+    NSLog(@"getRoomIconByRoomId[%@]", roomId);
+    NSData *icon = [self.cacheManager selectRoomIconAtRoomId:roomId];
+    if (icon == nil) {
+        @try {
+            icon = [self.gateway retrieveRoomIconByRoomId:roomId];
+            [self.cacheManager insertOrReplaceRoomIconAtRoomId:roomId icon:icon];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"exception in getAttachmentImageByEntryData [%@]", [exception reason]);
+            // Icon読み込みに失敗しても、エラーダイアログは出さない
+        }
+    }
+    return [[[UIImage alloc] initWithData:icon] autorelease];
+}
+
+- (UIImage *)getParticipationIconByRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId
+{
+    NSLog(@"getParticipationIconByRoomId[%@] participationId[%@]", roomId, participationId);
+    NSData *icon = [self.cacheManager selectParticipationIconAtRoomId:roomId participationId:participationId];
+    if (icon == nil) {
+        @try {
+            icon = [self.gateway retrieveParticipationIconByRoomId:roomId participationId:participationId];
+            [self.cacheManager insertOrReplaceParticipationIconAtRoomId:roomId participationId:participationId icon:icon];
+        }
+        @catch (NSException *exception) {
+            NSLog(@"exception in getAttachmentImageByEntryData [%@]", [exception reason]);
+            // Icon読み込みに失敗しても、エラーダイアログは出さない
+        }
+    }
+    return [[[UIImage alloc] initWithData:icon] autorelease];
 }
 
 - (void)deleteCache

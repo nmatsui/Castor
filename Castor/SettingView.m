@@ -13,10 +13,11 @@
 @synthesize factory = _factory;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Notiong to do
+        self.factory = factory;
     }
     return self;
 }
@@ -62,8 +63,8 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [self.factory clearAuthToken];
     NSLog(@"move to LoginView");
-    LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil] autorelease];
-    loginView.factory = self.factory;
+    LoginView *loginView = [[[LoginView alloc] initWithNibName:@"LoginView" bundle:nil
+                                                       factory:self.factory] autorelease];
     [self.navigationController pushViewController:loginView animated:YES];
     [pool release];
 }

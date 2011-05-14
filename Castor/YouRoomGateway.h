@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "RoomData.h"
 #import "EntryData.h"
-#import "CacheManager.h"
 #import "OAuthCore.h"
 #import "OAuth+Additions.h"
 #import "JSON.h"
@@ -18,12 +17,10 @@
 @interface YouRoomGateway : NSObject {
     NSString *_oAuthToken;
     NSString *_oAuthTokenSecret;
-    CacheManager *_cacheManager;
 }
 
 @property(nonatomic, retain) NSString *oAuthToken;
 @property(nonatomic, retain) NSString *oAuthTokenSecret;
-@property(nonatomic, retain) CacheManager *cacheManager;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
@@ -34,6 +31,8 @@
 - (BOOL)putEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId;
 - (BOOL)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;
 - (UIImage *)retrieveEntryAttachmentImageByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;
+- (NSData *)retrieveRoomIconByRoomId:(NSNumber *)roomId;
+- (NSData *)retrieveParticipationIconByRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
 
 @end
 

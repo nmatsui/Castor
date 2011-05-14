@@ -19,4 +19,7 @@
 @property(nonatomic, retain) EntryData *entry;
 @property(nonatomic, retain) IBOutlet UITextView *textView;
 
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                entry:(EntryData *)entry;
+
 @end

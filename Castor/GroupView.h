@@ -12,7 +12,7 @@
 #import "DataFactory.h"
 #import "RoomView.h"
 #import "SettingView.h"
-#import "ViewUtil.h"
+#import "CellBuilder.h"
 
 
 @interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable, Alertable> {
@@ -20,6 +20,7 @@
     NSMutableArray *_roomList;    
     DataFactory *_factory;
     UIActivityIndicatorView *_indicator;
+    CellBuilder *_cellBuilder;
     BOOL _portrate;
 }
 
@@ -27,7 +28,10 @@
 @property(nonatomic, retain) IBOutlet NSMutableArray *roomList;
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
+@property(nonatomic, retain) CellBuilder *cellBuilder;
 
 - (IBAction)callSetting:(id)sender;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+              factory:(DataFactory *)factory;
 
 @end

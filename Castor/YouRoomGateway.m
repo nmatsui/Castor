@@ -11,8 +11,6 @@
 @interface YouRoomGateway (Private)
 - (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret;
 - (NSData *)_getXAuthParamStringWithUsername:(NSString *)username password:(NSString *)password;
-- (NSData *)_getRoomIconAtRoomId:(NSNumber *)roomId;
-- (NSData *)_getParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level;
 @end
 
@@ -20,7 +18,6 @@
 
 @synthesize oAuthToken = _oAuthToken;
 @synthesize oAuthTokenSecret = _oAuthTokenSecret;
-@synthesize cacheManager = _cacheManager;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret
 {
@@ -36,7 +33,6 @@
 {
     self.oAuthToken = nil;
     self.oAuthTokenSecret = nil;
-    self.cacheManager = nil;
     [super dealloc];
 }
 
@@ -98,7 +94,7 @@
         roomData.updatedAt = [group objectForKey:@"updated_at"];
         roomData.admin     = [[[pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
         roomData.myId      = [[pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
-        roomData.roomIcon  = [[[UIImage alloc] initWithData:[self _getRoomIconAtRoomId:roomData.roomId]] autorelease];
+        roomData.roomIcon  = nil;
         [list addObject:roomData];
     }
     return list;
@@ -204,12 +200,40 @@
     return [[[UIImage alloc] initWithData:response] autorelease];
 }
 
+- (NSData *)retrieveRoomIconByRoomId:(NSNumber *)roomId
+{
+    NSLog(@"retrieveRoomIconByRoomId[%@]", roomId);
+    NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", roomId]]
+                               method:@"GET"
+                                 body:nil
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return nil;
+    }
+    return response;
+}
+
+- (NSData *)retrieveParticipationIconByRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId
+{
+    NSLog(@"retrieveParticipationIconByRoomId[%@] participationId[%@]", roomId, participationId);
+    NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, participationId]]
+                               method:@"GET"
+                                 body:nil
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return nil;
+    }
+    return response;
+}
+
 //// Private
 - (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret
 {
     NSLog(@"request(%@) to %@ [body:%@]", method, url, [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease]);
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
-    NSLog(@"request header : %@", header);
+//    NSLog(@"request header : %@", header);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:method];
     [request setValue:header forHTTPHeaderField:@"Authorization"];
@@ -217,8 +241,8 @@
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    NSLog(@"statusCode : %d", [response statusCode]);
-    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
+//    NSLog(@"statusCode : %d", [response statusCode]);
+//    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
     if (error != nil) {
         NSException* exception = [NSException exceptionWithName:@"OAuthException" reason:@"network disconnected" userInfo:nil];
         [exception raise];
@@ -231,42 +255,6 @@
     return [[NSString stringWithFormat:@"x_auth_username=%@&x_auth_password=%@&x_auth_mode=client_auth", username, password] dataUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (NSData *)_getRoomIconAtRoomId:(NSNumber *)roomId
-{
-    NSLog(@"getRoomIconAtRoomId[%@]", roomId);
-    NSData *icon = [self.cacheManager selectRoomIconAtRoomId:roomId];
-    if (icon == nil) {
-        icon = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/picture", roomId]]
-                      method:@"GET"
-                        body:nil
-                 oauth_token:self.oAuthToken
-          oauth_token_secret:self.oAuthTokenSecret];
-        if (icon == nil || [icon length] == 0) {
-            return nil;
-        }
-        [self.cacheManager insertOrReplaceRoomIconAtRoomId:roomId icon:icon];
-    }
-    return icon;
-}
-
-- (NSData *)_getParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId
-{
-    NSLog(@"getParticipationIconAtRoomId[%@] participationId[%@]", roomId, participationId);
-    NSData *icon = [self.cacheManager selectParticipationIconAtRoomId:roomId participationId:participationId];
-    if (icon == nil) {
-        icon = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/participations/%@/picture", roomId, participationId]]
-                      method:@"GET"
-                        body:nil
-                 oauth_token:self.oAuthToken
-          oauth_token_secret:self.oAuthTokenSecret];
-        if (icon == nil || [icon length] == 0) {
-            return nil;
-        }
-        [self.cacheManager insertOrReplaceParticipationIconAtRoomId:roomId participationId:participationId icon:icon];
-    }
-    return icon;
-}
-
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level
 {
     EntryData *entryData = [[[EntryData alloc] init] autorelease];
@@ -277,6 +265,7 @@
     entryData.rootId            = [[entry objectForKey:@"root_id"] isKindOfClass:[NSNumber class]] ? [entry objectForKey:@"root_id"] : nil;
     entryData.participationId   = [[entry objectForKey:@"participation"] objectForKey:@"id"];
     entryData.participationName = [[entry objectForKey:@"participation"] objectForKey:@"name"];
+    entryData.participationIcon = nil;
     if ([entry objectForKey:@"attachment"] != nil && [[entry objectForKey:@"attachment"] isKindOfClass:[NSDictionary class]]) {
         NSDictionary *attachment        = [entry objectForKey:@"attachment"];
         entryData.attachmentType        = [[attachment objectForKey:@"attachment_type"] isKindOfClass:[NSString class]] ? [attachment objectForKey:@"attachment_type"] : nil;
@@ -293,7 +282,6 @@
     }
     entryData.createdAt         = [entry objectForKey:@"created_at"];
     entryData.updatedAt         = [entry objectForKey:@"updated_at"];
-    entryData.participationIcon = [[[UIImage alloc] initWithData:[self _getParticipationIconAtRoomId:roomId participationId:entryData.participationId]] autorelease];
     entryData.level             = level;
     if ([entry objectForKey:@"children"] != nil && [[entry objectForKey:@"children"] isKindOfClass:[NSArray class]]) {
         NSMutableArray *children = [[[NSMutableArray alloc] init] autorelease];

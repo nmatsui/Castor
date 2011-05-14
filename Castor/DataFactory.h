@@ -33,5 +33,7 @@
 - (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender;
 - (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(UIViewController <Alertable> *)sender;
 - (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender;
+- (UIImage *)getRoomIconByRoomId:(NSNumber *)roomId;
+- (UIImage *)getParticipationIconByRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
 - (void)deleteCache;
 @end

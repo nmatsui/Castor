@@ -11,7 +11,6 @@
 @interface GroupView (Private)
 - (void)_startIndicator:(id)sender;
 - (void)_reloadGroupListInBackground:(id)arg;
-- (void)_alertException:(NSString *)message;
 @end
 
 @implementation GroupView
@@ -20,11 +19,15 @@
 @synthesize roomList = _roomList;
 @synthesize factory = _factory;
 @synthesize indicator = _indicator;
+@synthesize cellBuilder = _cellBuilder;
 
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
+        self.factory = factory;
+        self.cellBuilder = [[CellBuilder alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
     }
@@ -33,10 +36,11 @@
 
 - (void)dealloc
 {
-    self.factory = nil;
-    self.indicator = nil;
     self.roomList = nil;
     self.roomTable = nil;
+    self.factory = nil;
+    self.indicator = nil;
+    self.cellBuilder = nil;
     [super dealloc];
 }
 
@@ -60,9 +64,6 @@
     [super viewDidLoad];
     NSLog(@"GroupView loaded");
     self.title = @"Group";
-    if (self.factory == nil) {
-        self.factory = [[DataFactory alloc] init];
-    }
     [self.navigationItem.backBarButtonItem setEnabled:NO];
     self.navigationItem.hidesBackButton = YES;
     [self performSelector:@selector(_startIndicator:) withObject:self];
@@ -72,10 +73,11 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.factory = nil;
-    self.indicator = nil;
     self.roomList = nil;
     self.roomTable = nil;
+    self.factory = nil;
+    self.indicator = nil;
+    self.cellBuilder = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -104,7 +106,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [ViewUtil getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+//    return [ViewUtil getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+    return [self.cellBuilder getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -117,7 +120,7 @@
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     RoomData *room = [self.roomList objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:[ViewUtil getRoomCellView:self.view.window.screen.bounds.size room:room portrate:_portrate]];
+    [cell.contentView addSubview:[self.cellBuilder getRoomCellView:self.view.window.screen.bounds.size room:room portrate:_portrate]];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
     return cell;
@@ -127,10 +130,10 @@
 {
     NSLog(@"GroupView %d row tapped",indexPath.row);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to RoomView");
-    RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil] autorelease];
-    roomView.factory = self.factory;
-    roomView.room = [self.roomList objectAtIndex:indexPath.row];
+    NSLog(@"%@",[self.roomList objectAtIndex:indexPath.row]);
+    RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
+                                                       room:[self.roomList objectAtIndex:indexPath.row] 
+                                                    factory:self.factory] autorelease];
     [self.navigationController pushViewController:roomView animated:YES];
     [pool release];
 }
@@ -159,8 +162,8 @@
 {
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     NSLog(@"move to SettingView");
-    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil] autorelease];
-    settingView.factory = self.factory;
+    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
+                                                             factory:self.factory] autorelease];
     [self.navigationController pushViewController:settingView animated:YES];
     [pool release];
 }

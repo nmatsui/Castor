@@ -28,5 +28,7 @@
 - (IBAction)doneEmailEdit:(id)sender;
 - (IBAction)donePasswordEdit:(id)sender;
 - (IBAction)backTap:(id)sender;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+              factory:(DataFactory *)factory;
 
 @end

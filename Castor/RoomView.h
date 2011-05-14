@@ -15,7 +15,7 @@
 #import "SettingView.h"
 #import "LongTextView.h"
 #import "ImageView.h"
-#import "ViewUtil.h"
+#import "CellBuilder.h"
 
 @interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
     UITableView *_entryTable;
@@ -26,6 +26,7 @@
     EntryData *_willDelete;
     NSMutableArray *_selectors;
     UIActivityIndicatorView *_indicator;
+    CellBuilder *_cellBuilder;
     int _page;
     BOOL _portrate;
 }
@@ -38,8 +39,12 @@
 @property(nonatomic, retain) EntryData *willDelete;
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
+@property(nonatomic, retain) CellBuilder *cellBuilder;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)addEntry:(id)sender;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                 room:(RoomData *)room 
+              factory:(DataFactory *)factory;
 
 @end

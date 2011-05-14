@@ -34,4 +34,11 @@
 
 - (IBAction)postEntry:(id)sender;
 - (IBAction)doneEntryEdit:(id)sender;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+               roomId:(NSNumber *)roomId 
+             parentId:(NSNumber *)parentId 
+          targetEntry:(EntryData *)targetEntry 
+         previousView:(UIViewController <Reloadable> *)previousView 
+              factory:(DataFactory *)factory;
+
 @end
