@@ -137,7 +137,6 @@
     NSLog(@"GroupView %d row tapped",indexPath.row);
     if (indexPath.row < [self.roomList count] - 1) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        NSLog(@"%@",[self.roomList objectAtIndex:indexPath.row]);
         RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
                                                            room:[self.roomList objectAtIndex:indexPath.row] 
                                                         factory:self.factory] autorelease];
