@@ -97,8 +97,8 @@ static const int INDENT_WIDTH     = 6;
 - (CGFloat)getEntryCellHeight:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate
 {
     float w = (portrate) ? size.width - 70 : size.height - 70;
-    CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    float height = 30 + s.height + 20;
+    CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+    float height = 30 + s.height + 20 + [entry.level intValue]*INDENT_WIDTH;
     return (height<60)?60:height;
 }
 
@@ -121,9 +121,10 @@ static const int INDENT_WIDTH     = 6;
         [v addSubview:attachmentLabel];
         [attachmentLabel release];
     }
-    CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+    UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
+    NSLog(@"content %@", entry.content);
     [contentLabel release];
     UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [v addSubview:icon];
