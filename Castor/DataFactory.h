@@ -26,6 +26,7 @@
 - (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(UIViewController <Alertable> *)sender;
 - (BOOL)hasAuthToken;
 - (void)clearAuthToken;
+- (NSMutableArray *)getRoomListFromCache;
 - (NSMutableArray *)getRoomListWithSender:(UIViewController <Alertable> *)sender;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(UIViewController <Alertable> *)sender;
 - (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender;

@@ -175,6 +175,69 @@
     [self commit];
 }
 
+- (NSData *)selectRoomList
+{
+    NSLog(@"selectRoomList");
+    [self beginTransaction];
+    NSString *sql = @"select list, size from room_list_cache";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectRoomList" userInfo:nil];
+        [exception raise];
+    };
+    NSData *list = nil;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        list = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+    return list;
+}
+
+- (void)insertOrReplaceRoomList:(NSData *)list
+{
+    NSLog(@"insertOrReplaceRoomList");
+    [self beginTransaction];
+    NSString *sql = @"insert or replace into room_list_cache(pseud_id, list, size, cached_at) values(1, @list, @size, @cachedAt)"; // 最新１データだけ持てば良いので、PKは必ず1
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at insertOrReplaceRoomList" userInfo:nil];
+        [exception raise];
+    };
+    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@list"),     [list bytes], [list length], SQLITE_TRANSIENT);
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),     [list length]);
+    sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"), [[NSDate date] timeIntervalSince1970]);
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"insert or replace error at insertOrReplaceRoomList" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+
+- (void)deleteAllRoomList
+{
+    NSLog(@"deleteAllRoomList");
+    [self beginTransaction];
+    NSString *sql = @"delete from room_list_cache";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at deleteAllRoomList" userInfo:nil];
+        [exception raise];
+    };
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllRoomList" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+
 //// Private
 - (void)beginTransaction
 {

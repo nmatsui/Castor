@@ -76,12 +76,27 @@
     if ([[NSFileManager defaultManager] fileExistsAtPath:self.authTokenPath]) [[NSFileManager defaultManager] removeItemAtPath:self.authTokenPath error:nil];
 }
 
+- (NSMutableArray *)getRoomListFromCache
+{
+    NSLog(@"getRoomListFromCache");
+    NSData *data = [self.cacheManager selectRoomList];
+    if (data != nil) {
+        NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [data release];
+        return array;
+    }
+    else {
+        return nil;
+    }
+}
+
 - (NSMutableArray *)getRoomListWithSender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getRoomListWithSender");
     NSMutableArray *list = nil;
     @try {
         list = [self.gateway retrieveRoomList];
+        [self.cacheManager insertOrReplaceRoomList:[NSKeyedArchiver archivedDataWithRootObject:list]];
     }
     @catch (NSException *exception) {
         NSLog(@"exception in getRoomListWithSender[%@]", [exception reason]);
@@ -208,6 +223,7 @@
 {
     [self.cacheManager deleteAllRoomIcon];
     [self.cacheManager deleteAllParticipationIcon];
+    [self.cacheManager deleteAllRoomList];
 }
 
 //// Private

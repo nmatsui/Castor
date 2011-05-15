@@ -20,4 +20,8 @@
 - (NSData *)selectParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
 - (void)insertOrReplaceParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId icon:(NSData *)icon;
 - (void)deleteAllParticipationIcon;
+
+- (NSData *)selectRoomList;
+- (void)insertOrReplaceRoomList:(NSData *)list;
+- (void)deleteAllRoomList;
 @end

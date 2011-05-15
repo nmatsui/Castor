@@ -11,7 +11,7 @@
 		86062038137103D200E6A841 /* SettingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86062036137103D100E6A841 /* SettingView.m */; };
 		86062039137103D200E6A841 /* SettingView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86062037137103D100E6A841 /* SettingView.xib */; };
 		860E534E137E387E00A97B5C /* CellBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 860E534D137E387C00A97B5C /* CellBuilder.m */; };
-		8614C63E1374F95100AFBC39 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63D1374F95100AFBC39 /* database.sqlite */; };
+		860E8928137F979A001E4831 /* database.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = 860E8927137F979A001E4831 /* database.sqlite */; };
 		8614C6401375335100AFBC39 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63F1375335000AFBC39 /* README */; };
 		865DD8921373916F0008EB9F /* create_table.sql in Resources */ = {isa = PBXBuildFile; fileRef = 865DD8901373916F0008EB9F /* create_table.sql */; };
 		865DD895137392C10008EB9F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 865DD894137392C10008EB9F /* libsqlite3.dylib */; };
@@ -72,7 +72,7 @@
 		860E534A137E18C700A97B5C /* Alertable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alertable.h; sourceTree = "<group>"; };
 		860E534C137E387C00A97B5C /* CellBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBuilder.h; sourceTree = "<group>"; };
 		860E534D137E387C00A97B5C /* CellBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellBuilder.m; sourceTree = "<group>"; };
-		8614C63D1374F95100AFBC39 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
+		860E8927137F979A001E4831 /* database.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = database.sqlite; sourceTree = "<group>"; };
 		8614C63F1375335000AFBC39 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		865DD8901373916F0008EB9F /* create_table.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = create_table.sql; sourceTree = "<group>"; };
 		865DD894137392C10008EB9F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -173,7 +173,7 @@
 		865DD88F1373916F0008EB9F /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				8614C63D1374F95100AFBC39 /* database.sqlite */,
+				860E8927137F979A001E4831 /* database.sqlite */,
 				865DD8901373916F0008EB9F /* create_table.sql */,
 			);
 			path = Resources;
@@ -403,8 +403,8 @@
 				86DA6C731371592600DD923D /* myrooms.png in Resources */,
 				86DA6C741371592600DD923D /* test.jpg in Resources */,
 				865DD8921373916F0008EB9F /* create_table.sql in Resources */,
-				8614C63E1374F95100AFBC39 /* database.sqlite in Resources */,
 				8614C6401375335100AFBC39 /* README in Resources */,
+				860E8928137F979A001E4831 /* database.sqlite in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
