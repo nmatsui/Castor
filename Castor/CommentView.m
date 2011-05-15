@@ -46,6 +46,8 @@ static const int MAX_LEVLE = 6;
         self.originEntry = originEntry;
         self.previousView = previousView;
         self.factory = factory;
+        self.entryList = [self.factory getEntryCommentListFromCache:self.originEntry];
+        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         self.selectors = [[NSMutableArray alloc] init];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -291,9 +293,12 @@ static const int MAX_LEVLE = 6;
 {
     NSLog(@"reload CommentList [%@] In Background", self.originEntry.entryId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [self.factory getEntryCommentListByEntryData:self.originEntry sender:self];
-    [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
-    [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    NSMutableArray *entries = [self.factory getEntryCommentListByEntryData:self.originEntry sender:self];
+    if (entries != nil && [entries count] != 0) {
+        self.entryList = entries;
+        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
+        [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.indicator stopAnimating];
     [pool release];

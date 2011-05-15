@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface EntryData : NSObject {
+@interface EntryData : NSObject <NSCoding> {
     NSNumber       *_entryId;
     NSNumber       *_roomId;
     NSString       *_content;

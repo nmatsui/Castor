@@ -24,4 +24,13 @@
 - (NSData *)selectRoomList;
 - (void)insertOrReplaceRoomList:(NSData *)list;
 - (void)deleteAllRoomList;
+
+- (NSData *)selectRoomTimelineAtRoomId:(NSNumber *)roomId;
+- (void)insertOrReplaceRoomTimelineAtRoomId:(NSNumber *)roomId timeline:(NSData *)timeline;
+- (void)deleteAllRoomTimeline;
+
+- (NSData *)selectEntriesAtRoomId:(NSNumber *)roomId entryId:(NSNumber *)entryId;
+- (void)insertOrReplaceEntriesAtRoomId:(NSNumber *)roomId entryId:(NSNumber *)entryId entries:(NSData *)entries;
+- (void)deleteAllEntries;
+
 @end

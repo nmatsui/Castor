@@ -28,7 +28,9 @@
 - (void)clearAuthToken;
 - (NSMutableArray *)getRoomListFromCache;
 - (NSMutableArray *)getRoomListWithSender:(UIViewController <Alertable> *)sender;
+- (NSMutableArray *)getRoomEntryListFromCache:(NSNumber *)roomId;
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(UIViewController <Alertable> *)sender;
+- (NSMutableArray *)getEntryCommentListFromCache:(EntryData *)entry;
 - (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender;
 - (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(UIViewController <Alertable> *)sender;
 - (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender;

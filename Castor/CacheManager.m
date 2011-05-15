@@ -63,7 +63,6 @@
     [self commit];
     return image;
 }
-
 - (void)insertOrReplaceRoomIconAtRoomId:(NSNumber *)roomId icon:(NSData *)icon
 {
     NSLog(@"insertOrReplaceRoomIconAtRoomId[%@]", roomId);
@@ -87,7 +86,6 @@
     sqlite3_finalize(statement);
     [self commit];
 }
-
 - (void)deleteAllRoomIcon
 {
     NSLog(@"deleteAllRoomIcon");
@@ -119,7 +117,7 @@
         NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectParticipationIconAtRoomId" userInfo:nil];
         [exception raise];
     };
-    sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"), [roomId intValue]);
+    sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"),          [roomId intValue]);
     sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@participationId"), [participationId intValue]);
     NSData *image = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
@@ -129,7 +127,6 @@
     [self commit];
     return image;
 }
-
 - (void)insertOrReplaceParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId icon:(NSData *)icon
 {
     NSLog(@"insertOrReplaceParticipationIconAtRoomId[%@] participationId[%@]", roomId, participationId);
@@ -154,7 +151,6 @@
     sqlite3_finalize(statement);
     [self commit];
 }
-
 - (void)deleteAllParticipationIcon
 {
     NSLog(@"deleteAllParticipationIcon");
@@ -194,7 +190,6 @@
     [self commit];
     return list;
 }
-
 - (void)insertOrReplaceRoomList:(NSData *)list
 {
     NSLog(@"insertOrReplaceRoomList");
@@ -217,7 +212,6 @@
     sqlite3_finalize(statement);
     [self commit];
 }
-
 - (void)deleteAllRoomList
 {
     NSLog(@"deleteAllRoomList");
@@ -232,6 +226,134 @@
     if (sqlite3_step(statement) == SQLITE_ERROR) {
         [self rollback];
         NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllRoomList" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+
+- (NSData *)selectRoomTimelineAtRoomId:(NSNumber *)roomId
+{
+    NSLog(@"selectRoomTimelineAtRoomId[%@]", roomId);
+    [self beginTransaction];
+    NSString *sql = @"select timeline, size from room_timeline_cache where room_id = @roomId";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectRoomTimelineAtRoomId" userInfo:nil];
+        [exception raise];
+    };
+    sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"), [roomId intValue]);
+    NSData *timeline = nil;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        timeline = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+    return timeline;
+}
+- (void)insertOrReplaceRoomTimelineAtRoomId:(NSNumber *)roomId timeline:(NSData *)timeline
+{
+    NSLog(@"insertOrReplaceRoomTimelineAtRoomId[%@]", roomId);
+    [self beginTransaction];
+    NSString *sql = @"insert or replace into room_timeline_cache(room_id, timeline, size, cached_at) values(@roomId, @timeline, @size, @cachedAt)";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at insertOrReplaceRoomTimelineAtRoomId" userInfo:nil];
+        [exception raise];
+    };
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@roomId"),   [roomId intValue]);
+    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@timeline"), [timeline bytes], [timeline length], SQLITE_TRANSIENT);
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),     [timeline length]);
+    sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"), [[NSDate date] timeIntervalSince1970]);
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"insert or replace error at insertOrReplaceRoomTimelineAtRoomId" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+- (void)deleteAllRoomTimeline
+{
+    NSLog(@"deleteAllRoomTimeline");
+    [self beginTransaction];
+    NSString *sql = @"delete from room_timeline_cache";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at deleteAllRoomTimeline" userInfo:nil];
+        [exception raise];
+    };
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllRoomTimeline" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+
+- (NSData *)selectEntriesAtRoomId:(NSNumber *)roomId entryId:(NSNumber *)entryId
+{
+    NSLog(@"selectEntriesAtRoomId[%@] entryId[%@]", roomId, entryId);
+    [self beginTransaction];
+    NSString *sql = @"select entries, size from entries_cache where room_id = @roomId and entry_id = @entry_id";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectEntriesAtRoomId" userInfo:nil];
+        [exception raise];
+    };
+    sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"),   [roomId intValue]);
+    sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@entry_id"), [entryId intValue]);
+    NSData *entries = nil;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        entries = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+    return entries;
+}
+- (void)insertOrReplaceEntriesAtRoomId:(NSNumber *)roomId entryId:(NSNumber *)entryId entries:(NSData *)entries
+{
+    NSLog(@"insertOrReplaceEntriesAtRoomId[%@] participationId[%@]", roomId, entryId);
+    [self beginTransaction];
+    NSString *sql = @"insert or replace into entries_cache(room_id, entry_id, entries, size, cached_at) values(@roomId, @entryId, @entries, @size, @cachedAt)";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at insertOrReplaceEntriesAtRoomId" userInfo:nil];
+        [exception raise];
+    };
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@roomId"),   [roomId intValue]);
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@entryId"),  [entryId intValue]);
+    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@entries"),  [entries bytes], [entries length], SQLITE_TRANSIENT);
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),     [entries length]);
+    sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"), [[NSDate date] timeIntervalSince1970]);
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"insert or replace error at insertOrReplaceEntriesAtRoomId" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+- (void)deleteAllEntries
+{
+    NSLog(@"deleteAllEntries");
+    [self beginTransaction];
+    NSString *sql = @"delete from entries_cache";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at deleteAllEntries" userInfo:nil];
+        [exception raise];
+    };
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllEntries" userInfo:nil];
         [exception raise];
     }
     sqlite3_finalize(statement);

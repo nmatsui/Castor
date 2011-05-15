@@ -52,4 +52,51 @@
     self.level = nil;
     [super dealloc];
 }
+
+//// NSCoding
+- (void)encodeWithCoder:(NSCoder *)aCoder
+{
+    [aCoder encodeObject:self.entryId               forKey:@"entryId"];
+    [aCoder encodeObject:self.roomId                forKey:@"roomId"];
+    [aCoder encodeObject:self.content               forKey:@"content"];
+    [aCoder encodeObject:self.parentId              forKey:@"parentId"];
+    [aCoder encodeObject:self.rootId                forKey:@"rootId"];
+    [aCoder encodeObject:self.participationId       forKey:@"participationId"];
+    [aCoder encodeObject:self.participationName     forKey:@"participationName"];
+    [aCoder encodeObject:self.attachmentType        forKey:@"attachmentType"];
+    [aCoder encodeObject:self.attachmentContentType forKey:@"attachmentContentType"];
+    [aCoder encodeObject:self.attachmentText        forKey:@"attachmentText"];
+    [aCoder encodeObject:self.attachmentURL         forKey:@"attachmentURL"];
+    [aCoder encodeObject:self.attachmentFilename    forKey:@"attachmentFilename"];
+    [aCoder encodeObject:self.children              forKey:@"children"];
+    [aCoder encodeObject:self.descendantsCount      forKey:@"descendantsCount"];
+    [aCoder encodeObject:self.createdAt             forKey:@"createdAt"];
+    [aCoder encodeObject:self.updatedAt             forKey:@"updatedAt"];
+    [aCoder encodeObject:self.level                 forKey:@"level"];
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+    self = [super init];
+    self.entryId               = [aDecoder decodeObjectForKey:@"entryId"];
+    self.roomId                = [aDecoder decodeObjectForKey:@"roomId"];
+    self.content               = [aDecoder decodeObjectForKey:@"content"];
+    self.parentId              = [aDecoder decodeObjectForKey:@"parentId"];
+    self.rootId                = [aDecoder decodeObjectForKey:@"rootId"];
+    self.participationId       = [aDecoder decodeObjectForKey:@"participationId"];
+    self.participationName     = [aDecoder decodeObjectForKey:@"participationName"];
+    self.participationIcon     = nil;
+    self.attachmentType        = [aDecoder decodeObjectForKey:@"attachmentType"];
+    self.attachmentContentType = [aDecoder decodeObjectForKey:@"attachmentContentType"];
+    self.attachmentText        = [aDecoder decodeObjectForKey:@"attachmentText"];
+    self.attachmentURL         = [aDecoder decodeObjectForKey:@"attachmentURL"];
+    self.attachmentFilename    = [aDecoder decodeObjectForKey:@"attachmentFilename"];
+    self.children              = [aDecoder decodeObjectForKey:@"children"];
+    self.descendantsCount      = [aDecoder decodeObjectForKey:@"descendantsCount"];
+    self.createdAt             = [aDecoder decodeObjectForKey:@"creaedAt"];
+    self.updatedAt             = [aDecoder decodeObjectForKey:@"updatedAt"];
+    self.level                 = [aDecoder decodeObjectForKey:@"level"];
+    return self;
+}
+
 @end

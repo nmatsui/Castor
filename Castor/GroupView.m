@@ -189,9 +189,12 @@
 {
     NSLog(@"reload groupList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.roomList = [self.factory getRoomListWithSender:self];
-    [self.roomList addObject:[[[RoomData alloc] init] autorelease]]; // 最後の空白行用
-    [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    NSMutableArray *list = [self.factory getRoomListWithSender:self];
+    if (list != nil && [list count] != 0) {
+        self.roomList = list;
+        [self.roomList addObject:[[[RoomData alloc] init] autorelease]]; // 最後の空白行用
+        [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.indicator stopAnimating];
     [pool release];

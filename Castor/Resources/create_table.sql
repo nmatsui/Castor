@@ -31,4 +31,19 @@ create table room_list_cache (
   primary key(pseud_id)
 );
 
+create table room_timeline_cache (
+  room_id          integer not null,
+  timeline         blob    not null,
+  size             integer not null,
+  cached_at        real    not null,
+  primary key(room_id)
+);
 
+create table entries_cache (
+  room_id          integer not null,
+  entry_id         integer not null,
+  entries          blob    not null,
+  size             integer not null,
+  cached_at        real    not null,
+  primary key(room_id, entry_id)
+);

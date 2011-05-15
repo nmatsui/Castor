@@ -40,6 +40,9 @@
         _page = 1;
         self.room = room;
         self.factory = factory;
+        self.entryList = [self.factory getRoomEntryListFromCache:self.room.roomId];
+        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
+        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         self.selectors = [[NSMutableArray alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
@@ -291,10 +294,13 @@
 {
     NSLog(@"reload entryList[%@] In Background", self.room.roomId);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    self.entryList = [self.factory getRoomEntryListByRoomId:self.room.roomId page:_page sender:self];
-    [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
-    [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
-    [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    NSMutableArray *timeline = [self.factory getRoomEntryListByRoomId:self.room.roomId page:_page sender:self];
+    if (timeline != nil && [timeline count] != 0) {
+        self.entryList = timeline;
+        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
+        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
+        [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.indicator stopAnimating];
     [pool release];

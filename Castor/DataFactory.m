@@ -105,6 +105,20 @@
     return list;
 }
 
+- (NSMutableArray *)getRoomEntryListFromCache:(NSNumber *)roomId
+{
+    NSLog(@"getRoomEntryListFromCache[%@]", roomId);
+    NSData *data = [self.cacheManager selectRoomTimelineAtRoomId:roomId];
+    if (data != nil) {
+        NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [data release];
+        return array;
+    }
+    else {
+        return nil;
+    }
+}
+
 - (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getRoomEntryListByRoomId[%@] page[%d]", roomId, page);
@@ -113,6 +127,7 @@
         for (int i = 1; i <= page; i++) {
             [list addObjectsFromArray:[self.gateway retrieveEntryListByRoomId:roomId page:i]];
         }
+        [self.cacheManager insertOrReplaceRoomTimelineAtRoomId:roomId timeline:[NSKeyedArchiver archivedDataWithRootObject:list]];
     }
     @catch (NSException *exception) {
         NSLog(@"exception in getRoomEntryListByRoomId [%@]", [exception reason]);
@@ -121,12 +136,27 @@
     return list;
 }
 
+- (NSMutableArray *)getEntryCommentListFromCache:(EntryData *)entry
+{
+    NSLog(@"getEntryCommentListFromCache[%@][%@]", entry.roomId, entry.entryId);
+    NSData *data = [self.cacheManager selectEntriesAtRoomId:entry.roomId entryId:entry.entryId];
+    if (data != nil) {
+        NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+        [data release];
+        return array;
+    }
+    else {
+        return nil;
+    }
+}
+
 - (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getEntryCommentListByEntryData[%@]", entry.entryId);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     @try {
         [self _appendEntry:[self.gateway retrieveEntryCommentListByEntryId:entry.entryId roomId:entry.roomId] list:list];
+        [self.cacheManager insertOrReplaceEntriesAtRoomId:entry.roomId entryId:entry.entryId entries:[NSKeyedArchiver archivedDataWithRootObject:list]];
     }
     @catch (NSException *exception) {
         NSLog(@"exception in getEntryCommentListByEntryData [%@]", [exception reason]);
@@ -224,6 +254,8 @@
     [self.cacheManager deleteAllRoomIcon];
     [self.cacheManager deleteAllParticipationIcon];
     [self.cacheManager deleteAllRoomList];
+    [self.cacheManager deleteAllRoomTimeline];
+    [self.cacheManager deleteAllEntries];
 }
 
 //// Private

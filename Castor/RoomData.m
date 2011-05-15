@@ -44,7 +44,6 @@
     [aCoder encodeObject:self.updatedAt forKey:@"updatedAt"];
     [aCoder encodeBool:self.admin       forKey:@"admin"];
     [aCoder encodeObject:self.myId      forKey:@"myId"];
-    
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
