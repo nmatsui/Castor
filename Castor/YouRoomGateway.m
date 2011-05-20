@@ -72,7 +72,7 @@
         [dic setObject:[participation objectForKey:@"id"] forKey:@"myId"];
         [pDic setObject:dic forKey:[[participation objectForKey:@"group"] objectForKey:@"id"]];
     }
-    
+
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     NSData *response = [self _request:[NSURL URLWithString:@"https://www.youroom.in/groups/my?format=json"]
                                method:@"GET"
@@ -142,7 +142,7 @@
     NSLog(@"postEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
     NSString *body = [NSString stringWithFormat:@"entry[content]=%@", text];
     if (parentId != nil) {
-        body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId]; 
+        body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId];
     }
     NSData * response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
                                 method:@"POST"
@@ -238,6 +238,7 @@
     [request setHTTPMethod:method];
     [request setValue:header forHTTPHeaderField:@"Authorization"];
     [request setHTTPBody:body];
+    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -245,14 +246,14 @@
     //NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
     if (error != nil) {
         if ([@"Email/Password combination is not valid" isEqualToString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]]) {
-            NSException* exception = [NSException exceptionWithName:@"AuthenticationException" 
-                                                             reason:@"Email/Password combination is invalid" 
+            NSException* exception = [NSException exceptionWithName:@"AuthenticationException"
+                                                             reason:@"Email/Password combination is invalid"
                                                            userInfo:nil];
             [exception raise];
         }
         else {
-            NSException* exception = [NSException exceptionWithName:@"NetworkException" 
-                                                             reason:@"network connection error" 
+            NSException* exception = [NSException exceptionWithName:@"NetworkException"
+                                                             reason:@"network connection error"
                                                            userInfo:nil];
             [exception raise];
         }
