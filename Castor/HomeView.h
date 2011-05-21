@@ -20,6 +20,7 @@
     NSMutableArray *_homeList;
     DataFactory *_factory;
     CellBuilder *_cellBuilder;
+    UIActivityIndicatorView *_indicator;
     
     BOOL _portrate;
 }
@@ -28,7 +29,9 @@
 @property(nonatomic, retain) IBOutlet NSMutableArray *homeList;
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
+@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
+- (IBAction)callSetting:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory;
 

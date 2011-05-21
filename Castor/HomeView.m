@@ -9,8 +9,9 @@
 #import "HomeView.h"
 
 @interface HomeView (Private)
+- (void)_startIndicator:(id)sender;
+- (void)_reloadHomeTimelineInBackground:(id)arg;
 - (void)headerClick:(id)sender;
-
 @end
 
 @implementation HomeView
@@ -19,6 +20,7 @@
 @synthesize homeList = _homeList;
 @synthesize factory = _factory;
 @synthesize cellBuilder = _cellBuilder;
+@synthesize indicator = _indicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
@@ -27,74 +29,10 @@
     if (self) {
         // Custom initialization
         self.factory = factory;
+        self.homeList = [self.factory getHomeTimelineFromCache];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
-        
-        self.homeList = [[NSMutableArray alloc] init];
-        
-        EntryData *entry11 = [[EntryData alloc] init];
-        entry11.entryId = [[NSNumber alloc] initWithInt:11];
-        entry11.participationName = @"name11";
-        entry11.content = @"entry11";
-        entry11.level = 0;
-        
-        EntryData *entry12 = [[EntryData alloc] init];
-        entry12.entryId = [[NSNumber alloc] initWithInt:12];
-        entry12.participationName = @"name12";
-        entry12.content = @"entry12";
-        entry12.level = 0;
-        
-        EntryData *entry13 = [[EntryData alloc] init];
-        entry13.entryId = [[NSNumber alloc] initWithInt:123];
-        entry13.participationName = @"name13";
-        entry13.content = @"entry13wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
-        entry13.level = 0;
-        
-        RoomData *room1 = [[RoomData alloc] init];
-        room1.roomId = [[NSNumber alloc] initWithInt:1];
-        room1.roomName = @"room1";
-        room1.entries = [[NSMutableArray alloc] initWithObjects:entry11, entry12, entry13, nil];
-        
-        [self.homeList addObject:room1];
-        
-        EntryData *entry21 = [[EntryData alloc] init];
-        entry21.entryId = [[NSNumber alloc] initWithInt:21];
-        entry21.participationName = @"name21";
-        entry21.content = @"entry21";
-        entry21.level = 0;
-        
-        EntryData *entry22 = [[EntryData alloc] init];
-        entry22.entryId = [[NSNumber alloc] initWithInt:22];
-        entry22.participationName = @"name22";
-        entry22.content = @"entry22";
-        entry22.level = 0;
-        
-        EntryData *entry23 = [[EntryData alloc] init];
-        entry23.entryId = [[NSNumber alloc] initWithInt:23];
-        entry23.participationName = @"name23";
-        entry23.content = @"entry23";
-        entry23.level = 0;
-        
-        EntryData *entry24 = [[EntryData alloc] init];
-        entry24.entryId = [[NSNumber alloc] initWithInt:24];
-        entry24.participationName = @"name24";
-        entry24.content = @"entry24;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
-        entry24.level = 0;
-        
-        EntryData *entry25 = [[EntryData alloc] init];
-        entry25.entryId = [[NSNumber alloc] initWithInt:25];
-        entry25.participationName = @"name25";
-        entry25.content = @"entry25;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
-        entry25.level = 0;
-        
-        RoomData *room2 = [[RoomData alloc] init];
-        room2.roomId = [[NSNumber alloc] initWithInt:2];
-        room2.roomName = @"room2";
-        room2.entries = [[NSMutableArray alloc] initWithObjects:entry21, entry22, entry23, entry24, entry25, nil];
-        
-        [self.homeList addObject:room2];
-        
-        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[EntryData alloc] init]];
-        
+        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -103,6 +41,9 @@
 {
     self.homeTable = nil;
     self.homeList = nil;
+    self.factory = nil;
+    self.cellBuilder = nil;
+    self.indicator = nil;
     [super dealloc];
 }
 
@@ -114,10 +55,22 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"HomeView Will appear");
+    self.navigationController.navigationBar.hidden = NO;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    NSLog(@"HomeView loaded");
+    self.title = @"Home";
+    [self.navigationItem.backBarButtonItem setEnabled:NO];
+    self.navigationItem.hidesBackButton = YES;
+    [self performSelector:@selector(_startIndicator:) withObject:self];
+    [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
 }
 
 - (void)viewDidUnload
@@ -125,6 +78,9 @@
     [super viewDidUnload];
     self.homeTable = nil;
     self.homeList = nil;
+    self.factory = nil;
+    self.cellBuilder = nil;
+    self.indicator = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -196,18 +152,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"GroupView %d row tapped",indexPath.row);    
+    NSLog(@"HomeView %d section %d row tapped", indexPath.section, indexPath.row);    
 }
 
 //// Reloadable
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadHome");
-//    [self performSelector:@selector(_startIndicator:) withObject:self];
-//    [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
-    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil
-                                                    factory:self.factory] autorelease];
-    [self.navigationController pushViewController:groupView animated:YES];
+    [self performSelector:@selector(_startIndicator:) withObject:self];
+    [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
 }
 
 //// Alertable
@@ -221,7 +174,41 @@
 	[alert release];
 }
 
+//// IBAction
+- (IBAction)callSetting:(id)sender
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to SettingView");
+    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
+                                                             factory:self.factory] autorelease];
+    [self.navigationController pushViewController:settingView animated:YES];
+    [pool release];
+}
+
 //// Private
+- (void)_startIndicator:(id)sender
+{
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+}
+
+- (void)_reloadHomeTimelineInBackground:(id)arg
+{
+    NSLog(@"reload homeList In Background");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSMutableArray *list = [self.factory getHomeTimelineWithSender:self];
+    if (list != nil && [list count] != 0) {
+        self.homeList = list;
+        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
+        [self.homeTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    }
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
+    [pool release];
+}
+
 - (void)headerClick:(id)sender
 {
     NSLog(@"headerClick %d", [sender tag]);
