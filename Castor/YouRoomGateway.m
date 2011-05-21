@@ -65,7 +65,7 @@
     if (self.pDic == nil) {
         [self _retrieveVerifyCredential];
     }
-    
+
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/?format=json&page=%d&read_state=unread", page]]
                                method:@"GET"
@@ -84,7 +84,7 @@
             roomData.roomId    = entryData.roomId;
             roomData.roomName  = entryData.roomName;
             roomData.opend     = NO; // youRoomからデータが送られないので、一律NO
-            roomData.toParam   = entryData.roomId;
+            roomData.toParam   = [NSString stringWithFormat:@"%@", entryData.roomId];
             roomData.createdAt = nil;
             roomData.updatedAt = nil;
             roomData.admin     = [[[self.pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
@@ -345,7 +345,7 @@
         entryData.participationName = [participation objectForKey:@"name"];
         if ([participation objectForKey:@"group"] != nil && [[participation objectForKey:@"group"] isKindOfClass:[NSDictionary class]]) {
             NSDictionary *group = [participation objectForKey:@"group"];
-            entryData.roomId    = [group objectForKey:@"to_param"];
+            entryData.roomId    = [[NSNumber alloc] initWithInt:[[group objectForKey:@"to_param"] intValue]];
             entryData.roomName  = [group objectForKey:@"name"];
         }
     }
