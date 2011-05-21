@@ -232,6 +232,18 @@
     }
 }
 
+- (void)markEntryRead:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender
+{
+    NSLog(@"markEntryRead[%@]", entryId);
+    @try {
+        [self.gateway markRead:entryId];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in markEntryRead [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
+}
+
 - (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"getAttachmentImage[%@]", entry.entryId);
@@ -284,6 +296,7 @@
 {
     [self.cacheManager deleteAllRoomIcon];
     [self.cacheManager deleteAllParticipationIcon];
+    [self.cacheManager deleteAllHomeTimeline];
     [self.cacheManager deleteAllRoomList];
     [self.cacheManager deleteAllRoomTimeline];
     [self.cacheManager deleteAllEntries];

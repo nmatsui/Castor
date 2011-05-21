@@ -17,6 +17,7 @@
 - (void)_markReadWithOrigin:(NSArray *)origin;
 - (void)_viewAttachmentWithOrigin:(NSArray *)origin;
 - (void)_cancelWithOrigin:(NSArray *)origin;
+- (void)_markReadInBackground:(id)arg;
 @end
 
 @implementation HomeView
@@ -321,6 +322,10 @@
 - (void)_markReadWithOrigin:(NSArray *)origin
 {
     NSLog(@"mark read [%@]", [[origin objectAtIndex:1] entryId]);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [self performSelector:@selector(_startIndicator:) withObject:self];
+    [self performSelectorInBackground:@selector(_markReadInBackground:) withObject:[origin objectAtIndex:1]];
+    [pool release];
 }
 
 - (void)_viewAttachmentWithOrigin:(NSArray *)origin
@@ -353,4 +358,20 @@
     [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
 }
 
+- (void)_markReadInBackground:(id)arg
+{
+    NSLog(@"mark read In Background");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    [self.factory markEntryRead:[arg entryId] sender:self];
+    NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
+    if (list != nil && [list count] != 0) {
+        self.homeList = list;
+        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
+        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
+        [self.homeTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
+    }
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
+    [self.indicator stopAnimating];
+    [pool release];
+}
 @end

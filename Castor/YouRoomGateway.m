@@ -277,6 +277,21 @@
     return response;
 }
 
+- (BOOL)markRead:(NSNumber *)entryId
+{
+    NSLog(@"markRead[%@]", entryId);
+    NSString *body = [NSString stringWithFormat:@"ids[1]=%@", entryId];
+    NSData * response = [self _request:[NSURL URLWithString:@"https://www.youroom.in/mark_read.json"]
+                                method:@"POST"
+                                  body:[body dataUsingEncoding:NSUTF8StringEncoding]
+                           oauth_token:self.oAuthToken
+                    oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return NO; // ステータスコードまで見るべきか？
+    }
+    return YES;
+}
+
 //// Private
 - (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret
 {
@@ -291,8 +306,8 @@
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-    //NSLog(@"statusCode : %d", [response statusCode]);
-    //NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
+//    NSLog(@"statusCode : %d", [response statusCode]);
+//    NSLog(@"raw response data : %@", [[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]);
     if (error != nil) {
         if ([@"Email/Password combination is not valid" isEqualToString:[[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding] autorelease]]) {
             NSException* exception = [NSException exceptionWithName:@"AuthenticationException"

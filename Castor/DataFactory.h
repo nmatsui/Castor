@@ -37,8 +37,10 @@
 - (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(UIViewController <Alertable> *)sender;
 - (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender;
 - (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(UIViewController <Alertable> *)sender;
+- (void)markEntryRead:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender;
 - (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender;
 - (UIImage *)getRoomIconByRoomId:(NSNumber *)roomId;
 - (UIImage *)getParticipationIconByRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
 - (void)deleteCache;
+
 @end

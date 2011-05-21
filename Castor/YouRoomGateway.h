@@ -34,6 +34,7 @@
 - (UIImage *)retrieveEntryAttachmentImageByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;
 - (NSData *)retrieveRoomIconByRoomId:(NSNumber *)roomId;
 - (NSData *)retrieveParticipationIconByRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId;
+- (BOOL)markRead:(NSNumber *)entryId;
 
 @end
 
