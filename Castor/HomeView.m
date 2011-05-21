@@ -274,6 +274,7 @@
 {
     NSLog(@"reload homeList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.factory.gateway.pDic = nil;
     NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
     if (list != nil && [list count] != 0) {
         self.homeList = list;
@@ -362,6 +363,7 @@
 {
     NSLog(@"mark read In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.factory.gateway.pDic = nil;
     [self.factory markEntryRead:[arg entryId] sender:self];
     NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
     if (list != nil && [list count] != 0) {

@@ -11,6 +11,7 @@
 @interface YouRoomGateway (Private)
 - (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret;
 - (NSData *)_getXAuthParamStringWithUsername:(NSString *)username password:(NSString *)password;
+- (void)_retrieveVerifyCredential;
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level;
 @end
 
@@ -18,6 +19,7 @@
 
 @synthesize oAuthToken = _oAuthToken;
 @synthesize oAuthTokenSecret = _oAuthTokenSecret;
+@synthesize pDic = _pDic;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret
 {
@@ -33,6 +35,7 @@
 {
     self.oAuthToken = nil;
     self.oAuthTokenSecret = nil;
+    self.pDic = nil;
     [super dealloc];
 }
 
@@ -59,18 +62,8 @@
 - (NSMutableArray *)retrieveHomeTimelineWithPage:(int)page
 {
     NSLog(@"retrieveHomeTimeline");
-    NSData *credentials = [self _request:[NSURL URLWithString:@"https://www.youroom.in/verify_credentials?format=json"]
-                                  method:@"GET"
-                                    body:nil
-                             oauth_token:self.oAuthToken
-                      oauth_token_secret:self.oAuthTokenSecret];
-    NSArray *pList = [[[[[[NSString alloc] initWithData:credentials encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"user"] objectForKey:@"participations"];
-    NSMutableDictionary *pDic = [[[NSMutableDictionary alloc] init] autorelease];
-    for (NSDictionary *participation in pList) {
-        NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
-        [dic setObject:[participation objectForKey:@"admin"] forKey:@"admin"];
-        [dic setObject:[participation objectForKey:@"id"] forKey:@"myId"];
-        [pDic setObject:dic forKey:[[participation objectForKey:@"group"] objectForKey:@"id"]];
+    if (self.pDic == nil) {
+        [self _retrieveVerifyCredential];
     }
     
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
@@ -94,8 +87,8 @@
             roomData.toParam   = entryData.roomId;
             roomData.createdAt = nil;
             roomData.updatedAt = nil;
-            roomData.admin     = [[[pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
-            roomData.myId      = [[pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
+            roomData.admin     = [[[self.pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
+            roomData.myId      = [[self.pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
             roomData.roomIcon  = nil;
             roomData.entries   = [[[NSMutableArray alloc] init] autorelease];
             [list addObject:roomData];
@@ -108,18 +101,8 @@
 - (NSMutableArray *)retrieveRoomList
 {
     NSLog(@"retrieveRoomList");
-    NSData *credentials = [self _request:[NSURL URLWithString:@"https://www.youroom.in/verify_credentials?format=json"]
-                                  method:@"GET"
-                                    body:nil
-                             oauth_token:self.oAuthToken
-                      oauth_token_secret:self.oAuthTokenSecret];
-    NSArray *pList = [[[[[[NSString alloc] initWithData:credentials encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"user"] objectForKey:@"participations"];
-    NSMutableDictionary *pDic = [[[NSMutableDictionary alloc] init] autorelease];
-    for (NSDictionary *participation in pList) {
-        NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
-        [dic setObject:[participation objectForKey:@"admin"] forKey:@"admin"];
-        [dic setObject:[participation objectForKey:@"id"] forKey:@"myId"];
-        [pDic setObject:dic forKey:[[participation objectForKey:@"group"] objectForKey:@"id"]];
+    if (_pDic == nil) {
+        [self _retrieveVerifyCredential];
     }
 
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
@@ -141,8 +124,8 @@
         roomData.toParam   = [[group objectForKey:@"to_param"] isKindOfClass:[NSString class]] ? [group objectForKey:@"to_param"] : nil;
         roomData.createdAt = [group objectForKey:@"created_at"];
         roomData.updatedAt = [group objectForKey:@"updated_at"];
-        roomData.admin     = [[[pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
-        roomData.myId      = [[pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
+        roomData.admin     = [[[self.pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
+        roomData.myId      = [[self.pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
         roomData.roomIcon  = nil;
         [list addObject:roomData];
     }
@@ -328,6 +311,24 @@
 - (NSData *)_getXAuthParamStringWithUsername:(NSString *)username password:(NSString *)password
 {
     return [[NSString stringWithFormat:@"x_auth_username=%@&x_auth_password=%@&x_auth_mode=client_auth", username, password] dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (void)_retrieveVerifyCredential
+{
+    NSData *credentials = [self _request:[NSURL URLWithString:@"https://www.youroom.in/verify_credentials?format=json"]
+                                  method:@"GET"
+                                    body:nil
+                             oauth_token:self.oAuthToken
+                      oauth_token_secret:self.oAuthTokenSecret];
+    NSArray *pList = [[[[[[NSString alloc] initWithData:credentials encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"user"] objectForKey:@"participations"];
+    
+    _pDic = [[NSMutableDictionary alloc] init];
+    for (NSDictionary *participation in pList) {
+        NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
+        [dic setObject:[participation objectForKey:@"admin"] forKey:@"admin"];
+        [dic setObject:[participation objectForKey:@"id"] forKey:@"myId"];
+        [_pDic setObject:dic forKey:[[participation objectForKey:@"group"] objectForKey:@"id"]];
+    }
 }
 
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level

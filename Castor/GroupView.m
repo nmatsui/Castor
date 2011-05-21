@@ -200,6 +200,7 @@
 {
     NSLog(@"reload groupList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    self.factory.gateway.pDic = nil;
     NSMutableArray *list = [self.factory getRoomListWithSender:self];
     if (list != nil && [list count] != 0) {
         self.roomList = list;

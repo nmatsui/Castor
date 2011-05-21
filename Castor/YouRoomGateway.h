@@ -17,10 +17,12 @@
 @interface YouRoomGateway : NSObject {
     NSString *_oAuthToken;
     NSString *_oAuthTokenSecret;
+    NSMutableDictionary *_pDic;
 }
 
 @property(nonatomic, retain) NSString *oAuthToken;
 @property(nonatomic, retain) NSString *oAuthTokenSecret;
+@property(nonatomic, retain) NSMutableDictionary *pDic;
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
