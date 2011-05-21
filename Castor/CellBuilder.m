@@ -42,12 +42,12 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     [super dealloc];
 }
 
-- (UIView *)getSectionHeaderView:(CGSize)size room:(RoomData *)room target:(id)target action:(SEL)action section:(NSInteger)section portrate:(BOOL)portrate
+- (UIView *)getRoomHeaderView:(RoomData *)room target:(id)target action:(SEL)action section:(NSInteger)section portrate:(BOOL)portrate
 {
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     [v setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
     [v setAlpha:0.8];
-    float w = (portrate) ? size.width : size.height;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width : [[UIScreen mainScreen] bounds].size.height;
     UILabel *nameLabel = [self _makeLabel:CGRectMake(10, 0, w - 10, 20) text:room.roomName font:[UIFont systemFontOfSize:SECTION_HEADER_FONT_SIZE]];
     [nameLabel setBackgroundColor:[UIColor clearColor]];
     [nameLabel setFont:[UIFont boldSystemFontOfSize:SECTION_HEADER_FONT_SIZE]];
@@ -73,18 +73,18 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return v;
 }
 
-- (CGFloat)getRoomCellHeight:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
+- (CGFloat)getRoomCellHeight:(RoomData *)room portrate:(BOOL)portrate
 {
-    float w = (portrate) ? size.width - 70 : size.height - 70;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 70 : [[UIScreen mainScreen] bounds].size.height - 70;
     CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 10 + s.height + 10;
     return (height<40)?40:height;
 }
 
-- (UIView *)getRoomCellView:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
+- (UIView *)getRoomCellView:(RoomData *)room portrate:(BOOL)portrate
 {
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-    float w = (portrate) ? size.width - 70 : size.height - 70;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 70 : [[UIScreen mainScreen] bounds].size.height - 70;
     CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *nameLabel = [self _makeLabel:CGRectMake(60, 10, w, s.height) text:room.roomName font:[UIFont systemFontOfSize:GROUP_FONT_SIZE]];
     [v addSubview:nameLabel];
@@ -126,16 +126,15 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return v;
 }
 
-- (CGFloat)getEntryCellHeight:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate
+- (CGFloat)getEntryCellHeight:(EntryData *)entry portrate:(BOOL)portrate
 {
-    float w = (portrate) ? size.width - 70 : size.height - 70;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 30 + s.height + 20 + [entry.level intValue]*INDENT_WIDTH;
-    NSLog(@"height %f", height);
     return (height<60)?60:height;
 }
 
-- (UIView *)getEntryCellView:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate
+- (UIView *)getEntryCellView:(EntryData *)entry portrate:(BOOL)portrate
 {
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
     NSString *str = @"";
@@ -148,7 +147,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     UILabel *nameLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
     [nameLabel release];
-    float w = (portrate) ? size.width - 100 : size.height - 100;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
     if (entry.attachmentType != nil) {
         UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 10, 100, 16) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
         [v addSubview:attachmentLabel];
@@ -157,7 +156,6 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
-    NSLog(@"content %@", entry.content);
     [contentLabel release];
     UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [v addSubview:icon];
@@ -195,10 +193,10 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return v;
 }
 
-- (UIView *)getNextPageCellView:(CGSize)size portrate:(BOOL)portrate
+- (UIView *)getNextPageCellView:(BOOL)portrate
 {
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-    float w = (portrate) ? size.width - 10 : size.height - 10;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 10 : [[UIScreen mainScreen] bounds].size.height - 10;
     UILabel *nextLabel = [self _makeLabel:CGRectMake(10, 0, w, 40) text:@"<<load next page>>" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [nextLabel setTextAlignment:UITextAlignmentCenter];
     [v addSubview:nextLabel];

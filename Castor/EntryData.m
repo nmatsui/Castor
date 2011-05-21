@@ -13,6 +13,7 @@
 
 @synthesize entryId               = _entryId;
 @synthesize roomId                = _roomId;
+@synthesize roomName              = _roomName;
 @synthesize content               = _content;
 @synthesize parentId              = _parentId;
 @synthesize rootId                = _rootId;
@@ -34,6 +35,7 @@
 {
     self.entryId = nil;
     self.roomId = nil;
+    self.roomName = nil;
     self.content = nil;
     self.parentId = nil;
     self.rootId = nil;
@@ -58,6 +60,7 @@
 {
     [aCoder encodeObject:self.entryId               forKey:@"entryId"];
     [aCoder encodeObject:self.roomId                forKey:@"roomId"];
+    [aCoder encodeObject:self.roomName              forKey:@"roomName"];
     [aCoder encodeObject:self.content               forKey:@"content"];
     [aCoder encodeObject:self.parentId              forKey:@"parentId"];
     [aCoder encodeObject:self.rootId                forKey:@"rootId"];
@@ -80,6 +83,7 @@
     self = [super init];
     self.entryId               = [aDecoder decodeObjectForKey:@"entryId"];
     self.roomId                = [aDecoder decodeObjectForKey:@"roomId"];
+    self.roomName              = [aDecoder decodeObjectForKey:@"roomName"];
     self.content               = [aDecoder decodeObjectForKey:@"content"];
     self.parentId              = [aDecoder decodeObjectForKey:@"parentId"];
     self.rootId                = [aDecoder decodeObjectForKey:@"rootId"];

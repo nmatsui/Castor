@@ -80,6 +80,13 @@ static const int MAX_LEVLE = 6;
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"CommentView Will appear");
+    [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -132,7 +139,7 @@ static const int MAX_LEVLE = 6;
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.entryList count] - 1) {
-        return [self.cellBuilder getEntryCellHeight:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
+        return [self.cellBuilder getEntryCellHeight:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -144,13 +151,13 @@ static const int MAX_LEVLE = 6;
     static NSString *CellIdentifier = @"EntryCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.entryList count] <= indexPath.row) return cell;
     
     if (indexPath.row < [self.entryList count] - 1) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
-        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:_portrate]];
+        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:entry portrate:_portrate]];
         if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
             cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         }
@@ -381,6 +388,7 @@ static const int MAX_LEVLE = 6;
 - (void)_cancelWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"cancel entry [%@]", originEntry.entryId);
+    [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
 }
 
 @end

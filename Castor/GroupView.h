@@ -10,6 +10,7 @@
 #import "Reloadable.h"
 #import "Alertable.h"
 #import "DataFactory.h"
+#import "HomeView.h"
 #import "RoomView.h"
 #import "SettingView.h"
 #import "CellBuilder.h"
@@ -31,6 +32,7 @@
 @property(nonatomic, retain) CellBuilder *cellBuilder;
 
 - (IBAction)callSetting:(id)sender;
+- (IBAction)moveToHome:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory;
 

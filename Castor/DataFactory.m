@@ -82,74 +82,84 @@
     return nil;
 }
 
-- (NSMutableArray *)getHomeTimelineWithSender:(UIViewController <Alertable> *)sender
+- (NSMutableArray *)getHomeTimelineWithPage:(int)page sender:(UIViewController <Alertable> *)sender
 {
-    NSLog(@"getHomeTimelineWithSender");
-    NSMutableArray *homeList = [[NSMutableArray alloc] init];
-    
-    EntryData *entry11 = [[EntryData alloc] init];
-    entry11.entryId = [[NSNumber alloc] initWithInt:11];
-    entry11.participationName = @"name11";
-    entry11.content = @"entry11";
-    entry11.level = 0;
-    
-    EntryData *entry12 = [[EntryData alloc] init];
-    entry12.entryId = [[NSNumber alloc] initWithInt:12];
-    entry12.participationName = @"name12";
-    entry12.content = @"entry12";
-    entry12.level = 0;
-    
-    EntryData *entry13 = [[EntryData alloc] init];
-    entry13.entryId = [[NSNumber alloc] initWithInt:123];
-    entry13.participationName = @"name13";
-    entry13.content = @"entry13wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
-    entry13.level = 0;
-    
-    RoomData *room1 = [[RoomData alloc] init];
-    room1.roomId = [[NSNumber alloc] initWithInt:1];
-    room1.roomName = @"room1";
-    room1.entries = [[NSMutableArray alloc] initWithObjects:entry11, entry12, entry13, nil];
-    
-    [homeList addObject:room1];
-    
-    EntryData *entry21 = [[EntryData alloc] init];
-    entry21.entryId = [[NSNumber alloc] initWithInt:21];
-    entry21.participationName = @"name21";
-    entry21.content = @"entry21";
-    entry21.level = 0;
-    
-    EntryData *entry22 = [[EntryData alloc] init];
-    entry22.entryId = [[NSNumber alloc] initWithInt:22];
-    entry22.participationName = @"name22";
-    entry22.content = @"entry22";
-    entry22.level = 0;
-    
-    EntryData *entry23 = [[EntryData alloc] init];
-    entry23.entryId = [[NSNumber alloc] initWithInt:23];
-    entry23.participationName = @"name23";
-    entry23.content = @"entry23";
-    entry23.level = 0;
-    
-    EntryData *entry24 = [[EntryData alloc] init];
-    entry24.entryId = [[NSNumber alloc] initWithInt:24];
-    entry24.participationName = @"name24";
-    entry24.content = @"entry24;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
-    entry24.level = 0;
-    
-    EntryData *entry25 = [[EntryData alloc] init];
-    entry25.entryId = [[NSNumber alloc] initWithInt:25];
-    entry25.participationName = @"name25";
-    entry25.content = @"entry25;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
-    entry25.level = 0;
-    
-    RoomData *room2 = [[RoomData alloc] init];
-    room2.roomId = [[NSNumber alloc] initWithInt:2];
-    room2.roomName = @"room2";
-    room2.entries = [[NSMutableArray alloc] initWithObjects:entry21, entry22, entry23, entry24, entry25, nil];
-    
-    [homeList addObject:room2];
-    
-    return homeList;
+    NSLog(@"getHomeTimelineWithPage [%d]", page);
+//    NSMutableArray *homeList = [[NSMutableArray alloc] init];
+//    
+//    EntryData *entry11 = [[EntryData alloc] init];
+//    entry11.entryId = [[NSNumber alloc] initWithInt:11];
+//    entry11.participationName = @"name11";
+//    entry11.content = @"entry11";
+//    entry11.level = 0;
+//    
+//    EntryData *entry12 = [[EntryData alloc] init];
+//    entry12.entryId = [[NSNumber alloc] initWithInt:12];
+//    entry12.participationName = @"name12";
+//    entry12.content = @"entry12";
+//    entry12.level = 0;
+//    
+//    EntryData *entry13 = [[EntryData alloc] init];
+//    entry13.entryId = [[NSNumber alloc] initWithInt:123];
+//    entry13.participationName = @"name13";
+//    entry13.content = @"entry13wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
+//    entry13.level = 0;
+//    
+//    RoomData *room1 = [[RoomData alloc] init];
+//    room1.roomId = [[NSNumber alloc] initWithInt:1];
+//    room1.roomName = @"room1";
+//    room1.entries = [[NSMutableArray alloc] initWithObjects:entry11, entry12, entry13, nil];
+//    
+//    [homeList addObject:room1];
+//    
+//    EntryData *entry21 = [[EntryData alloc] init];
+//    entry21.entryId = [[NSNumber alloc] initWithInt:21];
+//    entry21.participationName = @"name21";
+//    entry21.content = @"entry21";
+//    entry21.level = 0;
+//    
+//    EntryData *entry22 = [[EntryData alloc] init];
+//    entry22.entryId = [[NSNumber alloc] initWithInt:22];
+//    entry22.participationName = @"name22";
+//    entry22.content = @"entry22";
+//    entry22.level = 0;
+//    
+//    EntryData *entry23 = [[EntryData alloc] init];
+//    entry23.entryId = [[NSNumber alloc] initWithInt:23];
+//    entry23.participationName = @"name23";
+//    entry23.content = @"entry23";
+//    entry23.level = 0;
+//    
+//    EntryData *entry24 = [[EntryData alloc] init];
+//    entry24.entryId = [[NSNumber alloc] initWithInt:24];
+//    entry24.participationName = @"name24";
+//    entry24.content = @"entry24;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+//    entry24.level = 0;
+//    
+//    EntryData *entry25 = [[EntryData alloc] init];
+//    entry25.entryId = [[NSNumber alloc] initWithInt:25];
+//    entry25.participationName = @"name25";
+//    entry25.content = @"entry25;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;";
+//    entry25.level = 0;
+//    
+//    RoomData *room2 = [[RoomData alloc] init];
+//    room2.roomId = [[NSNumber alloc] initWithInt:2];
+//    room2.roomName = @"room2";
+//    room2.entries = [[NSMutableArray alloc] initWithObjects:entry21, entry22, entry23, entry24, entry25, nil];
+//    
+//    [homeList addObject:room2];
+//    return homeList;
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    @try {
+        for (int i = 1; i <= page; i++) {
+            [list addObjectsFromArray:[self.gateway retrieveHomeTimelineWithPage:i]];
+        }
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in getHomeTimelineWithSender[%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
+    return list;
 }
 
 - (NSMutableArray *)getRoomListFromCache

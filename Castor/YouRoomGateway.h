@@ -24,6 +24,7 @@
 
 - (id)initWithOAuthToken:(NSString *)oAuthToken oAuthTokenSecret:(NSString *)oAuthTokenSecret;
 - (NSDictionary *)retrieveAuthTokenWithEmail:(NSString *)email password:(NSString *)password;
+- (NSMutableArray *)retrieveHomeTimelineWithPage:(int)page;
 - (NSMutableArray *)retrieveRoomList;
 - (NSMutableArray *)retrieveEntryListByRoomId:(NSNumber *)roomId page:(int)page;
 - (NSMutableArray *)retrieveEntryCommentListByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId;

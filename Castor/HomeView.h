@@ -10,18 +10,24 @@
 #import "Reloadable.h"
 #import "Alertable.h"
 #import "GroupView.h"
+#import "RoomView.h"
+#import "CommentView.h"
+#import "SettingView.h"
 #import "DataFactory.h"
 #import "CellBuilder.h"
 #import "RoomData.h"
 #import "EntryData.h"
 
-@interface HomeView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable, Alertable> {
+@interface HomeView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
     UITableView *_homeTable;
     NSMutableArray *_homeList;
     DataFactory *_factory;
     CellBuilder *_cellBuilder;
+    RoomData *_targetRoom;
+    EntryData *_targetEntry;
+    NSMutableArray *_selectors;
     UIActivityIndicatorView *_indicator;
-    
+    int _page;
     BOOL _portrate;
 }
 
@@ -29,9 +35,13 @@
 @property(nonatomic, retain) IBOutlet NSMutableArray *homeList;
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
+@property(nonatomic, retain) RoomData *targetRoom;
+@property(nonatomic, retain) EntryData *targetEntry;
+@property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (IBAction)callSetting:(id)sender;
+- (IBAction)moveToGroup:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory;
 

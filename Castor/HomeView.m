@@ -11,7 +11,12 @@
 @interface HomeView (Private)
 - (void)_startIndicator:(id)sender;
 - (void)_reloadHomeTimelineInBackground:(id)arg;
-- (void)headerClick:(id)sender;
+- (void)_nextPage:(id)sender;
+- (void)_headerClick:(id)sender;
+- (void)_moveToCommentViewWithOrigin:(NSArray *)origin;
+- (void)_markReadWithOrigin:(NSArray *)origin;
+- (void)_viewAttachmentWithOrigin:(NSArray *)origin;
+- (void)_cancelWithOrigin:(NSArray *)origin;
 @end
 
 @implementation HomeView
@@ -20,6 +25,9 @@
 @synthesize homeList = _homeList;
 @synthesize factory = _factory;
 @synthesize cellBuilder = _cellBuilder;
+@synthesize targetRoom = _targetRoom;
+@synthesize targetEntry = _targetEntry;
+@synthesize selectors = _selectors;
 @synthesize indicator = _indicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
@@ -27,10 +35,11 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        _page = 1;
         self.factory = factory;
         self.homeList = [self.factory getHomeTimelineFromCache];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
+        self.selectors = [[NSMutableArray alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
     }
@@ -43,6 +52,9 @@
     self.homeList = nil;
     self.factory = nil;
     self.cellBuilder = nil;
+    self.targetRoom = nil;
+    self.targetEntry = nil;
+    self.selectors = nil;
     self.indicator = nil;
     [super dealloc];
 }
@@ -60,6 +72,7 @@
     [super viewWillAppear:animated];
     NSLog(@"HomeView Will appear");
     self.navigationController.navigationBar.hidden = NO;
+    [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
 }
 
 - (void)viewDidLoad
@@ -80,6 +93,9 @@
     self.homeList = nil;
     self.factory = nil;
     self.cellBuilder = nil;
+    self.targetRoom = nil;
+    self.targetEntry = nil;
+    self.selectors = nil;
     self.indicator = nil;
 }
 
@@ -104,18 +120,12 @@
 
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    return [self.cellBuilder getSectionHeaderView:self.view.window.screen.bounds.size 
-                                             room:[self.homeList objectAtIndex:section] 
-                                           target:self 
-                                           action:@selector(headerClick:) 
-                                          section:section
-                                         portrate:_portrate];
+    return [self.cellBuilder getRoomHeaderView:[self.homeList objectAtIndex:section] 
+                                        target:self 
+                                        action:@selector(_headerClick:) 
+                                       section:section
+                                      portrate:_portrate];
 }
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
-//{
-//    RoomData *room = [self.homeList objectAtIndex:section];
-//    return room.roomName;
-//}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -124,8 +134,8 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section < [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 1) {
-        return [self.cellBuilder getEntryCellHeight:self.view.window.screen.bounds.size entry:[[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row] portrate:_portrate];
+    if (indexPath.section < [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+        return [self.cellBuilder getEntryCellHeight:[[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -140,11 +150,16 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.homeList count] <= indexPath.section && [[[self.homeList objectAtIndex:indexPath.section] entries] count] <= indexPath.row) return cell;
     
-    if (indexPath.section != [self.homeList count] - 1 || indexPath.row != [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 1) {
+    if (indexPath.section != [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         EntryData *entry = [[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row];
-        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:self.view.window.screen.bounds.size entry:entry portrate:_portrate]];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:entry portrate:_portrate]];
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        [pool release];
+    }
+    else if (indexPath.section == [self.homeList count] - 1 && indexPath.row == [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        [cell.contentView addSubview:[self.cellBuilder getNextPageCellView:_portrate]];
         [pool release];
     }
     return cell;
@@ -152,13 +167,63 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"HomeView %d section %d row tapped", indexPath.section, indexPath.row);    
+    NSLog(@"HomeView %d section %d row tapped", indexPath.section, indexPath.row);
+    if (indexPath.section != [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+        [self.selectors removeAllObjects];
+        if (self.targetRoom != nil) self.targetRoom = nil;
+        if (self.targetEntry != nil ) self.targetEntry = nil;
+        self.targetRoom = [self.homeList objectAtIndex:indexPath.section];
+        self.targetEntry = [[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row];
+        UIActionSheet *menu = [[UIActionSheet alloc] init];
+        [menu setDelegate:self];
+        
+        // View Commentsボタンは必ず表示
+        [menu addButtonWithTitle:@"View Comments"];
+        [self.selectors addObject:@"_moveToCommentViewWithOrigin:"];
+        
+        // Mark Readボタンは必ず表示
+        [menu addButtonWithTitle:@"Mark read"];
+        [self.selectors addObject:@"_markReadWithOrigin:"];
+        
+        // View Attachmentボタンの表示判定
+        if ([@"Text" isEqualToString:self.targetEntry.attachmentType] || [@"Image" isEqualToString:self.targetEntry.attachmentType] || [@"Link" isEqualToString:self.targetEntry.attachmentType]) {
+            [menu addButtonWithTitle:@"View Attachment"];
+            [self.selectors addObject:@"_viewAttachmentWithOrigin:"];
+        }
+        
+        // Cancelボタンは必ず表示
+        [menu addButtonWithTitle:@"Cancel"];
+        [self.selectors addObject:@"_cancelWithOrigin:"];
+        
+        [menu showInView:self.view];
+        [menu release];
+    }
+    else if (indexPath.section == [self.homeList count] - 1 && indexPath.row == [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+        [self _nextPage:self];
+    }
+}
+
+- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
+{
+    NSLog(@"accessory button %d section %d row clicked", indexPath.section, indexPath.row);
+    [self performSelector:@selector(_moveToCommentViewWithOriginEntry:) withObject:[[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row]];
+}
+
+//// UIActionSheet Callback
+-(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSLog(@"actionSheet button clicked[%d]", buttonIndex);
+    [self performSelector:NSSelectorFromString([self.selectors objectAtIndex:buttonIndex]) withObject:[[NSArray alloc] initWithObjects:self.targetRoom, self.targetEntry, nil]];
+    self.targetRoom = nil;
+    self.targetEntry = nil;
+    [self.selectors removeAllObjects];
 }
 
 //// Reloadable
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadHome");
+    _page = 1;
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
 }
@@ -185,6 +250,16 @@
     [pool release];
 }
 
+- (IBAction)moveToGroup:(id)sender
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to GroupView");
+    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
+                                                       factory:self.factory] autorelease];
+    [self.navigationController pushViewController:groupView animated:YES];
+    [pool release];
+}
+
 //// Private
 - (void)_startIndicator:(id)sender
 {
@@ -198,9 +273,10 @@
 {
     NSLog(@"reload homeList In Background");
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSMutableArray *list = [self.factory getHomeTimelineWithSender:self];
+    NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
     if (list != nil && [list count] != 0) {
         self.homeList = list;
+        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
         [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         [self.homeTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
@@ -209,9 +285,72 @@
     [pool release];
 }
 
-- (void)headerClick:(id)sender
+- (void)_nextPage:(id)sender
+{
+    _page++;
+    NSLog(@"nextPage [%d]", _page);
+    [self performSelector:@selector(_startIndicator:) withObject:self];
+    [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
+}
+
+- (void)_headerClick:(id)sender
 {
     NSLog(@"headerClick %d", [sender tag]);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
+                                                       room:[self.homeList objectAtIndex:[sender tag]] 
+                                                    factory:self.factory] autorelease];
+    [self.navigationController pushViewController:roomView animated:YES];
+    [pool release];
+}
+
+- (void)_moveToCommentViewWithOrigin:(NSArray *)origin
+{
+    NSLog(@"move to CommentView [%@]", [[origin objectAtIndex:1] entryId]);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    CommentView *commentView = [[[CommentView alloc] initWithNibName:@"CommentView" 
+                                                              bundle:nil 
+                                                                room:[origin objectAtIndex:0]
+                                                         originEntry:[origin objectAtIndex:1]
+                                                        previousView:self 
+                                                             factory:self.factory] autorelease];
+    [self.navigationController pushViewController:commentView animated:YES];
+    [pool release];
+}
+
+- (void)_markReadWithOrigin:(NSArray *)origin
+{
+    NSLog(@"mark read [%@]", [[origin objectAtIndex:1] entryId]);
+}
+
+- (void)_viewAttachmentWithOrigin:(NSArray *)origin
+{
+    NSLog(@"View Attachment [%@]", [[origin objectAtIndex:1] entryId]);
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    if ([@"Text" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {
+        NSLog(@"move to LongTextView");
+        LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil 
+                                                                      entry:[origin objectAtIndex:1]] autorelease];
+        [self.navigationController pushViewController:longTextView animated:YES];
+    }
+    else if ([@"Image" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {
+        NSLog(@"move to ImageView");
+        ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil 
+                                                             entry:[origin objectAtIndex:1] 
+                                                           factory:self.factory] autorelease];
+        [self.navigationController pushViewController:imageView animated:YES];
+    }
+    else if ([@"Link" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {
+        NSLog(@"open safari with url[%@]", [[origin objectAtIndex:1] attachmentURL]);
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[[origin objectAtIndex:1] attachmentURL]]];
+    }
+    [pool release];
+}
+
+- (void)_cancelWithOrigin:(NSArray *)origin
+{
+    NSLog(@"cancel entry [%@]", [[origin objectAtIndex:1] entryId]);
+    [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
 }
 
 @end

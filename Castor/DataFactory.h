@@ -27,7 +27,7 @@
 - (BOOL)hasAuthToken;
 - (void)clearAuthToken;
 - (NSMutableArray *)getHomeTimelineFromCache;
-- (NSMutableArray *)getHomeTimelineWithSender:(UIViewController <Alertable> *)sender;
+- (NSMutableArray *)getHomeTimelineWithPage:(int)page sender:(UIViewController <Alertable> *)sender;
 - (NSMutableArray *)getRoomListFromCache;
 - (NSMutableArray *)getRoomListWithSender:(UIViewController <Alertable> *)sender;
 - (NSMutableArray *)getRoomEntryListFromCache:(NSNumber *)roomId;

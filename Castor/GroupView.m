@@ -58,6 +58,7 @@
     [super viewWillAppear:animated];
     NSLog(@"GroupView Will appear");
     self.navigationController.navigationBar.hidden = NO;
+    [self.roomTable deselectRowAtIndexPath:[self.roomTable indexPathForSelectedRow] animated:YES];
 }
 
 - (void)viewDidLoad
@@ -108,7 +109,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.roomList count] - 1) {
-        return [self.cellBuilder getRoomCellHeight:self.view.window.screen.bounds.size room:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+        return [self.cellBuilder getRoomCellHeight:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -126,7 +127,7 @@
     if (indexPath.row < [self.roomList count] - 1) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         RoomData *room = [self.roomList objectAtIndex:indexPath.row];
-        [cell.contentView addSubview:[self.cellBuilder getRoomCellView:self.view.window.screen.bounds.size room:room portrate:_portrate]];
+        [cell.contentView addSubview:[self.cellBuilder getRoomCellView:room portrate:_portrate]];
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         [pool release];
     }
@@ -173,6 +174,16 @@
     SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
                                                              factory:self.factory] autorelease];
     [self.navigationController pushViewController:settingView animated:YES];
+    [pool release];
+}
+
+- (IBAction)moveToHome:(id)sender
+{
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    NSLog(@"move to HomeView");
+    HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
+                                                    factory:self.factory] autorelease];
+    [self.navigationController pushViewController:homeView animated:YES];
     [pool release];
 }
 

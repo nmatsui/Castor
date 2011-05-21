@@ -14,7 +14,7 @@
     NSString *_roomName;
     UIImage  *_roomIcon;
     BOOL     _opend;
-    NSString *_toParam;
+    NSNumber *_toParam;
     NSString *_createdAt;
     NSString *_updatedAt;
     BOOL     _admin;
@@ -26,7 +26,7 @@
 @property(nonatomic, retain) NSString *roomName;
 @property(nonatomic, retain) UIImage  *roomIcon;
 @property(nonatomic, assign) BOOL     opend;
-@property(nonatomic, retain) NSString *toParam;
+@property(nonatomic, retain) NSNumber *toParam;
 @property(nonatomic, retain) NSString *createdAt;
 @property(nonatomic, retain) NSString *updatedAt;
 @property(nonatomic, assign) BOOL     admin;

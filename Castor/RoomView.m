@@ -73,6 +73,13 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"RoomView Will appear");
+    [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -115,12 +122,13 @@
     return 1;
 }
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    switch(section) {
-        case 0: return self.room.roomName;
-        default: return nil;
-    }
+    return [self.cellBuilder getRoomHeaderView:self.room
+                                        target:nil 
+                                        action:nil
+                                       section:section
+                                      portrate:_portrate];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
@@ -131,7 +139,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.entryList count] - 2 ) {
-        return [self.cellBuilder getEntryCellHeight:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
+        return [self.cellBuilder getEntryCellHeight:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
     }
     else {
         return 40;
@@ -143,18 +151,18 @@
     static NSString *CellIdentifier = @"EntryCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
-    [cell setSelectionStyle:UITableViewCellSelectionStyleNone];
+    [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.entryList count] <= indexPath.row) return cell;
     
     if (indexPath.row < [self.entryList count] - 2) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:self.view.window.screen.bounds.size entry:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate]];
+        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate]];
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         [pool release];
     }
     else if (indexPath.row == [self.entryList count] - 2) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        [cell.contentView addSubview:[self.cellBuilder getNextPageCellView:self.view.window.screen.bounds.size portrate:_portrate]];
+        [cell.contentView addSubview:[self.cellBuilder getNextPageCellView:_portrate]];
         [pool release];
     }
     
@@ -240,6 +248,7 @@
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadRoom[%@]", self.room.roomId);
+    _page = 1;
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadEntryListInBackground:) withObject:nil];
 }
@@ -390,6 +399,7 @@
 - (void)_cancelWithOriginEntry:(EntryData *)originEntry
 {
     NSLog(@"cancel entry [%@]", originEntry.entryId);
+    [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
 }
 
 @end

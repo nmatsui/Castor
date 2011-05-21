@@ -56,12 +56,61 @@
     return dict;
 }
 
+- (NSMutableArray *)retrieveHomeTimelineWithPage:(int)page
+{
+    NSLog(@"retrieveHomeTimeline");
+    NSData *credentials = [self _request:[NSURL URLWithString:@"https://www.youroom.in/verify_credentials?format=json"]
+                                  method:@"GET"
+                                    body:nil
+                             oauth_token:self.oAuthToken
+                      oauth_token_secret:self.oAuthTokenSecret];
+    NSArray *pList = [[[[[[NSString alloc] initWithData:credentials encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"user"] objectForKey:@"participations"];
+    NSMutableDictionary *pDic = [[[NSMutableDictionary alloc] init] autorelease];
+    for (NSDictionary *participation in pList) {
+        NSMutableDictionary *dic = [[[NSMutableDictionary alloc] init] autorelease];
+        [dic setObject:[participation objectForKey:@"admin"] forKey:@"admin"];
+        [dic setObject:[participation objectForKey:@"id"] forKey:@"myId"];
+        [pDic setObject:dic forKey:[[participation objectForKey:@"group"] objectForKey:@"id"]];
+    }
+    
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/?format=json&page=%d&read_state=unread", page]]
+                               method:@"GET"
+                                 body:nil
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
+    if (response == nil || [response length] == 0) {
+        return list;
+    }
+    NSArray *jsonArray = [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue];
+    for (NSDictionary *dic in jsonArray) {
+        NSDictionary *entry = [dic objectForKey:@"entry"];
+        EntryData *entryData = [self _constructEntryListFromJSONDic:entry roomId:nil level:[[NSNumber alloc] initWithInt:0]];
+        if ([list count] == 0 || [[[list objectAtIndex:[list count] - 1] roomId] intValue] != [entryData.roomId intValue]) {
+            RoomData *roomData = [[[RoomData alloc] init] autorelease];
+            roomData.roomId    = entryData.roomId;
+            roomData.roomName  = entryData.roomName;
+            roomData.opend     = NO; // youRoomからデータが送られないので、一律NO
+            roomData.toParam   = entryData.roomId;
+            roomData.createdAt = nil;
+            roomData.updatedAt = nil;
+            roomData.admin     = [[[pDic objectForKey:roomData.roomId] objectForKey:@"admin"] boolValue];
+            roomData.myId      = [[pDic objectForKey:roomData.roomId] objectForKey:@"myId"];
+            roomData.roomIcon  = nil;
+            roomData.entries   = [[[NSMutableArray alloc] init] autorelease];
+            [list addObject:roomData];
+        }
+        [[[list objectAtIndex:[list count] - 1] entries] addObject:entryData];
+    }
+    return list;
+}
+
 - (NSMutableArray *)retrieveRoomList
 {
     NSLog(@"retrieveRoomList");
     NSData *credentials = [self _request:[NSURL URLWithString:@"https://www.youroom.in/verify_credentials?format=json"]
                                   method:@"GET"
-                                    body:Nil
+                                    body:nil
                              oauth_token:self.oAuthToken
                       oauth_token_secret:self.oAuthTokenSecret];
     NSArray *pList = [[[[[[NSString alloc] initWithData:credentials encoding:NSUTF8StringEncoding] autorelease] JSONValue] objectForKey:@"user"] objectForKey:@"participations"];
@@ -76,7 +125,7 @@
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
     NSData *response = [self _request:[NSURL URLWithString:@"https://www.youroom.in/groups/my?format=json"]
                                method:@"GET"
-                                 body:Nil
+                                 body:nil
                           oauth_token:self.oAuthToken
                    oauth_token_secret:self.oAuthTokenSecret];
     if (response == nil || [response length] == 0) {
@@ -274,8 +323,16 @@
     entryData.content           = [[entry objectForKey:@"content"] isKindOfClass:[NSString class]] ? [entry objectForKey:@"content"] : nil;
     entryData.parentId          = [[entry objectForKey:@"parent_id"] isKindOfClass:[NSNumber class]] ? [entry objectForKey:@"parent_id"] : nil;
     entryData.rootId            = [[entry objectForKey:@"root_id"] isKindOfClass:[NSNumber class]] ? [entry objectForKey:@"root_id"] : nil;
-    entryData.participationId   = [[entry objectForKey:@"participation"] objectForKey:@"id"];
-    entryData.participationName = [[entry objectForKey:@"participation"] objectForKey:@"name"];
+    if ([entry objectForKey:@"participation"] != nil && [[entry objectForKey:@"participation"] isKindOfClass:[NSDictionary class]]) {
+        NSDictionary *participation = [entry objectForKey:@"participation"];
+        entryData.participationId   = [participation objectForKey:@"id"];
+        entryData.participationName = [participation objectForKey:@"name"];
+        if ([participation objectForKey:@"group"] != nil && [[participation objectForKey:@"group"] isKindOfClass:[NSDictionary class]]) {
+            NSDictionary *group = [participation objectForKey:@"group"];
+            entryData.roomId    = [group objectForKey:@"to_param"];
+            entryData.roomName  = [group objectForKey:@"name"];
+        }
+    }
     entryData.participationIcon = nil;
     if ([entry objectForKey:@"attachment"] != nil && [[entry objectForKey:@"attachment"] isKindOfClass:[NSDictionary class]]) {
         NSDictionary *attachment        = [entry objectForKey:@"attachment"];

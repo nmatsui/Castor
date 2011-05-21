@@ -120,10 +120,10 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text sender:self];
     if (result) {
-        NSLog(@"move to GroupView");
-        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
-                                                           factory:self.factory] autorelease];
-        [self.navigationController pushViewController:groupView animated:YES];
+        NSLog(@"move to HomeView");
+        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
+                                                        factory:self.factory] autorelease];
+        [self.navigationController pushViewController:homeView animated:YES];
     }
     [pool release];
 }

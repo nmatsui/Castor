@@ -12,6 +12,7 @@
 @interface EntryData : NSObject <NSCoding> {
     NSNumber       *_entryId;
     NSNumber       *_roomId;
+    NSString       *_roomName;
     NSString       *_content;
     NSNumber       *_parentId;
     NSNumber       *_rootId;
@@ -32,6 +33,7 @@
 
 @property(nonatomic, retain) NSNumber       *entryId;
 @property(nonatomic, retain) NSNumber       *roomId;
+@property(nonatomic, retain) NSString       *roomName;
 @property(nonatomic, retain) NSString       *content;
 @property(nonatomic, retain) NSNumber       *parentId;
 @property(nonatomic, retain) NSNumber       *rootId;

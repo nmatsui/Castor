@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Alertable.h"
 #import "DataFactory.h"
-#import "GroupView.h"
+#import "HomeView.h"
 
 
 @interface LoginView : UIViewController <Alertable>  {
