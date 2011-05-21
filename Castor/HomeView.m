@@ -207,7 +207,9 @@
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"accessory button %d section %d row clicked", indexPath.section, indexPath.row);
-    [self performSelector:@selector(_moveToCommentViewWithOriginEntry:) withObject:[[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row]];
+    RoomData *room = [self.homeList objectAtIndex:indexPath.section];
+    EntryData *entry = [room.entries objectAtIndex:indexPath.row];
+    [self performSelector:@selector(_moveToCommentViewWithOrigin:) withObject:[[NSArray alloc] initWithObjects:room, entry, nil]];
 }
 
 //// UIActionSheet Callback
