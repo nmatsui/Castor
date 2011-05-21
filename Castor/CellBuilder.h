@@ -18,6 +18,7 @@
 
 @property(nonatomic, retain) DataFactory *factory;
 
+- (UIView *)getSectionHeaderView:(CGSize)size room:(RoomData *)room target:(id)target action:(SEL)action section:(NSInteger)section portrate:(BOOL)portrate;
 - (CGFloat)getRoomCellHeight:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate;
 - (UIView *)getRoomCellView:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate;
 - (CGFloat)getEntryCellHeight:(CGSize)size entry:(EntryData *)entry portrate:(BOOL)portrate;

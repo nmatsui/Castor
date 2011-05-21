@@ -20,6 +20,7 @@
 @synthesize updatedAt = _updatedAt;
 @synthesize admin     = _admin;
 @synthesize myId      = _myId;
+@synthesize entries   = _entries;
 
 - (void)dealloc
 {
@@ -30,6 +31,7 @@
     self.createdAt = nil;
     self.updatedAt = nil;
     self.myId = nil;
+    self.entries = nil;
     [super dealloc];
 }
 
@@ -44,6 +46,7 @@
     [aCoder encodeObject:self.updatedAt forKey:@"updatedAt"];
     [aCoder encodeBool:self.admin       forKey:@"admin"];
     [aCoder encodeObject:self.myId      forKey:@"myId"];
+    [aCoder encodeObject:self.entries   forKey:@"entries"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -57,6 +60,7 @@
     self.createdAt = [aDecoder decodeObjectForKey:@"createdAt"];
     self.admin     = [aDecoder decodeBoolForKey:@"admin"];
     self.myId      = [aDecoder decodeObjectForKey:@"myId"];
+    self.entries   = [aDecoder decodeObjectForKey:@"entries"];
     return self;
 }
 

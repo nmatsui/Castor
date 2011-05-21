@@ -82,9 +82,9 @@
     self.factory = [[DataFactory alloc] init];
     if ([self.factory hasAuthToken]) {
         NSLog(@"move to GroupView");
-        GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil
-                                                           factory:self.factory] autorelease];
-        [self.navigationController pushViewController:groupView animated:YES];
+        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
+                                                        factory:self.factory] autorelease];
+        [self.navigationController pushViewController:homeView animated:YES];
     }
     else {
         NSLog(@"move to LoginView");

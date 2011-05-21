@@ -19,6 +19,7 @@
     NSString *_updatedAt;
     BOOL     _admin;
     NSNumber *_myId;
+    NSMutableArray *_entries;
 }
 
 @property(nonatomic, retain) NSNumber *roomId;
@@ -30,5 +31,6 @@
 @property(nonatomic, retain) NSString *updatedAt;
 @property(nonatomic, assign) BOOL     admin;
 @property(nonatomic, retain) NSNumber *myId;
+@property(nonatomic, retain) NSMutableArray *entries;
 
 @end

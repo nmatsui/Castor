@@ -22,6 +22,7 @@ static const int GROUP_FONT_SIZE  = 14;
 static const int ENTRY_FONT_SIZE  = 12;
 static const int INDENT_FONT_SIZE = 10;
 static const int INDENT_WIDTH     = 6;
+static const int SECTION_HEADER_FONT_SIZE = 16;
 
 - (id)initWithDataFactory:(DataFactory *)factory
 {
@@ -39,6 +40,37 @@ static const int INDENT_WIDTH     = 6;
     dispatch_release(_localQueue);
     self.factory = nil;
     [super dealloc];
+}
+
+- (UIView *)getSectionHeaderView:(CGSize)size room:(RoomData *)room target:(id)target action:(SEL)action section:(NSInteger)section portrate:(BOOL)portrate
+{
+    UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
+    [v setBackgroundColor:[UIColor groupTableViewBackgroundColor]];
+    [v setAlpha:0.8];
+    float w = (portrate) ? size.width : size.height;
+    UILabel *nameLabel = [self _makeLabel:CGRectMake(10, 0, w - 10, 20) text:room.roomName font:[UIFont systemFontOfSize:SECTION_HEADER_FONT_SIZE]];
+    [nameLabel setBackgroundColor:[UIColor clearColor]];
+    [nameLabel setFont:[UIFont boldSystemFontOfSize:SECTION_HEADER_FONT_SIZE]];
+    [nameLabel setTextColor:[UIColor whiteColor]];
+    [nameLabel setShadowColor:[UIColor darkTextColor]];
+    [nameLabel setShadowOffset:CGSizeMake(1.0f, 1.0f)];
+    [v addSubview:nameLabel];
+    [nameLabel release];
+    
+    if (target != nil) {
+        UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow001_black.gif"]];
+        [icon setFrame:CGRectMake(w - 20, 5, 10, 10)];
+        [v addSubview:icon];
+        [icon release];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        [button setFrame:CGRectMake(0, 0, w, 20)];
+        [button setTag:section];
+        [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+        [v addSubview:button];
+        
+    }
+    return v;
 }
 
 - (CGFloat)getRoomCellHeight:(CGSize)size room:(RoomData *)room portrate:(BOOL)portrate
@@ -99,6 +131,7 @@ static const int INDENT_WIDTH     = 6;
     float w = (portrate) ? size.width - 70 : size.height - 70;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 30 + s.height + 20 + [entry.level intValue]*INDENT_WIDTH;
+    NSLog(@"height %f", height);
     return (height<60)?60:height;
 }
 
