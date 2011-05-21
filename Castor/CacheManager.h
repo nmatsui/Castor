@@ -21,6 +21,10 @@
 - (void)insertOrReplaceParticipationIconAtRoomId:(NSNumber *)roomId participationId:(NSNumber *)participationId icon:(NSData *)icon;
 - (void)deleteAllParticipationIcon;
 
+- (NSData *)selectHomeTimeline;
+- (void)insertOrReplaceHomeTimeline:(NSData *)timeline;
+- (void)deleteAllHomeTimeline;
+
 - (NSData *)selectRoomList;
 - (void)insertOrReplaceRoomList:(NSData *)list;
 - (void)deleteAllRoomList;

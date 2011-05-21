@@ -171,6 +171,67 @@
     [self commit];
 }
 
+- (NSData *)selectHomeTimeline
+{
+    NSLog(@"selectHomeTimeline");
+    [self beginTransaction];
+    NSString *sql = @"select timeline, size from home_timeline_cache";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at selectHomeTimeline" userInfo:nil];
+        [exception raise];
+    };
+    NSData *timeline = nil;
+    if (sqlite3_step(statement) == SQLITE_ROW) {
+        timeline = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+    return timeline;
+}
+- (void)insertOrReplaceHomeTimeline:(NSData *)timeline
+{
+    NSLog(@"insertOrReplaceHomeTimeline");
+    [self beginTransaction];
+    NSString *sql = @"insert or replace into home_timeline_cache(pseud_id, timeline, size, cached_at) values(1, @timeline, @size, @cachedAt)"; // 最新１データだけ持てば良いので、PKは必ず1
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at insertOrReplaceHomeTimeline" userInfo:nil];
+        [exception raise];
+    };
+    sqlite3_bind_blob  (statement, sqlite3_bind_parameter_index(statement, "@timeline"), [timeline bytes], [timeline length], SQLITE_TRANSIENT);
+    sqlite3_bind_int   (statement, sqlite3_bind_parameter_index(statement, "@size"),     [timeline length]);
+    sqlite3_bind_double(statement, sqlite3_bind_parameter_index(statement, "@cachedAt"), [[NSDate date] timeIntervalSince1970]);
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"insert or replace error at insertOrReplaceHomeTimeline" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+- (void)deleteAllHomeTimeline
+{
+    NSLog(@"deleteAllHomeTimeline");
+    [self beginTransaction];
+    NSString *sql = @"delete from home_timeline_cache";
+    sqlite3_stmt *statement = nil;
+    if(sqlite3_prepare_v2(_db, [sql UTF8String], -1, &statement, NULL) != SQLITE_OK) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"statement error at deleteAllHomeTimeline" userInfo:nil];
+        [exception raise];
+    };
+    if (sqlite3_step(statement) == SQLITE_ERROR) {
+        [self rollback];
+        NSException* exception = [NSException exceptionWithName:@"SQLException" reason:@"delete error at deleteAllHomeTimeline" userInfo:nil];
+        [exception raise];
+    }
+    sqlite3_finalize(statement);
+    [self commit];
+}
+
 - (NSData *)selectRoomList
 {
     NSLog(@"selectRoomList");

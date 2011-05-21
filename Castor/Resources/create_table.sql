@@ -23,6 +23,14 @@ create table participation_icon_cache (
   primary key(room_id, participation_id)
 );
 
+create table home_timeline_cache (
+  pseud_id         integer not null,
+  timeline         blob    not null,
+  size             integer not null,
+  cached_at        real    not null,
+  primary key(pseud_id)
+);
+
 create table room_list_cache (
   pseud_id         integer not null,
   list             blob    not null,
