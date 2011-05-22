@@ -208,6 +208,18 @@
     }
 }
 
+- (void)addEntryText:(NSString *)text image:(NSData *)image filename:(NSString *)filename roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(UIViewController <Alertable> *)sender
+{
+    NSLog(@"addEntryText[%@] image(size %d) filename[%@] roomId[%@] parentId[%@]", text, [image length], filename, roomId, parentId);
+    @try {
+        [self.gateway postEntryText:text image:image filename:filename roomId:roomId parentId:parentId];
+    }
+    @catch (NSException *exception) {
+        NSLog(@"exception in addEntryText [%@]", [exception reason]);
+        [sender performSelectorOnMainThread:@selector(alertException:) withObject:[exception reason] waitUntilDone:YES];
+    }
+}
+
 - (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender
 {
     NSLog(@"updateEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);

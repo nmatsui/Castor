@@ -10,6 +10,7 @@
 
 @interface YouRoomGateway (Private)
 - (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret;
+- (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body contentType:(NSString *)contentType oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret;
 - (NSData *)_getXAuthParamStringWithUsername:(NSString *)username password:(NSString *)password;
 - (void)_retrieveVerifyCredential;
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level;
@@ -176,13 +177,44 @@
     if (parentId != nil) {
         body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId];
     }
-    NSData * response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
-                                method:@"POST"
-                                  body:[body dataUsingEncoding:NSUTF8StringEncoding]
-                           oauth_token:self.oAuthToken
-                    oauth_token_secret:self.oAuthTokenSecret];
+    NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
+                               method:@"POST"
+                                 body:[body dataUsingEncoding:NSUTF8StringEncoding]
+                          oauth_token:self.oAuthToken
+                   oauth_token_secret:self.oAuthTokenSecret];
     if (response == nil || [response length] == 0) {
         return NO; // ステータスコードまで見るべきか？
+    }
+    return YES;
+}
+
+- (BOOL)postEntryText:(NSString *)text image:(NSData *)image filename:(NSString *)filename roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
+{
+    NSLog(@"postEntryText[%@] image(size[%d]) filename[%@] roomId[%@] parentId[%@]", text, [image length], filename, roomId, parentId);
+    NSString *boundary = @"---------------------------CASTORBOUNDARY";
+    NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
+    NSMutableData *postBody = [NSMutableData data];
+    [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[@"Content-Disposition: form-data; name=\"entry[content]\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[text dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"entry[attachment_attributes][uploaded_data]\"; filename=\"%@\"\r\n", filename] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[@"Content-Type: image/png\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:image];
+    [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[@"Content-Disposition: form-data; name=\"entry[attachment_attributes][attachment_type]\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[@"Image" dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n",boundary] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
+                               method:@"POST" 
+                                 body:postBody 
+                          contentType:contentType 
+                          oauth_token:self.oAuthToken 
+                   oauth_token_secret:self.oAuthTokenSecret];
+    //NSLog(@"response:%@", [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue]);
+    if (response == nil || [response length] == 0) {
+        return NO;
     }
     return YES;
 }
@@ -278,6 +310,11 @@
 //// Private
 - (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret
 {
+    return [self _request:url method:method body:body contentType:@"application/x-www-form-urlencoded" oauth_token:oauth_token oauth_token_secret:oauth_token_secret];
+}
+
+- (NSData *)_request:(NSURL *)url method:(NSString *)method body:(NSData *)body contentType:(NSString *)contentType oauth_token:(NSString *)oauth_token oauth_token_secret:(NSString *)oauth_token_secret
+{
     NSLog(@"request(%@) to %@ [body:%@]", method, url, [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease]);
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
 //    NSLog(@"request header : %@", header);
@@ -285,7 +322,7 @@
     [request setHTTPMethod:method];
     [request setValue:header forHTTPHeaderField:@"Authorization"];
     [request setHTTPBody:body];
-    [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
