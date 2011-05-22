@@ -13,13 +13,16 @@
 
 @synthesize textView = _textView;
 @synthesize entry = _entry;
+@synthesize factory = _factory;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.entry = entry;
+        self.factory = factory;
     }
     return self;
 }
@@ -37,6 +40,24 @@
     [super didReceiveMemoryWarning];
     
     // Release any cached data, images, etc that aren't in use.
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.factory == nil) {
+        NSLog(@"DataFactory disappeared");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
+                                                            message:@"メモリ不足のためキャッシュが破棄されました"
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
+        [alertView release];
+        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
+                                                        factory:[[DataFactory alloc] init]] autorelease];
+        [self.navigationController pushViewController:homeView animated:YES];
+    }
 }
 
 - (void)viewDidLoad

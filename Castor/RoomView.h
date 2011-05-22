@@ -10,6 +10,7 @@
 #import "Reloadable.h"
 #import "Alertable.h"
 #import "DataFactory.h"
+#import "HomeView.h"
 #import "CommentView.h"
 #import "EditView.h"
 #import "SettingView.h"

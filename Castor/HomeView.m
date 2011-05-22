@@ -71,6 +71,19 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (self.factory == nil) {
+        NSLog(@"DataFactory disappeared");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
+                                                            message:@"メモリ不足のためキャッシュが破棄されました"
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
+        [alertView release];
+        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
+                                                        factory:[[DataFactory alloc] init]] autorelease];
+        [self.navigationController pushViewController:homeView animated:YES];
+    }
     NSLog(@"HomeView Will appear");
     self.navigationController.navigationBar.hidden = NO;
     [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
@@ -275,6 +288,7 @@
 - (void)_reloadHomeTimelineInBackground:(id)arg
 {
     NSLog(@"reload homeList In Background");
+    NSLog(@"self.factory %@", self.factory);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     self.factory.gateway.pDic = nil;
     NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
@@ -338,7 +352,8 @@
     if ([@"Text" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {
         NSLog(@"move to LongTextView");
         LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil 
-                                                                      entry:[origin objectAtIndex:1]] autorelease];
+                                                                      entry:[origin objectAtIndex:1]
+                                                                    factory:self.factory] autorelease];
         [self.navigationController pushViewController:longTextView animated:YES];
     }
     else if ([@"Image" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {

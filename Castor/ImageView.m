@@ -56,6 +56,24 @@ static const float MIN_SCALE = 1.0;
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    if (self.factory == nil) {
+        NSLog(@"DataFactory disappeared");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
+                                                            message:@"メモリ不足のためキャッシュが破棄されました"
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
+        [alertView release];
+        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
+                                                        factory:[[DataFactory alloc] init]] autorelease];
+        [self.navigationController pushViewController:homeView animated:YES];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];

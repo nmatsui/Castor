@@ -11,6 +11,7 @@
 #import "Alertable.h"
 #import "DataFactory.h"
 #import "EntryData.h"
+#import "HomeView.h"
 
 
 @interface EditView : UIViewController <UITextViewDelegate, Alertable> {

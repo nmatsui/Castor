@@ -83,6 +83,19 @@ static const int MAX_LEVLE = 6;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    if (self.factory == nil) {
+        NSLog(@"DataFactory disappeared");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
+                                                            message:@"メモリ不足のためキャッシュが破棄されました"
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
+        [alertView release];
+        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
+                                                        factory:[[DataFactory alloc] init]] autorelease];
+        [self.navigationController pushViewController:homeView animated:YES];
+    }
     NSLog(@"CommentView Will appear");
     [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
 }
@@ -368,7 +381,8 @@ static const int MAX_LEVLE = 6;
     if ([@"Text" isEqualToString:originEntry.attachmentType]) {
         NSLog(@"move to LongTextView");
         LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil 
-                                                                      entry:originEntry] autorelease];
+                                                                      entry:originEntry
+                                                                    factory:self.factory] autorelease];
         [self.navigationController pushViewController:longTextView animated:YES];
     }
     else if ([@"Image" isEqualToString:originEntry.attachmentType]) {

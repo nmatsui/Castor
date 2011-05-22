@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Alertable.h"
+#import "HomeView.h"
 #import "EntryData.h"
 #import "DataFactory.h"
 

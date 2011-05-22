@@ -81,7 +81,7 @@
     [NSThread sleepForTimeInterval:1];
     self.factory = [[DataFactory alloc] init];
     if ([self.factory hasAuthToken]) {
-        NSLog(@"move to GroupView");
+        NSLog(@"move to HomeView");
         HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
                                                         factory:self.factory] autorelease];
         [self.navigationController pushViewController:homeView animated:YES];
