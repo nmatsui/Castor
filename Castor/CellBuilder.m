@@ -204,6 +204,24 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return v;
 }
 
+- (UIView *)getHeadrTrigger:(CGRect)rect portrate:(BOOL)portrate
+{
+    rect.origin.y -= 40;
+    rect.size.height = 40;
+    UIView *v = [[[UIView alloc] initWithFrame:rect] autorelease];
+    UILabel *label = [self _makeLabel:CGRectMake(30, 10, 150, 20) text:@"プルダウンすると更新" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    label.tag = 1;
+    [v addSubview:label];
+    [label release];
+    UIImageView *arrow = [self _makeIcon:CGRectMake(180, 12, 16, 16)];
+    [arrow setImage:[UIImage imageNamed:@"57-download.png"]];
+    arrow.tag = 2;
+    [v addSubview:arrow];
+    [arrow release];
+    
+    return v;
+}
+
 //// Private
 - (UILabel *)_makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font
 {

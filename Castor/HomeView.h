@@ -27,8 +27,10 @@
     EntryData *_targetEntry;
     NSMutableArray *_selectors;
     UIActivityIndicatorView *_indicator;
+    UIView *_headerTrigger;
     int _page;
     BOOL _portrate;
+    BOOL _headerON;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *homeTable;
@@ -39,6 +41,7 @@
 @property(nonatomic, retain) EntryData *targetEntry;
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
+@property(nonatomic, retain) UIView *headerTrigger;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)moveToGroup:(id)sender;

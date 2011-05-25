@@ -196,7 +196,7 @@
     NSLog(@"move to HomeView");
     HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
                                                     factory:self.factory] autorelease];
-    [self.navigationController pushViewController:homeView animated:YES];
+    [self.navigationController pushViewController:homeView animated:NO];
     [pool release];
 }
 

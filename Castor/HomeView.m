@@ -30,6 +30,7 @@
 @synthesize targetEntry = _targetEntry;
 @synthesize selectors = _selectors;
 @synthesize indicator = _indicator;
+@synthesize headerTrigger = _headerTrigger;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
@@ -87,6 +88,8 @@
     NSLog(@"HomeView Will appear");
     self.navigationController.navigationBar.hidden = NO;
     [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
+    self.headerTrigger = [self.cellBuilder getHeadrTrigger:self.homeTable.bounds portrate:_portrate];
+    [self.homeTable addSubview:self.headerTrigger];
 }
 
 - (void)viewDidLoad
@@ -225,6 +228,31 @@
     [self performSelector:@selector(_moveToCommentViewWithOrigin:) withObject:[[NSArray alloc] initWithObjects:room, entry, nil]];
 }
 
+//// UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGRect r = self.homeTable.bounds;
+    NSLog(@"%f", r.origin.y);
+    if ((r.origin.y < -50) && (_headerON == NO)) {
+		_headerON = YES;
+		[(UILabel *)[self.headerTrigger viewWithTag:1] setText:@"手を離すと更新"];
+        UIImageView *imageView = (UIImageView *)[self.headerTrigger viewWithTag:2];
+		[UIView beginAnimations:nil context:nil];
+		imageView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 3.14);
+		[UIView commitAnimations];
+	}
+	else if ((r.origin.y == 0) && (_headerON == YES)) {
+		_headerON = NO;
+		[(UILabel *)[self.headerTrigger viewWithTag:1] setText:@"プルダウンすると更新"];
+        UIImageView *imageView = (UIImageView *)[self.headerTrigger viewWithTag:2];
+		[UIView beginAnimations:nil context:nil];
+		imageView.transform = CGAffineTransformIdentity;
+		[UIView commitAnimations];
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
+	}
+}
+
 //// UIActionSheet Callback
 -(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
@@ -272,7 +300,7 @@
     NSLog(@"move to GroupView");
     GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
                                                        factory:self.factory] autorelease];
-    [self.navigationController pushViewController:groupView animated:YES];
+    [self.navigationController pushViewController:groupView animated:NO];
     [pool release];
 }
 
