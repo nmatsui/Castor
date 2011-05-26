@@ -209,17 +209,40 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     rect.origin.y -= 40;
     rect.size.height = 40;
     UIView *v = [[[UIView alloc] initWithFrame:rect] autorelease];
-    UILabel *label = [self _makeLabel:CGRectMake(30, 10, 150, 20) text:@"プルダウンすると更新" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *label = [self _makeLabel:CGRectMake(40, 10, 160, 20) text:@"プルダウンすると更新" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     label.tag = 1;
     [v addSubview:label];
     [label release];
-    UIImageView *arrow = [self _makeIcon:CGRectMake(180, 12, 16, 16)];
+    UIImageView *arrow = [self _makeIcon:CGRectMake(200, 12, 16, 16)];
     [arrow setImage:[UIImage imageNamed:@"57-download.png"]];
     arrow.tag = 2;
     [v addSubview:arrow];
     [arrow release];
     
     return v;
+}
+
+- (UIView *)getFooterTrigger:(CGRect)rect portrate:(BOOL)portrate
+{
+    rect.origin.y = 0;
+	rect.size.height = 40;
+    UIView *v = [[[UIView alloc] initWithFrame:rect] autorelease];
+    UILabel *label = [self _makeLabel:CGRectMake(40, 10, 160, 20) text:@"プルアップすると次ページを表示" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    label.tag = 1;
+    [v addSubview:label];
+    [label release];
+    UIImageView *arrow = [self _makeIcon:CGRectMake(200, 12, 16, 16)];
+    [arrow setImage:[UIImage imageNamed:@"57-upload.png"]];
+    arrow.tag = 2;
+    [v addSubview:arrow];
+    [arrow release];
+    
+    return v;
+}
+
+- (NSInteger)getTriggerBounds
+{
+    return 110;
 }
 
 //// Private

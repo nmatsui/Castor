@@ -25,6 +25,8 @@
 - (UIView *)getEntryCellView:(EntryData *)entry portrate:(BOOL)portrate;
 - (UIView *)getNextPageCellView:(BOOL)portrate;
 - (UIView *)getHeadrTrigger:(CGRect)rect portrate:(BOOL)portrate;
+- (UIView *)getFooterTrigger:(CGRect)rect portrate:(BOOL)portrate;
+- (NSInteger)getTriggerBounds;
 - (id)initWithDataFactory:(DataFactory *)factory;
 
 @end

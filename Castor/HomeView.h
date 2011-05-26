@@ -28,9 +28,11 @@
     NSMutableArray *_selectors;
     UIActivityIndicatorView *_indicator;
     UIView *_headerTrigger;
+    UIView *_footerTrigger;
     int _page;
     BOOL _portrate;
     BOOL _headerON;
+    BOOL _footerON;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *homeTable;
@@ -42,6 +44,7 @@
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) UIView *headerTrigger;
+@property(nonatomic, retain) UIView *footerTrigger;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)moveToGroup:(id)sender;

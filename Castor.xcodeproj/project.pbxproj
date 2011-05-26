@@ -20,6 +20,7 @@
 		8611A6C9138BECC500FF03DD /* 57-download.png in Resources */ = {isa = PBXBuildFile; fileRef = 8611A6C8138BECC500FF03DD /* 57-download.png */; };
 		8614C6401375335100AFBC39 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63F1375335000AFBC39 /* README */; };
 		8614CA611388FAAA00F0E23B /* 68-paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = 8614CA601388FAAA00F0E23B /* 68-paperclip.png */; };
+		86175060138E7DC4009E8B09 /* 57-upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 8617505F138E7DC4009E8B09 /* 57-upload.png */; };
 		865DD8921373916F0008EB9F /* create_table.sql in Resources */ = {isa = PBXBuildFile; fileRef = 865DD8901373916F0008EB9F /* create_table.sql */; };
 		865DD895137392C10008EB9F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 865DD894137392C10008EB9F /* libsqlite3.dylib */; };
 		865DD8981373981A0008EB9F /* CacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 865DD8971373981A0008EB9F /* CacheManager.m */; };
@@ -90,6 +91,7 @@
 		8611A6C8138BECC500FF03DD /* 57-download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "57-download.png"; sourceTree = "<group>"; };
 		8614C63F1375335000AFBC39 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		8614CA601388FAAA00F0E23B /* 68-paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "68-paperclip.png"; sourceTree = "<group>"; };
+		8617505F138E7DC4009E8B09 /* 57-upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "57-upload.png"; sourceTree = "<group>"; };
 		865DD8901373916F0008EB9F /* create_table.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = create_table.sql; sourceTree = "<group>"; };
 		865DD894137392C10008EB9F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		865DD8961373981A0008EB9F /* CacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheManager.h; sourceTree = "<group>"; };
@@ -199,6 +201,7 @@
 		86DA6C681371592500DD923D /* image */ = {
 			isa = PBXGroup;
 			children = (
+				8617505F138E7DC4009E8B09 /* 57-upload.png */,
 				8611A6C8138BECC500FF03DD /* 57-download.png */,
 				8614CA601388FAAA00F0E23B /* 68-paperclip.png */,
 				8608E62E1388E258008A9585 /* 86-camera.png */,
@@ -438,6 +441,7 @@
 				8608E62F1388E258008A9585 /* 86-camera.png in Resources */,
 				8614CA611388FAAA00F0E23B /* 68-paperclip.png in Resources */,
 				8611A6C9138BECC500FF03DD /* 57-download.png in Resources */,
+				86175060138E7DC4009E8B09 /* 57-upload.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

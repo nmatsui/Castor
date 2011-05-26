@@ -31,6 +31,7 @@
 @synthesize selectors = _selectors;
 @synthesize indicator = _indicator;
 @synthesize headerTrigger = _headerTrigger;
+@synthesize footerTrigger = _footerTrigger;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
@@ -44,6 +45,8 @@
         self.selectors = [[NSMutableArray alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
+        _headerON = NO;
+        _footerON = NO;
     }
     return self;
 }
@@ -58,6 +61,8 @@
     self.targetEntry = nil;
     self.selectors = nil;
     self.indicator = nil;
+    self.headerTrigger = nil;
+    self.footerTrigger = nil;
     [super dealloc];
 }
 
@@ -90,6 +95,8 @@
     [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
     self.headerTrigger = [self.cellBuilder getHeadrTrigger:self.homeTable.bounds portrate:_portrate];
     [self.homeTable addSubview:self.headerTrigger];
+    self.footerTrigger = [self.cellBuilder getFooterTrigger:self.homeTable.bounds portrate:_portrate];
+    self.homeTable.tableFooterView = self.footerTrigger;
 }
 
 - (void)viewDidLoad
@@ -114,6 +121,8 @@
     self.targetEntry = nil;
     self.selectors = nil;
     self.indicator = nil;
+    self.headerTrigger = nil;
+    self.footerTrigger = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -151,12 +160,12 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section < [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+//    if (indexPath.section < [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 1) {
         return [self.cellBuilder getEntryCellHeight:[[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row] portrate:_portrate];
-    }
-    else {
-        return 40;
-    }
+//    }
+//    else {
+//        return 40;
+//    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -167,25 +176,26 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.homeList count] <= indexPath.section && [[[self.homeList objectAtIndex:indexPath.section] entries] count] <= indexPath.row) return cell;
     
-    if (indexPath.section != [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+//    if (indexPath.section != [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 1) {
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         EntryData *entry = [[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row];
         [cell.contentView addSubview:[self.cellBuilder getEntryCellView:entry portrate:_portrate]];
         cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
         [pool release];
-    }
-    else if (indexPath.section == [self.homeList count] - 1 && indexPath.row == [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        [cell.contentView addSubview:[self.cellBuilder getNextPageCellView:_portrate]];
-        [pool release];
-    }
+//    }
+//    else if (indexPath.section == [self.homeList count] - 1 && indexPath.row == [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 1) {
+//        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//        self.footerTrigger = [self.cellBuilder getFooterTrigger:CGRectZero portrate:_portrate];
+//        [cell.contentView addSubview:self.footerTrigger];
+//        [pool release];
+//    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"HomeView %d section %d row tapped", indexPath.section, indexPath.row);
-    if (indexPath.section != [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+    if (indexPath.section != [self.homeList count] - 1 || indexPath.row < [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 1) {
         [self.selectors removeAllObjects];
         if (self.targetRoom != nil) self.targetRoom = nil;
         if (self.targetEntry != nil ) self.targetEntry = nil;
@@ -215,9 +225,9 @@
         [menu showInView:self.view];
         [menu release];
     }
-    else if (indexPath.section == [self.homeList count] - 1 && indexPath.row == [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
-        [self _nextPage:self];
-    }
+//    else if (indexPath.section == [self.homeList count] - 1 && indexPath.row == [[[self.homeList objectAtIndex:indexPath.section] entries] count] - 2) {
+//        [self _nextPage:self];
+//    }
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
@@ -232,8 +242,7 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     CGRect r = self.homeTable.bounds;
-    NSLog(@"%f", r.origin.y);
-    if ((r.origin.y < -50) && (_headerON == NO)) {
+    if ((r.origin.y < -1 * [self.cellBuilder getTriggerBounds]) && (_headerON == NO)) {
 		_headerON = YES;
 		[(UILabel *)[self.headerTrigger viewWithTag:1] setText:@"手を離すと更新"];
         UIImageView *imageView = (UIImageView *)[self.headerTrigger viewWithTag:2];
@@ -250,6 +259,27 @@
 		[UIView commitAnimations];
         [self performSelector:@selector(_startIndicator:) withObject:self];
         [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
+	}
+    
+    
+    double tableTail = r.origin.y + r.size.height;
+    double triggerTail = self.footerTrigger.frame.origin.y + self.footerTrigger.frame.size.height;
+    if ((tableTail > triggerTail + [self.cellBuilder getTriggerBounds]) && (_footerON == NO)) {
+        _footerON = YES;
+        [(UILabel *)[self.footerTrigger viewWithTag:1] setText:@"手を離すと次ページを表示"];
+        UIImageView *imageView = (UIImageView *)[self.footerTrigger viewWithTag:2];
+		[UIView beginAnimations:nil context:nil];
+		imageView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 3.14);
+		[UIView commitAnimations];
+    }
+    else if ((tableTail == triggerTail) && (_footerON == YES)) {
+		_footerON = NO;
+		[(UILabel *)[self.footerTrigger viewWithTag:1] setText:@"プルアップすると次ページを表示"];
+        UIImageView *imageView = (UIImageView *)[self.footerTrigger viewWithTag:2];
+		[UIView beginAnimations:nil context:nil];
+		imageView.transform = CGAffineTransformIdentity;
+		[UIView commitAnimations];
+        [self _nextPage:self];
 	}
 }
 
@@ -322,8 +352,8 @@
     NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
     if (list != nil && [list count] != 0) {
         self.homeList = list;
-        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
-        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
+        //[[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
+        //[[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         [self.homeTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
@@ -413,8 +443,8 @@
     NSMutableArray *list = [self.factory getHomeTimelineWithPage:_page sender:self];
     if (list != nil && [list count] != 0) {
         self.homeList = list;
-        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
-        [[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
+        //[[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // <<load next page>>用
+        //[[[self.homeList objectAtIndex:[self.homeList count] - 1] entries] addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         [self.homeTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
