@@ -92,6 +92,8 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     UIImageView *icon = [self _makeIcon:CGRectMake(20, 5, 30, 30)];
     [v addSubview:icon];
     if (room.roomIcon != nil) {
+        float height = 30 * room.roomIcon.size.height / room.roomIcon.size.width;
+        [icon setFrame:CGRectMake(20, 5 + 15 - height / 2, 30, height)];
         [icon setImage:room.roomIcon];
         [icon release];
     }
@@ -110,9 +112,10 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
                 [icon addSubview:indicator];
             });
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-            room.roomIcon = [self.factory getRoomIconByRoomId:room.roomId];
-        
+            room.roomIcon = [self.factory getRoomIconByRoomId:room.roomId];        
             dispatch_async(_mainQueue, ^{
+                float height = 30 * room.roomIcon.size.height / room.roomIcon.size.width;
+                [icon setFrame:CGRectMake(20, 5 + 15 - height / 2, 30, height)];
                 [icon setImage:room.roomIcon];
                 [indicator removeFromSuperview];
                 [indicator release];
@@ -166,6 +169,8 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [v addSubview:icon];
     if (entry.participationIcon != nil) {
+        float height = 30 * entry.participationIcon.size.height / entry.participationIcon.size.width;
+        [icon setFrame:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
         [icon setImage:entry.participationIcon];
         [icon release];
     }
@@ -187,6 +192,8 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
             entry.participationIcon = [self.factory getParticipationIconByRoomId:entry.roomId participationId:entry.participationId];
             
             dispatch_async(_mainQueue, ^{
+                float height = 30 * entry.participationIcon.size.height / entry.participationIcon.size.width;
+                [icon setFrame:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
                 [icon setImage:entry.participationIcon];
                 [indicator removeFromSuperview];
                 [indicator release];
