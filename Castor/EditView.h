@@ -11,7 +11,7 @@
 #import "Alertable.h"
 #import "DataFactory.h"
 #import "EntryData.h"
-#import "HomeView.h"
+#import "ContainerView.h"
 
 
 @interface EditView : UIViewController <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Alertable> {

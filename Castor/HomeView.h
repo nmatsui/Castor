@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "Reloadable.h"
 #import "Alertable.h"
+#import "ContainerView.h"
 #import "GroupView.h"
 #import "RoomView.h"
 #import "CommentView.h"
@@ -17,6 +18,8 @@
 #import "CellBuilder.h"
 #import "RoomData.h"
 #import "EntryData.h"
+
+@class ContainerView;
 
 @interface HomeView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
     UITableView *_homeTable;
@@ -29,6 +32,7 @@
     UIActivityIndicatorView *_indicator;
     UIView *_triggerHeader;
     UIView *_triggerFooter;
+    ContainerView *_container;
     int _page;
     BOOL _portrate;
     BOOL _headerON;
@@ -45,10 +49,12 @@
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) UIView *triggerHeader;
 @property(nonatomic, retain) UIView *triggerFooter;
+@property(nonatomic, assign) ContainerView *container;
 
-- (IBAction)callSetting:(id)sender;
-- (IBAction)moveToGroup:(id)sender;
+//- (IBAction)callSetting:(id)sender;
+//- (IBAction)moveToGroup:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
-              factory:(DataFactory *)factory;
+              factory:(DataFactory *)factory
+            container:(ContainerView *)container;
 
 @end

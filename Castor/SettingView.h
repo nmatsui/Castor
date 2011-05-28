@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "LoginView.h"
 #import "DataFactory.h"
-
+#import "ContainerView.h"
 #import "CacheManager.h"
 
 @interface SettingView : UIViewController {

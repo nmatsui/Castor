@@ -32,9 +32,11 @@
 @synthesize indicator = _indicator;
 @synthesize triggerHeader = _triggerHeader;
 @synthesize triggerFooter = _triggerFooter;
+@synthesize container = _container;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
+            container:(ContainerView *)container
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -47,6 +49,7 @@
         [self.view addSubview:self.indicator];
         _headerON = NO;
         _footerON = NO;
+        self.container = container;
     }
     return self;
 }
@@ -86,17 +89,21 @@
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
         [alertView release];
-        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
-                                                        factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:homeView animated:YES];
+        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
+                                                                       factory:[[DataFactory alloc] init]] autorelease];
+        [self.container.navigationController pushViewController:containerView animated:YES];
     }
     NSLog(@"HomeView Will appear");
-    self.navigationController.navigationBar.hidden = NO;
+    self.container.navigationController.navigationBar.hidden = NO;
     [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
-    self.triggerHeader = [self.cellBuilder getTriggerHeader:self.homeTable.bounds portrate:_portrate];
-    [self.homeTable addSubview:self.triggerHeader];
-    self.triggerFooter = [self.cellBuilder getTriggerFooter:self.homeTable.bounds portrate:_portrate];
-    self.homeTable.tableFooterView = self.triggerFooter;
+    if (self.triggerHeader == nil) {
+        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.homeTable.bounds portrate:_portrate];
+        [self.homeTable addSubview:self.triggerHeader];
+    }
+    if (self.triggerFooter == nil) {
+        self.triggerFooter = [self.cellBuilder getTriggerFooter:self.homeTable.bounds portrate:_portrate];
+        self.homeTable.tableFooterView = self.triggerFooter;
+    }
 }
 
 - (void)viewDidLoad
@@ -104,8 +111,8 @@
     [super viewDidLoad];
     NSLog(@"HomeView loaded");
     self.title = @"Home";
-    [self.navigationItem.backBarButtonItem setEnabled:NO];
-    self.navigationItem.hidesBackButton = YES;
+    [self.container.navigationItem.backBarButtonItem setEnabled:NO];
+    self.container.navigationItem.hidesBackButton = YES;
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
 }
@@ -280,8 +287,10 @@
 {
     NSLog(@"reloadHome");
     _page = 1;
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
+    [pool release];
 }
 
 //// Alertable
@@ -296,25 +305,27 @@
 }
 
 //// IBAction
-- (IBAction)callSetting:(id)sender
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to SettingView");
-    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
-                                                             factory:self.factory] autorelease];
-    [self.navigationController pushViewController:settingView animated:YES];
-    [pool release];
-}
+//- (IBAction)callSetting:(id)sender
+//{
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//    NSLog(@"move to SettingView");
+//    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
+//                                                             factory:self.factory] autorelease];
+//    [self.container.navigationController pushViewController:settingView animated:YES];
+//    [pool release];
+//}
 
-- (IBAction)moveToGroup:(id)sender
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to GroupView");
-    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
-                                                       factory:self.factory] autorelease];
-    [self.navigationController pushViewController:groupView animated:NO];
-    [pool release];
-}
+//- (IBAction)moveToGroup:(id)sender
+//{
+////    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+////    NSLog(@"move to GroupView");
+////    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
+////                                                       factory:self.factory] autorelease];
+////    [self.navigationController pushViewController:groupView animated:NO];
+////    [pool release];
+//    
+//    [self.container tggleView];
+//}
 
 //// Private
 - (void)_startIndicator:(id)sender
@@ -356,7 +367,7 @@
     RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
                                                        room:[self.homeList objectAtIndex:[sender tag]] 
                                                     factory:self.factory] autorelease];
-    [self.navigationController pushViewController:roomView animated:YES];
+    [self.container.navigationController pushViewController:roomView animated:YES];
     [pool release];
 }
 
@@ -370,7 +381,7 @@
                                                          originEntry:[origin objectAtIndex:1]
                                                         previousView:self 
                                                              factory:self.factory] autorelease];
-    [self.navigationController pushViewController:commentView animated:YES];
+    [self.container.navigationController pushViewController:commentView animated:YES];
     [pool release];
 }
 
@@ -392,14 +403,14 @@
         LongTextView *longTextView = [[[LongTextView alloc] initWithNibName:@"LongTextView" bundle:nil 
                                                                       entry:[origin objectAtIndex:1]
                                                                     factory:self.factory] autorelease];
-        [self.navigationController pushViewController:longTextView animated:YES];
+        [self.container.navigationController pushViewController:longTextView animated:YES];
     }
     else if ([@"Image" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {
         NSLog(@"move to ImageView");
         ImageView *imageView = [[[ImageView alloc] initWithNibName:@"ImageView" bundle:nil 
                                                              entry:[origin objectAtIndex:1] 
                                                            factory:self.factory] autorelease];
-        [self.navigationController pushViewController:imageView animated:YES];
+        [self.container.navigationController pushViewController:imageView animated:YES];
     }
     else if ([@"Link" isEqualToString:[[origin objectAtIndex:1] attachmentType]]) {
         NSLog(@"open safari with url[%@]", [[origin objectAtIndex:1] attachmentURL]);

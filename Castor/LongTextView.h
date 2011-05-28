@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "EntryData.h"
-#import "HomeView.h"
+#import "ContainerView.h"
 
 @interface LongTextView : UIViewController {
     UITextView *_textView;

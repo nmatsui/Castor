@@ -10,11 +10,13 @@
 #import "Reloadable.h"
 #import "Alertable.h"
 #import "DataFactory.h"
+#import "ContainerView.h"
 #import "HomeView.h"
 #import "RoomView.h"
 #import "SettingView.h"
 #import "CellBuilder.h"
 
+@class ContainerView;
 
 @interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable, Alertable> {
     UITableView *_roomTable;
@@ -24,8 +26,10 @@
     CellBuilder *_cellBuilder;
     UIView *_triggerHeader;
     UIView *_nilFooter;
+    ContainerView *_container;
     BOOL _portrate;
     BOOL _headerON;
+    UIToolbar *_toolbar;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *roomTable;
@@ -35,10 +39,13 @@
 @property(nonatomic, retain) CellBuilder *cellBuilder;
 @property(nonatomic, retain) UIView *triggerHeader;
 @property(nonatomic, retain) UIView *nilFooter;
+@property(nonatomic, assign) ContainerView *container;
+@property(nonatomic, retain) IBOutlet UIToolbar *toolbar;
 
-- (IBAction)callSetting:(id)sender;
-- (IBAction)moveToHome:(id)sender;
+//- (IBAction)callSetting:(id)sender;
+//- (IBAction)moveToHome:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
-              factory:(DataFactory *)factory;
+              factory:(DataFactory *)factory
+            container:(ContainerView *)container;
 
 @end

@@ -120,10 +120,10 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     BOOL result = [self.factory storeAuthTokenWithEmail:self.email.text password:self.password.text sender:self];
     if (result) {
-        NSLog(@"move to HomeView");
-        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
-                                                        factory:self.factory] autorelease];
-        [self.navigationController pushViewController:homeView animated:YES];
+        NSLog(@"move to ContainerView");
+        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil 
+                                                                       factory:self.factory] autorelease];
+        [self.navigationController pushViewController:containerView animated:YES];
     }
     [pool release];
 }

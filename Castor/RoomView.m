@@ -89,16 +89,20 @@
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
         [alertView release];
-        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
-                                                        factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:homeView animated:YES];
+        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
+                                                                       factory:[[DataFactory alloc] init]] autorelease];
+        [self.navigationController pushViewController:containerView animated:YES];
     }
     NSLog(@"RoomView Will appear");
     [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
-    self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
-    [self.entryTable addSubview:self.triggerHeader];
-    self.triggerFooter = [self.cellBuilder getTriggerFooter:self.entryTable.bounds portrate:_portrate];
-    self.entryTable.tableFooterView = self.triggerFooter;
+    if (self.triggerHeader == nil) {
+        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
+        [self.entryTable addSubview:self.triggerHeader];
+    }
+    if (self.triggerFooter == nil) {
+        self.triggerFooter = [self.cellBuilder getTriggerFooter:self.entryTable.bounds portrate:_portrate];
+        self.entryTable.tableFooterView = self.triggerFooter;
+    }
 }
 
 - (void)viewDidLoad

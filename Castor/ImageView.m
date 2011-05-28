@@ -68,9 +68,9 @@ static const float MIN_SCALE = 1.0;
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
         [alertView release];
-        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
-                                                        factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:homeView animated:YES];
+        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
+                                                                       factory:[[DataFactory alloc] init]] autorelease];
+        [self.navigationController pushViewController:containerView animated:YES];
     }
 }
 

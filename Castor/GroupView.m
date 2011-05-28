@@ -22,9 +22,12 @@
 @synthesize cellBuilder = _cellBuilder;
 @synthesize triggerHeader = _triggerHeader;
 @synthesize nilFooter = _nilFooter;
+@synthesize container = _container;
+@synthesize toolbar = _toolbar;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
+            container:(ContainerView *)container
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
@@ -34,6 +37,7 @@
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
         _headerON = NO;
+        self.container = container;
     }
     return self;
 }
@@ -47,6 +51,7 @@
     self.cellBuilder = nil;
     self.triggerHeader = nil;
     self.nilFooter = nil;
+    self.toolbar = nil;
     [super dealloc];
 }
 
@@ -70,17 +75,17 @@
                                                   otherButtonTitles:@"OK", nil];
         [alertView show];
         [alertView release];
-        HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
-                                                        factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:homeView animated:YES];
+        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
+                                                                       factory:[[DataFactory alloc] init]] autorelease];
+        [self.container.navigationController pushViewController:containerView animated:YES];
     }
     NSLog(@"GroupView Will appear");
-    self.navigationController.navigationBar.hidden = NO;
+    self.container.navigationController.navigationBar.hidden = NO;
     [self.roomTable deselectRowAtIndexPath:[self.roomTable indexPathForSelectedRow] animated:YES];
-    self.triggerHeader = [self.cellBuilder getTriggerHeader:self.roomTable.bounds portrate:_portrate];
-    [self.roomTable addSubview:self.triggerHeader];
-    self.nilFooter = [self.cellBuilder getNilFooter:self.roomTable.bounds portrate:_portrate];
-    self.roomTable.tableFooterView = self.nilFooter;
+    if (self.triggerHeader == nil) {
+        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.roomTable.bounds portrate:_portrate];
+        [self.roomTable addSubview:self.triggerHeader];
+    }
 }
 
 - (void)viewDidLoad
@@ -88,8 +93,8 @@
     [super viewDidLoad];
     NSLog(@"GroupView loaded");
     self.title = @"Group";
-    [self.navigationItem.backBarButtonItem setEnabled:NO];
-    self.navigationItem.hidesBackButton = YES;
+    [self.container.navigationItem.backBarButtonItem setEnabled:NO];
+    self.container.navigationItem.hidesBackButton = YES;
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
 }
@@ -104,6 +109,7 @@
     self.cellBuilder = nil;
     self.triggerHeader = nil;
     self.nilFooter = nil;
+    self.toolbar = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -127,12 +133,17 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [self.roomList count];
+    return [self.roomList count] + 1;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return [self.cellBuilder getRoomCellHeight:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+    if (indexPath.row < [self.roomList count] - 1) {
+        return [self.cellBuilder getRoomCellHeight:[self.roomList objectAtIndex:indexPath.row] portrate:_portrate];
+    }
+    else {
+        return 40;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -143,23 +154,27 @@
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.roomList count] <= indexPath.row) return cell;
     
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    RoomData *room = [self.roomList objectAtIndex:indexPath.row];
-    [cell.contentView addSubview:[self.cellBuilder getRoomCellView:room portrate:_portrate]];
-    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    [pool release];
+    if (indexPath.row < [self.roomList count] - 1) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        RoomData *room = [self.roomList objectAtIndex:indexPath.row];
+        [cell.contentView addSubview:[self.cellBuilder getRoomCellView:room portrate:_portrate]];
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        [pool release];
+    }
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"GroupView %d row tapped",indexPath.row);
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
-                                                       room:[self.roomList objectAtIndex:indexPath.row] 
-                                                    factory:self.factory] autorelease];
-    [self.navigationController pushViewController:roomView animated:YES];
-    [pool release];
+    if (indexPath.row < [self.roomList count] - 1) {
+        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+        RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil
+                                                           room:[self.roomList objectAtIndex:indexPath.row]
+                                                        factory:self.factory] autorelease];
+        [self.container.navigationController pushViewController:roomView animated:YES];
+        [pool release];
+    }
 }
 
 //// UIScrollViewDelegate
@@ -190,8 +205,10 @@
 - (IBAction)reload:(id)sender
 {
     NSLog(@"reloadGroup");
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
+    [pool release];
 }
 
 //// Alertable
@@ -206,25 +223,26 @@
 }
 
 //// IBAction
-- (IBAction)callSetting:(id)sender
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to SettingView");
-    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
-                                                             factory:self.factory] autorelease];
-    [self.navigationController pushViewController:settingView animated:YES];
-    [pool release];
-}
+//- (IBAction)callSetting:(id)sender
+//{
+//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+//    NSLog(@"move to SettingView");
+//    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
+//                                                             factory:self.factory] autorelease];
+//    [self.container.navigationController pushViewController:settingView animated:YES];
+//    [pool release];
+//}
 
-- (IBAction)moveToHome:(id)sender
-{
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    NSLog(@"move to HomeView");
-    HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
-                                                    factory:self.factory] autorelease];
-    [self.navigationController pushViewController:homeView animated:NO];
-    [pool release];
-}
+//- (IBAction)moveToHome:(id)sender
+//{
+////    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+////    NSLog(@"move to HomeView");
+////    HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
+////                                                    factory:self.factory] autorelease];
+////    [self.navigationController pushViewController:homeView animated:NO];
+////    [pool release];
+//    [self.container tggleView];
+//}
 
 //// Private
 - (void)_startIndicator:(id)sender
@@ -243,6 +261,7 @@
     NSMutableArray *list = [self.factory getRoomListWithSender:self];
     if (list != nil && [list count] != 0) {
         self.roomList = list;
+        [self.roomList addObject:[[[RoomData alloc] init] autorelease]]; // 最後の空白行用
         [self.roomTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
