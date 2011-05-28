@@ -28,8 +28,12 @@
     NSMutableArray *_selectors;
     UIActivityIndicatorView *_indicator;
     CellBuilder *_cellBuilder;
+    UIView *_triggerHeader;
+    UIView *_triggerFooter;
     int _page;
     BOOL _portrate;
+    BOOL _headerON;
+    BOOL _footerON;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
@@ -41,6 +45,8 @@
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
+@property(nonatomic, retain) UIView *triggerHeader;
+@property(nonatomic, retain) UIView *triggerFooter;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)addEntry:(id)sender;

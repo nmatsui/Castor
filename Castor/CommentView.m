@@ -31,6 +31,8 @@
 @synthesize previousView = _previousView;
 @synthesize indicator = _indicator;
 @synthesize cellBuilder = _cellBuilder;
+@synthesize triggerHeader = _triggerHeader;
+@synthesize nilFooter = _nilFooter;
 
 static const int MAX_LEVLE = 6;
 
@@ -47,11 +49,12 @@ static const int MAX_LEVLE = 6;
         self.previousView = previousView;
         self.factory = factory;
         self.entryList = [self.factory getEntryCommentListFromCache:self.originEntry];
-        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         self.selectors = [[NSMutableArray alloc] init];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
+        _headerON = NO;
+        _footerON = NO;
     }
     return self;
 }
@@ -69,6 +72,8 @@ static const int MAX_LEVLE = 6;
     self.indicator = nil;
     self.previousView = nil;
     self.cellBuilder = nil;
+    self.triggerHeader = nil;
+    self.nilFooter = nil;
     [super dealloc];
 }
 
@@ -98,6 +103,10 @@ static const int MAX_LEVLE = 6;
     }
     NSLog(@"CommentView Will appear");
     [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
+    self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
+    [self.entryTable addSubview:self.triggerHeader];
+    self.nilFooter = [self.cellBuilder getNilFooter:self.entryTable.bounds portrate:_portrate];
+    self.entryTable.tableFooterView = self.nilFooter;
 }
 
 - (void)viewDidLoad
@@ -123,6 +132,8 @@ static const int MAX_LEVLE = 6;
     self.indicator = nil;
     self.previousView = nil;
     self.cellBuilder = nil;
+    self.triggerHeader = nil;
+    self.nilFooter = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -151,12 +162,7 @@ static const int MAX_LEVLE = 6;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.row < [self.entryList count] - 1) {
-        return [self.cellBuilder getEntryCellHeight:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
-    }
-    else {
-        return 40;
-    }
+    return [self.cellBuilder getEntryCellHeight:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -167,68 +173,88 @@ static const int MAX_LEVLE = 6;
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.entryList count] <= indexPath.row) return cell;
     
-    if (indexPath.row < [self.entryList count] - 1) {
-        NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-        EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
-        [cell.contentView addSubview:[self.cellBuilder getEntryCellView:entry portrate:_portrate]];
-        if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
-            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
-        }
-        [pool release];
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    EntryData *entry = [self.entryList objectAtIndex:indexPath.row];
+    [cell.contentView addSubview:[self.cellBuilder getEntryCellView:entry portrate:_portrate]];
+    if (indexPath.row != 0 && [entry.level intValue] < MAX_LEVLE) {
+        cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
     }
+    [pool release];
     return cell;    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"CommentView %d row clicked",indexPath.row);
-    if (indexPath.row < [self.entryList count] - 1) {
-        [self.selectors removeAllObjects];
-        if (self.target != nil) self.target = nil;
-        self.target = [self.entryList objectAtIndex:indexPath.row];
-        UIActionSheet *menu = [[UIActionSheet alloc] init];
-        [menu setDelegate:self];
-        
-        // Add Commentボタンの表示判定
-        if (indexPath.row != 0 && [self.target.level intValue] < MAX_LEVLE) {
-            [menu addButtonWithTitle:@"Add Comment"];
-            [self.selectors addObject:@"_addEntryWithOriginEntry:"];
-        }
-        
-        // Updateボタンの表示判定
-        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
-            [menu addButtonWithTitle:@"Update"];
-            [self.selectors addObject:@"_updateEntryWithOriginEntry:"];
-        }
-        
-        // Delteボタンの表示判定
-        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
-            if ([self.target.entryId intValue] == [self.target.rootId intValue] || self.target.children == nil || [self.target.children count] == 0) {
-                [menu addButtonWithTitle:@"Delete"];
-                [self.selectors addObject:@"_deleteEntryWithOriginEntry:"];
-            }
-        }
-        
-        // View Attachmentボタンの表示判定
-        if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
-            [menu addButtonWithTitle:@"View Attachment"];
-            [self.selectors addObject:@"_viewAttachmentWithOriginEntry:"];
-        }
-        
-        // Cancelボタンは必ず表示
-        [menu addButtonWithTitle:@"Cancel"];
-        [self.selectors addObject:@"_cancelWithOriginEntry:"];
-        
-        
-        [menu showInView:self.view];
-        [menu release];
+    [self.selectors removeAllObjects];
+    if (self.target != nil) self.target = nil;
+    self.target = [self.entryList objectAtIndex:indexPath.row];
+    UIActionSheet *menu = [[UIActionSheet alloc] init];
+    [menu setDelegate:self];
+    
+    // Add Commentボタンの表示判定
+    if (indexPath.row != 0 && [self.target.level intValue] < MAX_LEVLE) {
+        [menu addButtonWithTitle:@"Add Comment"];
+        [self.selectors addObject:@"_addEntryWithOriginEntry:"];
     }
+    
+    // Updateボタンの表示判定
+    if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+        [menu addButtonWithTitle:@"Update"];
+        [self.selectors addObject:@"_updateEntryWithOriginEntry:"];
+    }
+    
+    // Delteボタンの表示判定
+    if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+        if ([self.target.entryId intValue] == [self.target.rootId intValue] || self.target.children == nil || [self.target.children count] == 0) {
+            [menu addButtonWithTitle:@"Delete"];
+            [self.selectors addObject:@"_deleteEntryWithOriginEntry:"];
+        }
+    }
+    
+    // View Attachmentボタンの表示判定
+    if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
+        [menu addButtonWithTitle:@"View Attachment"];
+        [self.selectors addObject:@"_viewAttachmentWithOriginEntry:"];
+    }
+    
+    // Cancelボタンは必ず表示
+    [menu addButtonWithTitle:@"Cancel"];
+    [self.selectors addObject:@"_cancelWithOriginEntry:"];
+    
+    
+    [menu showInView:self.view];
+    [menu release];
 }
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"accessory button clicked[%d]", indexPath.row);
     [self performSelector:@selector(_addEntryWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
+}
+
+//// UIScrollViewDelegate
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    CGRect r = self.entryTable.bounds;
+    if ((r.origin.y < -1 * [self.cellBuilder getTriggerBounds]) && (_headerON == NO)) {
+		_headerON = YES;
+		[(UILabel *)[self.triggerHeader viewWithTag:1] setText:@"手を離すと更新"];
+        UIImageView *imageView = (UIImageView *)[self.triggerHeader viewWithTag:2];
+		[UIView beginAnimations:nil context:nil];
+		imageView.transform = CGAffineTransformRotate(CGAffineTransformIdentity, 3.14);
+		[UIView commitAnimations];
+	}
+	else if ((r.origin.y == 0) && (_headerON == YES)) {
+		_headerON = NO;
+		[(UILabel *)[self.triggerHeader viewWithTag:1] setText:@"プルダウンすると更新"];
+        UIImageView *imageView = (UIImageView *)[self.triggerHeader viewWithTag:2];
+		[UIView beginAnimations:nil context:nil];
+		imageView.transform = CGAffineTransformIdentity;
+		[UIView commitAnimations];
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadCommentListInBackground:) withObject:nil];
+	}
 }
 
 //// UIAlertView Callback
@@ -316,7 +342,6 @@ static const int MAX_LEVLE = 6;
     NSMutableArray *entries = [self.factory getEntryCommentListByEntryData:self.originEntry sender:self];
     if (entries != nil && [entries count] != 0) {
         self.entryList = entries;
-        [self.entryList addObject:[[[EntryData alloc] init] autorelease]]; // 最後の空白行用
         [self.entryTable performSelectorOnMainThread:@selector(reloadData) withObject:nil waitUntilDone:YES];
     }
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;

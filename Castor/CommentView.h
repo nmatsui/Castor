@@ -27,7 +27,11 @@
     UIViewController <Reloadable> *_previousView;
     UIActivityIndicatorView *_indicator;
     CellBuilder *_cellBuilder;
+    UIView *_triggerHeader;
+    UIView *_nilFooter;
     BOOL _portrate;
+    BOOL _headerON;
+    BOOL _footerON;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
@@ -41,6 +45,8 @@
 @property(nonatomic, retain) UIViewController <Reloadable> *previousView;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
+@property(nonatomic, retain) UIView *triggerHeader;
+@property(nonatomic, retain) UIView *nilFooter;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)addEntry:(id)sender;

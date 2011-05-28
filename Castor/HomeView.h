@@ -27,8 +27,8 @@
     EntryData *_targetEntry;
     NSMutableArray *_selectors;
     UIActivityIndicatorView *_indicator;
-    UIView *_headerTrigger;
-    UIView *_footerTrigger;
+    UIView *_triggerHeader;
+    UIView *_triggerFooter;
     int _page;
     BOOL _portrate;
     BOOL _headerON;
@@ -43,8 +43,8 @@
 @property(nonatomic, retain) EntryData *targetEntry;
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
-@property(nonatomic, retain) UIView *headerTrigger;
-@property(nonatomic, retain) UIView *footerTrigger;
+@property(nonatomic, retain) UIView *triggerHeader;
+@property(nonatomic, retain) UIView *triggerFooter;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)moveToGroup:(id)sender;

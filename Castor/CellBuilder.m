@@ -193,27 +193,16 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return v;
 }
 
-- (UIView *)getNextPageCellView:(BOOL)portrate
-{
-    UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 10 : [[UIScreen mainScreen] bounds].size.height - 10;
-    UILabel *nextLabel = [self _makeLabel:CGRectMake(10, 0, w, 40) text:@"<<load next page>>" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
-    [nextLabel setTextAlignment:UITextAlignmentCenter];
-    [v addSubview:nextLabel];
-    [nextLabel release];
-    return v;
-}
-
-- (UIView *)getHeadrTrigger:(CGRect)rect portrate:(BOOL)portrate
+- (UIView *)getTriggerHeader:(CGRect)rect portrate:(BOOL)portrate
 {
     rect.origin.y -= 40;
     rect.size.height = 40;
     UIView *v = [[[UIView alloc] initWithFrame:rect] autorelease];
-    UILabel *label = [self _makeLabel:CGRectMake(40, 10, 160, 20) text:@"プルダウンすると更新" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *label = [self _makeLabel:CGRectMake(40, 10, 190, 20) text:@"プルダウンすると更新" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     label.tag = 1;
     [v addSubview:label];
     [label release];
-    UIImageView *arrow = [self _makeIcon:CGRectMake(200, 12, 16, 16)];
+    UIImageView *arrow = [self _makeIcon:CGRectMake(230, 12, 16, 16)];
     [arrow setImage:[UIImage imageNamed:@"57-download.png"]];
     arrow.tag = 2;
     [v addSubview:arrow];
@@ -222,21 +211,29 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return v;
 }
 
-- (UIView *)getFooterTrigger:(CGRect)rect portrate:(BOOL)portrate
+- (UIView *)getTriggerFooter:(CGRect)rect portrate:(BOOL)portrate
 {
     rect.origin.y = 0;
 	rect.size.height = 40;
     UIView *v = [[[UIView alloc] initWithFrame:rect] autorelease];
-    UILabel *label = [self _makeLabel:CGRectMake(40, 10, 160, 20) text:@"プルアップすると次ページを表示" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *label = [self _makeLabel:CGRectMake(40, 10, 190, 20) text:@"プルアップすると次ページを表示" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     label.tag = 1;
     [v addSubview:label];
     [label release];
-    UIImageView *arrow = [self _makeIcon:CGRectMake(200, 12, 16, 16)];
+    UIImageView *arrow = [self _makeIcon:CGRectMake(230, 12, 16, 16)];
     [arrow setImage:[UIImage imageNamed:@"57-upload.png"]];
     arrow.tag = 2;
     [v addSubview:arrow];
     [arrow release];
     
+    return v;
+}
+
+- (UIView *)getNilFooter:(CGRect)rect portrate:(BOOL)portrate
+{
+    rect.origin.y = 0;
+    rect.size.height = 40;
+    UIView *v = [[[UIView alloc] initWithFrame:rect] autorelease];
     return v;
 }
 

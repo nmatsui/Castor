@@ -22,7 +22,10 @@
     DataFactory *_factory;
     UIActivityIndicatorView *_indicator;
     CellBuilder *_cellBuilder;
+    UIView *_triggerHeader;
+    UIView *_nilFooter;
     BOOL _portrate;
+    BOOL _headerON;
 }
 
 @property(nonatomic, retain) IBOutlet UITableView *roomTable;
@@ -30,6 +33,8 @@
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
+@property(nonatomic, retain) UIView *triggerHeader;
+@property(nonatomic, retain) UIView *nilFooter;
 
 - (IBAction)callSetting:(id)sender;
 - (IBAction)moveToHome:(id)sender;
