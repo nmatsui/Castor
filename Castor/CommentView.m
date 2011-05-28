@@ -57,7 +57,7 @@ static const int MAX_LEVLE = 6;
         _headerON = NO;
         _footerON = NO;
         UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
-        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+        swipe.direction = UISwipeGestureRecognizerDirectionLeft + UISwipeGestureRecognizerDirectionRight;
         swipe.delegate = self;
         [self.entryTable addGestureRecognizer:swipe];
         [swipe release];

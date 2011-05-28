@@ -52,7 +52,7 @@
         _footerON = NO;
         self.container = container;
         UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
-        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+        swipe.direction = UISwipeGestureRecognizerDirectionLeft + UISwipeGestureRecognizerDirectionRight;
         swipe.delegate = self;
         [self.homeTable addGestureRecognizer:swipe];
         [swipe release];
