@@ -31,7 +31,7 @@
 @synthesize previousView = _previousView;
 @synthesize indicator = _indicator;
 
-static const int MAX_LETTER = 140;
+static const int MAX_LETTER = 280;
 static const int MAX_RESOLUTION = 800;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
@@ -190,7 +190,7 @@ static const int MAX_RESOLUTION = 800;
     if ([self.textView.text length] > MAX_LETTER) {
         UIAlertView *alert = [[UIAlertView alloc] init];
         [alert setDelegate:self];
-        [alert setMessage:@"140文字を越えています"];
+        [alert setMessage:[NSString stringWithFormat:@"%d文字を越えています", MAX_LETTER]];
         [alert addButtonWithTitle:@"OK"];
         [alert show];
         [alert release];
