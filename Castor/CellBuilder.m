@@ -149,7 +149,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     [nameLabel release];
     float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
     if (entry.attachmentType != nil) {
-        UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 12, 100, 10) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
+        UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 15, 100, 10) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:attachmentLabel];
         [attachmentLabel release];
     }
@@ -158,7 +158,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     [v addSubview:contentLabel];
     [contentLabel release];
     if (entry.descendantsCount != nil) {
-        UILabel *descendantsLabel = [self _makeLabel:CGRectMake(w, 2, 100, 10) 
+        UILabel *descendantsLabel = [self _makeLabel:CGRectMake(w, 5, 100, 10) 
                                                 text:[NSString stringWithFormat:@"%@ comments", entry.descendantsCount] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:descendantsLabel];
         [descendantsLabel release];
