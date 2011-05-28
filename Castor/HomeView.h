@@ -21,7 +21,7 @@
 
 @class ContainerView;
 
-@interface HomeView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
+@interface HomeView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable, Alertable> {
     UITableView *_homeTable;
     NSMutableArray *_homeList;
     DataFactory *_factory;
@@ -51,8 +51,6 @@
 @property(nonatomic, retain) UIView *triggerFooter;
 @property(nonatomic, assign) ContainerView *container;
 
-//- (IBAction)callSetting:(id)sender;
-//- (IBAction)moveToGroup:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
             container:(ContainerView *)container;

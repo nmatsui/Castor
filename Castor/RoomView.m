@@ -12,6 +12,7 @@
 - (void)_startIndicator:(id)sender;
 - (void)_reloadEntryListInBackground:(id)arg;
 - (void)_nextPage:(id)sender;
+- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
 - (void)_moveToCommentViewWithOriginEntry:(EntryData *)originEntry;
 - (void)_updateEntryWithOriginEntry:(EntryData *)originEntry;
 - (void)_deleteEntryWithOriginEntry:(EntryData *)originEntry;
@@ -49,6 +50,11 @@
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         _headerON = NO;
         _footerON = NO;
+        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
+        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+        swipe.delegate = self;
+        [self.entryTable addGestureRecognizer:swipe];
+        [swipe release];
     }
     return self;
 }
@@ -178,54 +184,14 @@
     
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     [cell.contentView addSubview:[self.cellBuilder getEntryCellView:[self.entryList objectAtIndex:indexPath.row] portrate:_portrate]];
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
     return cell;    
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"RoomView %d row clicked",indexPath.row);
-    [self.selectors removeAllObjects];
-    if (self.target != nil) self.target = nil;
-    self.target = [self.entryList objectAtIndex:indexPath.row];
-    UIActionSheet *menu = [[UIActionSheet alloc] init];
-    [menu setDelegate:self];
-    
-    // View Commentsボタンは必ず表示
-    [menu addButtonWithTitle:@"View Comments"];
-    [self.selectors addObject:@"_moveToCommentViewWithOriginEntry:"];
-    
-    // Updateボタンの表示判定
-    if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
-        [menu addButtonWithTitle:@"Update"];
-        [self.selectors addObject:@"_updateEntryWithOriginEntry:"];
-    }
-    
-    // Deleteボタンの表示判定(RoomViewのエントリは全てrootエントリ)
-    if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
-        [menu addButtonWithTitle:@"Delete"];
-        [self.selectors addObject:@"_deleteEntryWithOriginEntry:"];
-    }
-    
-    // View Attachmentボタンの表示判定
-    if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
-        [menu addButtonWithTitle:@"View Attachment"];
-        [self.selectors addObject:@"_viewAttachmentWithOriginEntry:"];
-    }
-    
-    // Cancelボタンは必ず表示
-    [menu addButtonWithTitle:@"Cancel"];
-    [self.selectors addObject:@"_cancelWithOriginEntry:"];
-    
-    
-    [menu showInView:self.view];
-    [menu release];
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"accessory button clicked[%d]", indexPath.row);
+    NSLog(@"RoomView %d row tapped", indexPath.row);
     [self performSelector:@selector(_moveToCommentViewWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
 }
 
@@ -373,6 +339,50 @@
     NSLog(@"nextPage [%d]", _page);
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadEntryListInBackground:) withObject:nil];
+}
+
+- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint p = [gestureRecognizer locationInView:self.entryTable];
+    NSIndexPath *indexPath = [self.entryTable indexPathForRowAtPoint:p];
+    if (indexPath != nil) {
+        NSLog(@"RoomView %d row swiped",indexPath.row);
+        [self.selectors removeAllObjects];
+        if (self.target != nil) self.target = nil;
+        self.target = [self.entryList objectAtIndex:indexPath.row];
+        UIActionSheet *menu = [[UIActionSheet alloc] init];
+        [menu setDelegate:self];
+        
+        // View Commentsボタンは必ず表示
+        [menu addButtonWithTitle:@"View Comments"];
+        [self.selectors addObject:@"_moveToCommentViewWithOriginEntry:"];
+        
+        // Updateボタンの表示判定
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            [menu addButtonWithTitle:@"Update"];
+            [self.selectors addObject:@"_updateEntryWithOriginEntry:"];
+        }
+        
+        // Deleteボタンの表示判定(RoomViewのエントリは全てrootエントリ)
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            [menu addButtonWithTitle:@"Delete"];
+            [self.selectors addObject:@"_deleteEntryWithOriginEntry:"];
+        }
+        
+        // View Attachmentボタンの表示判定
+        if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
+            [menu addButtonWithTitle:@"View Attachment"];
+            [self.selectors addObject:@"_viewAttachmentWithOriginEntry:"];
+        }
+        
+        // Cancelボタンは必ず表示
+        [menu addButtonWithTitle:@"Cancel"];
+        [self.selectors addObject:@"_cancelWithOriginEntry:"];
+        
+        
+        [menu showInView:self.view];
+        [menu release];
+    }
 }
 
 - (void)_moveToCommentViewWithOriginEntry:(EntryData *)originEntry

@@ -222,28 +222,6 @@
 	[alert release];
 }
 
-//// IBAction
-//- (IBAction)callSetting:(id)sender
-//{
-//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//    NSLog(@"move to SettingView");
-//    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
-//                                                             factory:self.factory] autorelease];
-//    [self.container.navigationController pushViewController:settingView animated:YES];
-//    [pool release];
-//}
-
-//- (IBAction)moveToHome:(id)sender
-//{
-////    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-////    NSLog(@"move to HomeView");
-////    HomeView *homeView = [[[HomeView alloc] initWithNibName:@"HomeView" bundle:nil 
-////                                                    factory:self.factory] autorelease];
-////    [self.navigationController pushViewController:homeView animated:NO];
-////    [pool release];
-//    [self.container tggleView];
-//}
-
 //// Private
 - (void)_startIndicator:(id)sender
 {

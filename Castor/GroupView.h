@@ -42,8 +42,6 @@
 @property(nonatomic, assign) ContainerView *container;
 @property(nonatomic, retain) IBOutlet UIToolbar *toolbar;
 
-//- (IBAction)callSetting:(id)sender;
-//- (IBAction)moveToHome:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory
             container:(ContainerView *)container;

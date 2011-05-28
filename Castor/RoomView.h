@@ -19,7 +19,7 @@
 #import "ImageView.h"
 #import "CellBuilder.h"
 
-@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
+@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable, Alertable> {
     UITableView *_entryTable;
     NSMutableArray *_entryList;
     DataFactory *_factory;

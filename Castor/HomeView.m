@@ -12,7 +12,8 @@
 - (void)_startIndicator:(id)sender;
 - (void)_reloadHomeTimelineInBackground:(id)arg;
 - (void)_nextPage:(id)sender;
-- (void)_headerClick:(id)sender;
+- (void)_headerTap:(id)sender;
+- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
 - (void)_moveToCommentViewWithOrigin:(NSArray *)origin;
 - (void)_markReadWithOrigin:(NSArray *)origin;
 - (void)_viewAttachmentWithOrigin:(NSArray *)origin;
@@ -50,6 +51,11 @@
         _headerON = NO;
         _footerON = NO;
         self.container = container;
+        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
+        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+        swipe.delegate = self;
+        [self.homeTable addGestureRecognizer:swipe];
+        [swipe release];
     }
     return self;
 }
@@ -155,7 +161,7 @@
 {
     return [self.cellBuilder getRoomHeaderView:[self.homeList objectAtIndex:section] 
                                         target:self 
-                                        action:@selector(_headerClick:) 
+                                        action:@selector(_headerTap:) 
                                        section:section
                                       portrate:_portrate];
 }
@@ -181,7 +187,7 @@
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     EntryData *entry = [[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row];
     [cell.contentView addSubview:[self.cellBuilder getEntryCellView:entry portrate:_portrate]];
-    cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     [pool release];
     return cell;
 }
@@ -189,39 +195,6 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSLog(@"HomeView %d section %d row tapped", indexPath.section, indexPath.row);
-    [self.selectors removeAllObjects];
-    if (self.targetRoom != nil) self.targetRoom = nil;
-    if (self.targetEntry != nil ) self.targetEntry = nil;
-    self.targetRoom = [self.homeList objectAtIndex:indexPath.section];
-    self.targetEntry = [[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row];
-    UIActionSheet *menu = [[UIActionSheet alloc] init];
-    [menu setDelegate:self];
-    
-    // View Commentsボタンは必ず表示
-    [menu addButtonWithTitle:@"View Comments"];
-    [self.selectors addObject:@"_moveToCommentViewWithOrigin:"];
-    
-    // Mark Readボタンは必ず表示
-    [menu addButtonWithTitle:@"Mark read"];
-    [self.selectors addObject:@"_markReadWithOrigin:"];
-    
-    // View Attachmentボタンの表示判定
-    if ([@"Text" isEqualToString:self.targetEntry.attachmentType] || [@"Image" isEqualToString:self.targetEntry.attachmentType] || [@"Link" isEqualToString:self.targetEntry.attachmentType]) {
-        [menu addButtonWithTitle:@"View Attachment"];
-        [self.selectors addObject:@"_viewAttachmentWithOrigin:"];
-    }
-    
-    // Cancelボタンは必ず表示
-    [menu addButtonWithTitle:@"Cancel"];
-    [self.selectors addObject:@"_cancelWithOrigin:"];
-    
-    [menu showInView:self.view];
-    [menu release];
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"accessory button %d section %d row clicked", indexPath.section, indexPath.row);
     RoomData *room = [self.homeList objectAtIndex:indexPath.section];
     EntryData *entry = [room.entries objectAtIndex:indexPath.row];
     [self performSelector:@selector(_moveToCommentViewWithOrigin:) withObject:[[NSArray alloc] initWithObjects:room, entry, nil]];
@@ -249,7 +222,6 @@
         [self performSelector:@selector(_startIndicator:) withObject:self];
         [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
 	}
-    
     
     double tableTail = r.origin.y + r.size.height;
     double triggerTail = self.triggerFooter.frame.origin.y + self.triggerFooter.frame.size.height;
@@ -304,29 +276,6 @@
 	[alert release];
 }
 
-//// IBAction
-//- (IBAction)callSetting:(id)sender
-//{
-//    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-//    NSLog(@"move to SettingView");
-//    SettingView *settingView = [[[SettingView alloc] initWithNibName:@"SettingView" bundle:nil 
-//                                                             factory:self.factory] autorelease];
-//    [self.container.navigationController pushViewController:settingView animated:YES];
-//    [pool release];
-//}
-
-//- (IBAction)moveToGroup:(id)sender
-//{
-////    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-////    NSLog(@"move to GroupView");
-////    GroupView *groupView = [[[GroupView alloc] initWithNibName:@"GroupView" bundle:nil 
-////                                                       factory:self.factory] autorelease];
-////    [self.navigationController pushViewController:groupView animated:NO];
-////    [pool release];
-//    
-//    [self.container tggleView];
-//}
-
 //// Private
 - (void)_startIndicator:(id)sender
 {
@@ -360,15 +309,52 @@
     [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
 }
 
-- (void)_headerClick:(id)sender
+- (void)_headerTap:(id)sender
 {
-    NSLog(@"headerClick %d", [sender tag]);
+    NSLog(@"headerTap %d", [sender tag]);
     NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
     RoomView *roomView = [[[RoomView alloc] initWithNibName:@"RoomView" bundle:nil 
                                                        room:[self.homeList objectAtIndex:[sender tag]] 
                                                     factory:self.factory] autorelease];
     [self.container.navigationController pushViewController:roomView animated:YES];
     [pool release];
+}
+
+- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint p = [gestureRecognizer locationInView:self.homeTable];
+    NSIndexPath *indexPath = [self.homeTable indexPathForRowAtPoint:p];
+    if (indexPath != nil) {
+        NSLog(@"HomeView %d section %d row swiped", indexPath.section, indexPath.row);
+        [self.selectors removeAllObjects];
+        if (self.targetRoom != nil) self.targetRoom = nil;
+        if (self.targetEntry != nil ) self.targetEntry = nil;
+        self.targetRoom = [self.homeList objectAtIndex:indexPath.section];
+        self.targetEntry = [[[self.homeList objectAtIndex:indexPath.section] entries] objectAtIndex:indexPath.row];
+        UIActionSheet *menu = [[UIActionSheet alloc] init];
+        [menu setDelegate:self];
+        
+        // View Commentsボタンは必ず表示
+        [menu addButtonWithTitle:@"View Comments"];
+        [self.selectors addObject:@"_moveToCommentViewWithOrigin:"];
+        
+        // Mark Readボタンは必ず表示
+        [menu addButtonWithTitle:@"Mark read"];
+        [self.selectors addObject:@"_markReadWithOrigin:"];
+        
+        // View Attachmentボタンの表示判定
+        if ([@"Text" isEqualToString:self.targetEntry.attachmentType] || [@"Image" isEqualToString:self.targetEntry.attachmentType] || [@"Link" isEqualToString:self.targetEntry.attachmentType]) {
+            [menu addButtonWithTitle:@"View Attachment"];
+            [self.selectors addObject:@"_viewAttachmentWithOrigin:"];
+        }
+        
+        // Cancelボタンは必ず表示
+        [menu addButtonWithTitle:@"Cancel"];
+        [self.selectors addObject:@"_cancelWithOrigin:"];
+        
+        [menu showInView:self.view];
+        [menu release];
+    }
 }
 
 - (void)_moveToCommentViewWithOrigin:(NSArray *)origin
@@ -440,4 +426,5 @@
     [self.indicator stopAnimating];
     [pool release];
 }
+
 @end

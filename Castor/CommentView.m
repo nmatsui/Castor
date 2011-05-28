@@ -11,6 +11,7 @@
 @interface CommentView (Private)
 - (void)_startIndicator:(id)sender;
 - (void)_reloadCommentListInBackground:(id)arg;
+- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
 - (void)_addEntryWithOriginEntry:(EntryData *)originEntry;
 - (void)_updateEntryWithOriginEntry:(EntryData *)originEntry;
 - (void)_deleteEntryWithOriginEntry:(EntryData *)originEntry;
@@ -55,6 +56,11 @@ static const int MAX_LEVLE = 6;
         [self.view addSubview:self.indicator];
         _headerON = NO;
         _footerON = NO;
+        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
+        swipe.direction = UISwipeGestureRecognizerDirectionLeft;
+        swipe.delegate = self;
+        [self.entryTable addGestureRecognizer:swipe];
+        [swipe release];
     }
     return self;
 }
@@ -189,51 +195,7 @@ static const int MAX_LEVLE = 6;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSLog(@"CommentView %d row clicked",indexPath.row);
-    [self.selectors removeAllObjects];
-    if (self.target != nil) self.target = nil;
-    self.target = [self.entryList objectAtIndex:indexPath.row];
-    UIActionSheet *menu = [[UIActionSheet alloc] init];
-    [menu setDelegate:self];
-    
-    // Add Commentボタンの表示判定
-    if (indexPath.row != 0 && [self.target.level intValue] < MAX_LEVLE) {
-        [menu addButtonWithTitle:@"Add Comment"];
-        [self.selectors addObject:@"_addEntryWithOriginEntry:"];
-    }
-    
-    // Updateボタンの表示判定
-    if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
-        [menu addButtonWithTitle:@"Update"];
-        [self.selectors addObject:@"_updateEntryWithOriginEntry:"];
-    }
-    
-    // Delteボタンの表示判定
-    if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
-        if ([self.target.entryId intValue] == [self.target.rootId intValue] || self.target.children == nil || [self.target.children count] == 0) {
-            [menu addButtonWithTitle:@"Delete"];
-            [self.selectors addObject:@"_deleteEntryWithOriginEntry:"];
-        }
-    }
-    
-    // View Attachmentボタンの表示判定
-    if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
-        [menu addButtonWithTitle:@"View Attachment"];
-        [self.selectors addObject:@"_viewAttachmentWithOriginEntry:"];
-    }
-    
-    // Cancelボタンは必ず表示
-    [menu addButtonWithTitle:@"Cancel"];
-    [self.selectors addObject:@"_cancelWithOriginEntry:"];
-    
-    
-    [menu showInView:self.view];
-    [menu release];
-}
-
-- (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
-{
-    NSLog(@"accessory button clicked[%d]", indexPath.row);
+    NSLog(@"CommentView %d row tapped", indexPath.row);
     [self performSelector:@selector(_addEntryWithOriginEntry:) withObject:[self.entryList objectAtIndex:indexPath.row]];
 }
 
@@ -351,6 +313,54 @@ static const int MAX_LEVLE = 6;
     [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     [self.indicator stopAnimating];
     [pool release];
+}
+
+- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer
+{
+    CGPoint p = [gestureRecognizer locationInView:self.entryTable];
+    NSIndexPath *indexPath = [self.entryTable indexPathForRowAtPoint:p];
+    if (indexPath != nil) {
+        NSLog(@"CommentView %d row swiped",indexPath.row);
+        [self.selectors removeAllObjects];
+        if (self.target != nil) self.target = nil;
+        self.target = [self.entryList objectAtIndex:indexPath.row];
+        UIActionSheet *menu = [[UIActionSheet alloc] init];
+        [menu setDelegate:self];
+        
+        // Add Commentボタンの表示判定
+        if (indexPath.row != 0 && [self.target.level intValue] < MAX_LEVLE) {
+            [menu addButtonWithTitle:@"Add Comment"];
+            [self.selectors addObject:@"_addEntryWithOriginEntry:"];
+        }
+        
+        // Updateボタンの表示判定
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            [menu addButtonWithTitle:@"Update"];
+            [self.selectors addObject:@"_updateEntryWithOriginEntry:"];
+        }
+        
+        // Delteボタンの表示判定
+        if (self.room.admin || [self.room.myId intValue] == [self.target.participationId intValue]) {
+            if ([self.target.entryId intValue] == [self.target.rootId intValue] || self.target.children == nil || [self.target.children count] == 0) {
+                [menu addButtonWithTitle:@"Delete"];
+                [self.selectors addObject:@"_deleteEntryWithOriginEntry:"];
+            }
+        }
+        
+        // View Attachmentボタンの表示判定
+        if ([@"Text" isEqualToString:self.target.attachmentType] || [@"Image" isEqualToString:self.target.attachmentType] || [@"Link" isEqualToString:self.target.attachmentType]) {
+            [menu addButtonWithTitle:@"View Attachment"];
+            [self.selectors addObject:@"_viewAttachmentWithOriginEntry:"];
+        }
+        
+        // Cancelボタンは必ず表示
+        [menu addButtonWithTitle:@"Cancel"];
+        [self.selectors addObject:@"_cancelWithOriginEntry:"];
+        
+        
+        [menu showInView:self.view];
+        [menu release];
+    }
 }
 
 - (void)_addEntryWithOriginEntry:(EntryData *)originEntry

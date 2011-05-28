@@ -16,7 +16,7 @@
 #import "SettingView.h"
 #import "CellBuilder.h"
 
-@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, Reloadable, Alertable> {
+@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable, Alertable> {
     UITableView *_entryTable;
     NSMutableArray *_entryList;
     DataFactory *_factory;
