@@ -95,6 +95,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+    [self.currentView shouldAutorotateToInterfaceOrientation:interfaceOrientation];
     return YES;
 }
 
