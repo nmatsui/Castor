@@ -1,6 +1,13 @@
 Castorは youRoom( http://youroom.in/ )のiPhoneネイティブクライアントです。
 iOS4.2以降で動作します。
 
+操作方法）
+1. 初回起動時には、登録したEmailアドレスとパスワードを入力します。
+2. TABLEのCELLをTAPすると次画面、左または右へSWIPEすると(存在する場合)サブメニューが表示されます。
+3. TABLEをプルダウンするとリロードします。
+4. HomeTimeline/RoomTimeleneでは、TABLEをプルアップすると次画面を表示します。
+5. キャッシュは自動で削除されません。Castor Settings画面から適時削除してください。
+
 注意）
 ビルドする前にyouRoomに開発者登録を行い、youRoomから consumer key と consumer secret key を入手してください。
 YouRoomGateway+ConsumerKey.m に、入手した consumer key と consumer secret key を設定してからビルドしてください。
