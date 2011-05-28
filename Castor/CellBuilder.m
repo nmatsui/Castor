@@ -149,7 +149,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     [nameLabel release];
     float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
     if (entry.attachmentType != nil) {
-        UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 10, 100, 16) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+        UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 12, 100, 10) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:attachmentLabel];
         [attachmentLabel release];
     }
@@ -157,6 +157,12 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
     [contentLabel release];
+    if (entry.descendantsCount != nil) {
+        UILabel *descendantsLabel = [self _makeLabel:CGRectMake(w, 2, 100, 10) 
+                                                text:[NSString stringWithFormat:@"%@ comments", entry.descendantsCount] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
+        [v addSubview:descendantsLabel];
+        [descendantsLabel release];
+    }
     UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [v addSubview:icon];
     if (entry.participationIcon != nil) {
