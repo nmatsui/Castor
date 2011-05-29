@@ -12,6 +12,8 @@
 #import "OAuthCore.h"
 #import "OAuth+Additions.h"
 #import "JSON.h"
+#import "RegexKitLite.h"
+#import "RKLMatchEnumerator.h"
 
 
 @interface YouRoomGateway : NSObject {

@@ -38,6 +38,10 @@
 		86B04C3A136C41FF00F8BFA1 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C38136C41FF00F8BFA1 /* CommentView.xib */; };
 		86CD2356136D3C53005AB366 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CD2354136D3C53005AB366 /* EditView.m */; };
 		86CD2357136D3C53005AB366 /* EditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2355136D3C53005AB366 /* EditView.xib */; };
+		86D96E431392263B00449613 /* BackgroundRect.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D96E421392263B00449613 /* BackgroundRect.m */; };
+		86D96E6013924FDF00449613 /* libicucore.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D96E5F13924FDE00449613 /* libicucore.A.dylib */; };
+		86D96E7013926CF100449613 /* RKLMatchEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D96E6D13926CF100449613 /* RKLMatchEnumerator.m */; };
+		86D96E7113926CF100449613 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D96E6F13926CF100449613 /* RegexKitLite.m */; };
 		86DA6C67137131E100DD923D /* YouRoomGateway+ConsumerKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6C66137131E100DD923D /* YouRoomGateway+ConsumerKey.m */; };
 		86DA6C6F1371592600DD923D /* 01-refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DA6C691371592600DD923D /* 01-refresh.png */; };
 		86DA6C701371592600DD923D /* 09-chat-2.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DA6C6A1371592600DD923D /* 09-chat-2.png */; };
@@ -120,6 +124,13 @@
 		86CD2353136D3C53005AB366 /* EditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditView.h; sourceTree = "<group>"; };
 		86CD2354136D3C53005AB366 /* EditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditView.m; sourceTree = "<group>"; };
 		86CD2355136D3C53005AB366 /* EditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditView.xib; sourceTree = "<group>"; };
+		86D96E411392263B00449613 /* BackgroundRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackgroundRect.h; sourceTree = "<group>"; };
+		86D96E421392263B00449613 /* BackgroundRect.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BackgroundRect.m; sourceTree = "<group>"; };
+		86D96E5F13924FDE00449613 /* libicucore.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.A.dylib; path = usr/lib/libicucore.A.dylib; sourceTree = SDKROOT; };
+		86D96E6C13926CF100449613 /* RKLMatchEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKLMatchEnumerator.h; sourceTree = "<group>"; };
+		86D96E6D13926CF100449613 /* RKLMatchEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKLMatchEnumerator.m; sourceTree = "<group>"; };
+		86D96E6E13926CF100449613 /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		86D96E6F13926CF100449613 /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		86DA6C66137131E100DD923D /* YouRoomGateway+ConsumerKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "YouRoomGateway+ConsumerKey.m"; sourceTree = "<group>"; };
 		86DA6C691371592600DD923D /* 01-refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "01-refresh.png"; sourceTree = "<group>"; };
 		86DA6C6A1371592600DD923D /* 09-chat-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "09-chat-2.png"; sourceTree = "<group>"; };
@@ -186,6 +197,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86D96E6013924FDF00449613 /* libicucore.A.dylib in Frameworks */,
 				865DD895137392C10008EB9F /* libsqlite3.dylib in Frameworks */,
 				86F85B89136ACEB00031F3B2 /* UIKit.framework in Frameworks */,
 				86F85B8B136ACEB00031F3B2 /* Foundation.framework in Frameworks */,
@@ -203,6 +215,17 @@
 				865DD8901373916F0008EB9F /* create_table.sql */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		86D96E6B13926CF100449613 /* regexKitLite */ = {
+			isa = PBXGroup;
+			children = (
+				86D96E6C13926CF100449613 /* RKLMatchEnumerator.h */,
+				86D96E6D13926CF100449613 /* RKLMatchEnumerator.m */,
+				86D96E6E13926CF100449613 /* RegexKitLite.h */,
+				86D96E6F13926CF100449613 /* RegexKitLite.m */,
+			);
+			path = regexKitLite;
 			sourceTree = "<group>";
 		};
 		86DA6C681371592500DD923D /* image */ = {
@@ -229,6 +252,7 @@
 		86DA6CA813715A8100DD923D /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				86D96E6B13926CF100449613 /* regexKitLite */,
 				86DA6CA913715A8100DD923D /* json */,
 				86DA6CAA13715A8100DD923D /* oAuth */,
 			);
@@ -279,6 +303,7 @@
 		86F85B79136ACEB00031F3B2 = {
 			isa = PBXGroup;
 			children = (
+				86D96E5F13924FDE00449613 /* libicucore.A.dylib */,
 				8614C63F1375335000AFBC39 /* README */,
 				865DD894137392C10008EB9F /* libsqlite3.dylib */,
 				86DA6CA813715A8100DD923D /* lib */,
@@ -363,6 +388,8 @@
 				86EE1B06136BBCB200B94192 /* RoomData.m */,
 				86EE1B12136BF4DF00B94192 /* EntryData.h */,
 				86EE1B13136BF4E000B94192 /* EntryData.m */,
+				86D96E411392263B00449613 /* BackgroundRect.h */,
+				86D96E421392263B00449613 /* BackgroundRect.m */,
 			);
 			path = Castor;
 			sourceTree = "<group>";
@@ -497,6 +524,9 @@
 				860E534E137E387E00A97B5C /* CellBuilder.m in Sources */,
 				860A69F11387315D00D14C85 /* HomeView.m in Sources */,
 				86916C091390E8BA007CB1F9 /* ContainerView.m in Sources */,
+				86D96E431392263B00449613 /* BackgroundRect.m in Sources */,
+				86D96E7013926CF100449613 /* RKLMatchEnumerator.m in Sources */,
+				86D96E7113926CF100449613 /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -536,7 +566,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Nobuyuki Matsui";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nobuyuki Matsui";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
@@ -556,7 +586,7 @@
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Nobuyuki Matsui";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nobuyuki Matsui";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;

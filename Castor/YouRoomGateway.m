@@ -14,6 +14,7 @@
 - (NSData *)_getXAuthParamStringWithUsername:(NSString *)username password:(NSString *)password;
 - (void)_retrieveVerifyCredential;
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level;
+- (NSMutableArray *)_detectUrlList:(NSString *)content;
 @end
 
 @implementation YouRoomGateway
@@ -411,7 +412,28 @@
         }
         entryData.children      = children;
     }
+    entryData.urlList           = [self _detectUrlList:entryData.content];
     return entryData;
 }
 
+- (NSMutableArray *)_detectUrlList:(NSString *)content
+{
+    NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
+    
+    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    
+    NSString *reg = @"([hH][tT][tT][pP][sS]?:\\/\\/[^ ,'\">\\]\\)]*[^\\. ,'\">\\]\\)])";
+    NSEnumerator *matchEnumerator = NULL;
+    NSString   *matchedString = NULL;
+    
+    matchEnumerator = [content matchEnumeratorWithRegex:reg];
+    
+    while((matchedString = [matchEnumerator nextObject]) != NULL) {
+        [list addObject:matchedString];
+    }
+    
+    [pool release];
+    
+    return list;
+}
 @end

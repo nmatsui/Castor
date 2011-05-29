@@ -248,7 +248,13 @@
 -(void)actionSheet:(UIActionSheet*)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSLog(@"actionSheet button clicked[%d]", buttonIndex);
-    [self performSelector:NSSelectorFromString([self.selectors objectAtIndex:buttonIndex]) withObject:[[NSArray alloc] initWithObjects:self.targetRoom, self.targetEntry, nil]];
+    if ([[self.selectors objectAtIndex:buttonIndex] hasPrefix:@"DetectedURL_"]) {
+        [[UIApplication sharedApplication] openURL:
+         [NSURL URLWithString:[[self.selectors objectAtIndex:buttonIndex] stringByReplacingOccurrencesOfString:@"DetectedURL_" withString:@""]]];
+    }
+    else {
+        [self performSelector:NSSelectorFromString([self.selectors objectAtIndex:buttonIndex]) withObject:[[NSArray alloc] initWithObjects:self.targetRoom, self.targetEntry, nil]];
+    }
     self.targetRoom = nil;
     self.targetEntry = nil;
     [self.selectors removeAllObjects];
@@ -346,6 +352,12 @@
         if ([@"Text" isEqualToString:self.targetEntry.attachmentType] || [@"Image" isEqualToString:self.targetEntry.attachmentType] || [@"Link" isEqualToString:self.targetEntry.attachmentType]) {
             [menu addButtonWithTitle:@"View Attachment"];
             [self.selectors addObject:@"_viewAttachmentWithOrigin:"];
+        }
+        
+        // URL遷移の表示判定
+        for (NSString *url in self.targetEntry.urlList) {
+            [menu addButtonWithTitle:url];
+            [self.selectors addObject:[NSString stringWithFormat:@"DetectedURL_%@", url]];
         }
         
         // Cancelボタンは必ず表示

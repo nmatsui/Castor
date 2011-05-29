@@ -30,6 +30,7 @@
 @synthesize createdAt             = _createdAt;
 @synthesize updatedAt             = _updatedAt;
 @synthesize level                 = _level;
+@synthesize urlList               = _urlList;
 
 - (void)dealloc
 {
@@ -52,6 +53,7 @@
     self.createdAt = nil;
     self.updatedAt = nil;
     self.level = nil;
+    self.urlList = nil;
     [super dealloc];
 }
 
@@ -76,6 +78,7 @@
     [aCoder encodeObject:self.createdAt             forKey:@"createdAt"];
     [aCoder encodeObject:self.updatedAt             forKey:@"updatedAt"];
     [aCoder encodeObject:self.level                 forKey:@"level"];
+    [aCoder encodeObject:self.urlList               forKey:@"urlList"];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder
@@ -100,6 +103,7 @@
     self.createdAt             = [aDecoder decodeObjectForKey:@"creaedAt"];
     self.updatedAt             = [aDecoder decodeObjectForKey:@"updatedAt"];
     self.level                 = [aDecoder decodeObjectForKey:@"level"];
+    self.urlList               = [aDecoder decodeObjectForKey:@"urlList"];
     return self;
 }
 

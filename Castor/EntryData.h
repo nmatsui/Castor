@@ -29,6 +29,7 @@
     NSString       *_createdAt;
     NSString       *_updatedAt;
     NSNumber       *_level;
+    NSMutableArray *_urlList;
 }
 
 @property(nonatomic, retain) NSNumber       *entryId;
@@ -50,5 +51,6 @@
 @property(nonatomic, retain) NSString       *createdAt;
 @property(nonatomic, retain) NSString       *updatedAt;
 @property(nonatomic, retain) NSNumber       *level;
+@property(nonatomic, retain) NSMutableArray *urlList;
 
 @end
