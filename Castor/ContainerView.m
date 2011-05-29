@@ -95,6 +95,12 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
+    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
+        _portrate = NO;
+    }
+    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
+        _portrate = YES;
+    }
     [self.currentView shouldAutorotateToInterfaceOrientation:interfaceOrientation];
     return YES;
 }
@@ -139,6 +145,15 @@
         transition = UIViewAnimationOptionTransitionFlipFromRight;
         title = @"Home";
         buttonImage = [UIImage imageNamed:@"44-shoebox.png"];
+    }
+    
+    float w = [[UIScreen mainScreen] applicationFrame].size.width;
+    float h = [[UIScreen mainScreen] applicationFrame].size.height;
+    if (_portrate) {
+        [comming.view setFrame:CGRectMake(0, 0, w, h)];
+    }
+    else {
+        [comming.view setFrame:CGRectMake(0, 0, h, w)];
     }
     
     [UIView transitionWithView:self.view duration:0.75 options:transition animations:^{

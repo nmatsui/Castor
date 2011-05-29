@@ -22,6 +22,7 @@
     HomeView *_homeView;
     GroupView *_groupView;
     UIViewController <Reloadable> *_currentView;
+    BOOL _portrate;
 }
 
 @property(nonatomic, retain) IBOutlet UIToolbar *toolbar;
