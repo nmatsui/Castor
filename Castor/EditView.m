@@ -20,7 +20,7 @@
 @synthesize textView = _textView;
 @synthesize letterCount = _letterCount;
 @synthesize cameraButton = _cameraButton;
-@synthesize postBarButton = _postBarButton;
+@synthesize postButton = _postButton;
 @synthesize clipIcon = _clipIcon;
 @synthesize factory = _factory;
 @synthesize roomId = _roomId;
@@ -115,6 +115,7 @@ static const int MAX_RESOLUTION = 800;
         self.textView.text = self.targetEntry.content;
         self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER - [self.targetEntry.content length]];
     }
+    [self.textView becomeFirstResponder];
 }
 
 - (void)viewDidUnload
@@ -198,15 +199,10 @@ static const int MAX_RESOLUTION = 800;
     }
     else {
         [self _disableOperation];
+        [self.textView resignFirstResponder];
         [self performSelector:@selector(_startIndicator:) withObject:self];
         [self performSelectorInBackground:@selector(_postEntryInBackground:) withObject:nil];
     }
-}
-
-- (IBAction)doneEntryEdit:(id)sender
-{
-    NSLog(@"done Entry editing");
-    [self.textView resignFirstResponder];
 }
 
 - (IBAction)openCameraView:(id)sender
@@ -384,14 +380,14 @@ static const int MAX_RESOLUTION = 800;
 {
     [self.textView setEditable:NO];
     [self.cameraButton setEnabled:NO];
-    [self.postBarButton setEnabled:NO];
+    [self.postButton setEnabled:NO];
 }
 
 - (void)_enableOperation
 {
     [self.textView setEditable:YES];
     [self.cameraButton setEnabled:YES];
-    [self.postBarButton setEnabled:YES];
+    [self.postButton setEnabled:YES];
 }
 
 @end

@@ -19,7 +19,7 @@
     UILabel *_letterCount;
     UIButton *_cameraButton;
     UIImageView *_clipIcon;
-    UIBarButtonItem *_postBarButton;
+    UIButton *_postButton;
     DataFactory *_factory;
     NSNumber *_roomId;
     NSNumber *_parentId;
@@ -35,7 +35,7 @@
 @property(nonatomic, retain) IBOutlet UILabel *letterCount;
 @property(nonatomic, retain) IBOutlet UIButton *cameraButton;
 @property(nonatomic, retain) IBOutlet UIImageView *clipIcon;
-@property(nonatomic, retain) IBOutlet UIBarButtonItem *postBarButton;
+@property(nonatomic, retain) IBOutlet UIButton *postButton;
 @property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) NSNumber *roomId;
 @property(nonatomic, retain) NSNumber *parentId;
@@ -46,7 +46,6 @@
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (IBAction)postEntry:(id)sender;
-- (IBAction)doneEntryEdit:(id)sender;
 - (IBAction)openCameraView:(id)sender;
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                roomId:(NSNumber *)roomId 
