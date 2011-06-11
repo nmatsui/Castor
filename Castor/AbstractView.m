@@ -8,10 +8,14 @@
 
 #import "AbstractView.h"
 
+@interface AbstractView (Private)
+- (void)_startIndicator:(id)sender;
+@end
 
 @implementation AbstractView
 
 @synthesize factory = _factory;
+@synthesize indicator = _indicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
               factory:(DataFactory *)factory
@@ -19,6 +23,8 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.factory = factory;
+        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -87,6 +93,15 @@
     [alert addButtonWithTitle:@"OK"];
 	[alert show];
 	[alert release];
+}
+
+//// Protected
+- (void)_startIndicator:(id)sender
+{
+    CGRect viewSize = self.view.bounds;
+    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
+    [self.indicator startAnimating];
+    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 @end

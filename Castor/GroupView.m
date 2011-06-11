@@ -9,7 +9,6 @@
 #import "GroupView.h"
 
 @interface GroupView (Private)
-- (void)_startIndicator:(id)sender;
 - (void)_reloadGroupListInBackground:(id)arg;
 @end
 
@@ -17,7 +16,6 @@
 
 @synthesize roomTable = _roomTable;
 @synthesize roomList = _roomList;
-@synthesize indicator = _indicator;
 @synthesize cellBuilder = _cellBuilder;
 @synthesize triggerHeader = _triggerHeader;
 @synthesize nilFooter = _nilFooter;
@@ -32,8 +30,6 @@
     if (self) {
         self.roomList = [self.factory getRoomListFromCache];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
-        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
         _headerON = NO;
         self.container = container;
     }
@@ -44,7 +40,6 @@
 {
     self.roomList = nil;
     self.roomTable = nil;
-    self.indicator = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
     self.nilFooter = nil;
@@ -90,7 +85,6 @@
     [super viewDidUnload];
     self.roomList = nil;
     self.roomTable = nil;
-    self.indicator = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
     self.nilFooter = nil;
@@ -191,14 +185,6 @@
 }
 
 //// Private
-- (void)_startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
 - (void)_reloadGroupListInBackground:(id)arg
 {
     NSLog(@"reload groupList In Background");

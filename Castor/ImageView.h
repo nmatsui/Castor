@@ -16,13 +16,11 @@
     UIScrollView *_scrollView;
     UIImageView *_imageView;
     EntryData *_entry;
-    UIActivityIndicatorView *_indicator;
 }
 
 @property(nonatomic, retain) IBOutlet UIImageView *imageView;
 @property(nonatomic, retain) IBOutlet UIScrollView *scrollView;
 @property(nonatomic, retain) EntryData *entry;
-@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry 

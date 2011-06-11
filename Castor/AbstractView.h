@@ -14,9 +14,11 @@
 @interface AbstractView : UIViewController {
     DataFactory *_factory;
     BOOL _portrate;
+    UIActivityIndicatorView *_indicator;
 }
 
 @property(nonatomic, retain) DataFactory *factory;
+@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory;

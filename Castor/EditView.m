@@ -9,7 +9,6 @@
 #import "EditView.h"
 
 @interface EditView (Private)
-- (void)_startIndicator:(id)sender;
 - (UIImage *)_scaleImage:(UIImage *)image;
 - (void)_disableOperation;
 - (void)_enableOperation;
@@ -28,7 +27,6 @@
 @synthesize cameraController = _cameraController;
 @synthesize attachmentImage = _attachmentImage;
 @synthesize previousView = _previousView;
-@synthesize indicator = _indicator;
 
 static const int MAX_LETTER = 280;
 static const int MAX_RESOLUTION = 800;
@@ -46,8 +44,6 @@ static const int MAX_RESOLUTION = 800;
         self.parentId = parentId;
         self.targetEntry = targetEntry;
         self.previousView = previousView;
-        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -64,7 +60,6 @@ static const int MAX_RESOLUTION = 800;
     self.cameraController = nil;
     self.attachmentImage = nil;
     self.previousView = nil;
-    self.indicator = nil;
     [super dealloc];
 }
 
@@ -117,7 +112,6 @@ static const int MAX_RESOLUTION = 800;
     self.cameraController = nil;
     self.attachmentImage = nil;
     self.previousView = nil;
-    self.indicator = nil;
 }
 
 //// UITextViewDelegate
@@ -190,14 +184,6 @@ static const int MAX_RESOLUTION = 800;
 }
 
 //// Private
-- (void)_startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
 - (void)_postEntryInBackground:(id)arg
 {
     NSLog(@"post entry In Background");

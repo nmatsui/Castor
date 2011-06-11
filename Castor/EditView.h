@@ -25,7 +25,6 @@
     UIImagePickerController *_cameraController;
     UIImage *_attachmentImage;
     UIViewController <Reloadable> *_previousView;
-    UIActivityIndicatorView *_indicator;
 }
 
 @property(nonatomic, retain) IBOutlet UITextView *textView;
@@ -39,7 +38,6 @@
 @property(nonatomic, retain) UIImagePickerController *cameraController;
 @property(nonatomic, retain) UIImage *attachmentImage;
 @property(nonatomic, retain) UIViewController <Reloadable> *previousView;
-@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 
 - (IBAction)postEntry:(id)sender;
 - (IBAction)openCameraView:(id)sender;

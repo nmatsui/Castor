@@ -27,7 +27,6 @@
     RoomData *_targetRoom;
     EntryData *_targetEntry;
     NSMutableArray *_selectors;
-    UIActivityIndicatorView *_indicator;
     UIView *_triggerHeader;
     UIView *_triggerFooter;
     ContainerView *_container;
@@ -42,7 +41,6 @@
 @property(nonatomic, retain) RoomData *targetRoom;
 @property(nonatomic, retain) EntryData *targetEntry;
 @property(nonatomic, retain) NSMutableArray *selectors;
-@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) UIView *triggerHeader;
 @property(nonatomic, retain) UIView *triggerFooter;
 @property(nonatomic, assign) ContainerView *container;

@@ -9,7 +9,6 @@
 #import "HomeView.h"
 
 @interface HomeView (Private)
-- (void)_startIndicator:(id)sender;
 - (void)_reloadHomeTimelineInBackground:(id)arg;
 - (void)_nextPage:(id)sender;
 - (void)_headerTap:(id)sender;
@@ -29,7 +28,6 @@
 @synthesize targetRoom = _targetRoom;
 @synthesize targetEntry = _targetEntry;
 @synthesize selectors = _selectors;
-@synthesize indicator = _indicator;
 @synthesize triggerHeader = _triggerHeader;
 @synthesize triggerFooter = _triggerFooter;
 @synthesize container = _container;
@@ -44,8 +42,6 @@
         self.homeList = [self.factory getHomeTimelineFromCache];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.selectors = [[NSMutableArray alloc] init];
-        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
         _headerON = NO;
         _footerON = NO;
         self.container = container;
@@ -66,7 +62,6 @@
     self.targetRoom = nil;
     self.targetEntry = nil;
     self.selectors = nil;
-    self.indicator = nil;
     self.triggerHeader = nil;
     self.triggerFooter = nil;
     [super dealloc];
@@ -118,7 +113,6 @@
     self.targetRoom = nil;
     self.targetEntry = nil;
     self.selectors = nil;
-    self.indicator = nil;
     self.triggerHeader = nil;
     self.triggerFooter = nil;
 }
@@ -248,15 +242,6 @@
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
     [pool release];
-}
-
-//// Private
-- (void)_startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
 }
 
 - (void)_reloadHomeTimelineInBackground:(id)arg

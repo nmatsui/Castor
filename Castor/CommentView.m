@@ -9,7 +9,6 @@
 #import "CommentView.h"
 
 @interface CommentView (Private)
-- (void)_startIndicator:(id)sender;
 - (void)_reloadCommentListInBackground:(id)arg;
 - (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
 - (void)_addEntryWithOriginEntry:(EntryData *)originEntry;
@@ -29,7 +28,6 @@
 @synthesize willDelete = _willDelete;
 @synthesize selectors = _selectors;
 @synthesize previousView = _previousView;
-@synthesize indicator = _indicator;
 @synthesize cellBuilder = _cellBuilder;
 @synthesize triggerHeader = _triggerHeader;
 @synthesize nilFooter = _nilFooter;
@@ -50,8 +48,6 @@ static const int MAX_LEVLE = 6;
         self.entryList = [self.factory getEntryCommentListFromCache:self.originEntry];
         self.selectors = [[NSMutableArray alloc] init];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
-        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
         _headerON = NO;
         _footerON = NO;
         UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
@@ -72,7 +68,6 @@ static const int MAX_LEVLE = 6;
     self.target = nil;
     self.willDelete = nil;
     self.selectors = nil;
-    self.indicator = nil;
     self.previousView = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
@@ -124,7 +119,6 @@ static const int MAX_LEVLE = 6;
     self.target = nil;
     self.willDelete = nil;
     self.selectors = nil;
-    self.indicator = nil;
     self.previousView = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
@@ -267,14 +261,6 @@ static const int MAX_LEVLE = 6;
 }
 
 //// Private
-- (void)_startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
 - (void)_reloadCommentListInBackground:(id)arg
 {
     NSLog(@"reload CommentList [%@] In Background", self.originEntry.entryId);

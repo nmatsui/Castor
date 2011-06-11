@@ -23,7 +23,6 @@
     EntryData *_willDelete;
     NSMutableArray *_selectors;
     UIViewController <Reloadable> *_previousView;
-    UIActivityIndicatorView *_indicator;
     CellBuilder *_cellBuilder;
     UIView *_triggerHeader;
     UIView *_nilFooter;
@@ -39,7 +38,6 @@
 @property(nonatomic, retain) EntryData *willDelete;
 @property(nonatomic, retain) NSMutableArray *selectors;
 @property(nonatomic, retain) UIViewController <Reloadable> *previousView;
-@property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
 @property(nonatomic, retain) UIView *triggerHeader;
 @property(nonatomic, retain) UIView *nilFooter;

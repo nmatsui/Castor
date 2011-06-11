@@ -9,7 +9,6 @@
 #import "RoomView.h"
 
 @interface RoomView (Private)
-- (void)_startIndicator:(id)sender;
 - (void)_reloadEntryListInBackground:(id)arg;
 - (void)_nextPage:(id)sender;
 - (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
@@ -28,7 +27,6 @@
 @synthesize target = _target;
 @synthesize willDelete = _willDelete;
 @synthesize selectors = _selectors;
-@synthesize indicator = _indicator;
 @synthesize cellBuilder = _cellBuilder;
 @synthesize triggerHeader = _triggerHeader;
 @synthesize triggerFooter = _triggerFooter;
@@ -43,8 +41,6 @@
         self.room = room;
         self.entryList = [self.factory getRoomEntryListFromCache:self.room.roomId];
         self.selectors = [[NSMutableArray alloc] init];
-        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         _headerON = NO;
         _footerON = NO;
@@ -65,7 +61,6 @@
     self.target = nil;
     self.willDelete = nil;
     self.selectors = nil;
-    self.indicator = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
     self.triggerFooter = nil;
@@ -115,7 +110,6 @@
     self.target = nil;
     self.willDelete = nil;
     self.selectors = nil;
-    self.indicator = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
     self.triggerFooter = nil;
@@ -285,14 +279,6 @@
 }
 
 //// Private
-- (void)_startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
 - (void)_reloadEntryListInBackground:(id)arg
 {
     NSLog(@"reload entryList[%@] In Background", self.room.roomId);

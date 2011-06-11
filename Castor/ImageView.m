@@ -9,7 +9,6 @@
 #import "ImageView.h"
 
 @interface ImageView (Private)
-- (void)_startIndicator:(id)sender;
 - (void)_loadAttachmentImageInBackground:(id)arg;
 @end
 
@@ -17,7 +16,6 @@
 
 @synthesize imageView = _imageView;
 @synthesize scrollView = _scrollView;
-@synthesize indicator = _indicator;
 @synthesize entry = _entry;
 
 static const float MAX_SCALE = 5.0;
@@ -30,8 +28,6 @@ static const float MIN_SCALE = 1.0;
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         self.entry = entry;
-        self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
     }
     return self;
 }
@@ -40,7 +36,6 @@ static const float MIN_SCALE = 1.0;
 {
     self.imageView = nil;
     self.scrollView = nil;
-    self.indicator = nil;
     self.entry = nil;
     [super dealloc];
 }
@@ -72,7 +67,6 @@ static const float MIN_SCALE = 1.0;
     [super viewDidUnload];
     self.imageView = nil;
     self.scrollView = nil;
-    self.indicator = nil;
     self.entry = nil;
 }
 
@@ -82,14 +76,6 @@ static const float MIN_SCALE = 1.0;
 } 
 
 //// Private
-- (void)_startIndicator:(id)sender
-{
-    CGRect viewSize = self.view.bounds;
-    [self.indicator setFrame:CGRectMake(viewSize.size.width/2-25, viewSize.size.height/2-25, 50, 50)];
-    [self.indicator startAnimating];
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-}
-
 - (void)_loadAttachmentImageInBackground:(id)arg
 {
     NSLog(@"load Attachment Image In Background");
