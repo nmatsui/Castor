@@ -59,7 +59,6 @@
 		86DA6C711371592600DD923D /* 117-todo.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DA6C6B1371592600DD923D /* 117-todo.png */; };
 		86DA6C721371592600DD923D /* 19-gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DA6C6C1371592600DD923D /* 19-gear.png */; };
 		86DA6C731371592600DD923D /* myrooms.png in Resources */ = {isa = PBXBuildFile; fileRef = 86DA6C6D1371592600DD923D /* myrooms.png */; };
-		86DA6C741371592600DD923D /* test.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 86DA6C6E1371592600DD923D /* test.jpg */; };
 		86DA6CBF13715ACC00DD923D /* NSObject+JSON.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CAD13715ACC00DD923D /* NSObject+JSON.m */; };
 		86DA6CC013715ACC00DD923D /* SBJsonParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CB013715ACC00DD923D /* SBJsonParser.m */; };
 		86DA6CC113715ACC00DD923D /* SBJsonStreamParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CB213715ACC00DD923D /* SBJsonStreamParser.m */; };
@@ -72,6 +71,7 @@
 		86DA6CCE13715AD700DD923D /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CC913715AD700DD923D /* NSData+Base64.m */; };
 		86DA6CCF13715AD700DD923D /* OAuth+Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CCB13715AD700DD923D /* OAuth+Additions.m */; };
 		86DA6CD013715AD700DD923D /* OAuthCore.m in Sources */ = {isa = PBXBuildFile; fileRef = 86DA6CCD13715AD700DD923D /* OAuthCore.m */; };
+		86ECB90313A33C0E005D319A /* AbstractView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86ECB90213A33C0E005D319A /* AbstractView.m */; };
 		86EE1B04136BBAAB00B94192 /* DataFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B03136BBAAB00B94192 /* DataFactory.m */; };
 		86EE1B07136BBCB200B94192 /* RoomData.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B06136BBCB200B94192 /* RoomData.m */; };
 		86EE1B0B136BD46800B94192 /* RoomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86EE1B09136BD46700B94192 /* RoomView.m */; };
@@ -103,7 +103,6 @@
 		860A69F41387851500D14C85 /* arrow001_black.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = arrow001_black.gif; sourceTree = "<group>"; };
 		860A69F81387D79200D14C85 /* 44-shoebox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "44-shoebox.png"; sourceTree = "<group>"; };
 		860A69FA1387D7A100D14C85 /* 53-house.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "53-house.png"; sourceTree = "<group>"; };
-		860E534A137E18C700A97B5C /* Alertable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Alertable.h; sourceTree = "<group>"; };
 		860E534C137E387C00A97B5C /* CellBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CellBuilder.h; sourceTree = "<group>"; };
 		860E534D137E387C00A97B5C /* CellBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CellBuilder.m; sourceTree = "<group>"; };
 		8611A6C8138BECC500FF03DD /* 57-download.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "57-download.png"; sourceTree = "<group>"; };
@@ -158,7 +157,6 @@
 		86DA6C6B1371592600DD923D /* 117-todo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "117-todo.png"; sourceTree = "<group>"; };
 		86DA6C6C1371592600DD923D /* 19-gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "19-gear.png"; sourceTree = "<group>"; };
 		86DA6C6D1371592600DD923D /* myrooms.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = myrooms.png; sourceTree = "<group>"; };
-		86DA6C6E1371592600DD923D /* test.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test.jpg; sourceTree = "<group>"; };
 		86DA6CAB13715ACC00DD923D /* JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSON.h; sourceTree = "<group>"; };
 		86DA6CAC13715ACC00DD923D /* NSObject+JSON.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JSON.h"; sourceTree = "<group>"; };
 		86DA6CAD13715ACC00DD923D /* NSObject+JSON.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JSON.m"; sourceTree = "<group>"; };
@@ -185,6 +183,8 @@
 		86DA6CCB13715AD700DD923D /* OAuth+Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "OAuth+Additions.m"; sourceTree = "<group>"; };
 		86DA6CCC13715AD700DD923D /* OAuthCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAuthCore.h; sourceTree = "<group>"; };
 		86DA6CCD13715AD700DD923D /* OAuthCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAuthCore.m; sourceTree = "<group>"; };
+		86ECB90113A33C0E005D319A /* AbstractView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractView.h; sourceTree = "<group>"; };
+		86ECB90213A33C0E005D319A /* AbstractView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractView.m; sourceTree = "<group>"; };
 		86EE1B02136BBAAB00B94192 /* DataFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataFactory.h; sourceTree = "<group>"; };
 		86EE1B03136BBAAB00B94192 /* DataFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataFactory.m; sourceTree = "<group>"; };
 		86EE1B05136BBCB100B94192 /* RoomData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RoomData.h; sourceTree = "<group>"; };
@@ -274,7 +274,6 @@
 				86DA6C6B1371592600DD923D /* 117-todo.png */,
 				86DA6C6C1371592600DD923D /* 19-gear.png */,
 				86DA6C6D1371592600DD923D /* myrooms.png */,
-				86DA6C6E1371592600DD923D /* test.jpg */,
 			);
 			path = image;
 			sourceTree = "<group>";
@@ -377,7 +376,8 @@
 				86F85B9E136ACEB10031F3B2 /* RootViewController.m */,
 				86F85BA0136ACEB10031F3B2 /* RootViewController.xib */,
 				866F9E0D1372D6FA006BA19C /* Reloadable.h */,
-				860E534A137E18C700A97B5C /* Alertable.h */,
+				86ECB90113A33C0E005D319A /* AbstractView.h */,
+				86ECB90213A33C0E005D319A /* AbstractView.m */,
 				86F85BA8136AD1110031F3B2 /* LoginView.h */,
 				86F85BA9136AD1110031F3B2 /* LoginView.m */,
 				86F85BAA136AD1110031F3B2 /* LoginView.xib */,
@@ -499,7 +499,6 @@
 				86DA6C711371592600DD923D /* 117-todo.png in Resources */,
 				86DA6C721371592600DD923D /* 19-gear.png in Resources */,
 				86DA6C731371592600DD923D /* myrooms.png in Resources */,
-				86DA6C741371592600DD923D /* test.jpg in Resources */,
 				865DD8921373916F0008EB9F /* create_table.sql in Resources */,
 				8614C6401375335100AFBC39 /* README in Resources */,
 				860A69F21387315D00D14C85 /* HomeView.xib in Resources */,
@@ -569,6 +568,7 @@
 				86916C091390E8BA007CB1F9 /* ContainerView.m in Sources */,
 				86D96E7013926CF100449613 /* RKLMatchEnumerator.m in Sources */,
 				86D96E7113926CF100449613 /* RegexKitLite.m in Sources */,
+				86ECB90313A33C0E005D319A /* AbstractView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

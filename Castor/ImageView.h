@@ -7,19 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Alertable.h"
+#import "AbstractView.h"
 #import "ContainerView.h"
 #import "EntryData.h"
 #import "DataFactory.h"
 
 
-@interface ImageView : UIViewController <UIScrollViewDelegate, Alertable> {
+@interface ImageView : AbstractView <UIScrollViewDelegate> {
     UIScrollView *_scrollView;
     UIImageView *_imageView;
     DataFactory *_factory;
     EntryData *_entry;
     UIActivityIndicatorView *_indicator;
-    BOOL _portrate;
 }
 
 @property(nonatomic, retain) IBOutlet UIImageView *imageView;

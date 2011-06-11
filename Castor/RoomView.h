@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "Reloadable.h"
-#import "Alertable.h"
 #import "DataFactory.h"
 #import "ContainerView.h"
 #import "HomeView.h"
@@ -19,7 +19,7 @@
 #import "ImageView.h"
 #import "CellBuilder.h"
 
-@interface RoomView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable, Alertable> {
+@interface RoomView : AbstractView <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable> {
     UITableView *_entryTable;
     NSMutableArray *_entryList;
     DataFactory *_factory;
@@ -32,7 +32,6 @@
     UIView *_triggerHeader;
     UIView *_triggerFooter;
     int _page;
-    BOOL _portrate;
     BOOL _headerON;
     BOOL _footerON;
 }

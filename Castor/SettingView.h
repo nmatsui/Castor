@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "LoginView.h"
 #import "DataFactory.h"
 #import "ContainerView.h"
 #import "CacheManager.h"
 
-@interface SettingView : UIViewController {
+@interface SettingView : AbstractView {
     DataFactory *_factory;
 }
 

@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "Reloadable.h"
-#import "Alertable.h"
 #import "DataFactory.h"
 #import "EntryData.h"
 #import "ContainerView.h"
 
 
-@interface EditView : UIViewController <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, Alertable> {
+@interface EditView : AbstractView <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {
     UITextView *_textView;
     UILabel *_letterCount;
     UIButton *_cameraButton;
@@ -28,7 +28,6 @@
     UIImage *_attachmentImage;
     UIViewController <Reloadable> *_previousView;
     UIActivityIndicatorView *_indicator;
-    BOOL _portrate;
 }
 
 @property(nonatomic, retain) IBOutlet UITextView *textView;

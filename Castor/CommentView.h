@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "Reloadable.h"
-#import "Alertable.h"
 #import "DataFactory.h"
 #import "ContainerView.h"
 #import "HomeView.h"
@@ -16,7 +16,7 @@
 #import "SettingView.h"
 #import "CellBuilder.h"
 
-@interface CommentView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable, Alertable> {
+@interface CommentView : AbstractView <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable> {
     UITableView *_entryTable;
     NSMutableArray *_entryList;
     DataFactory *_factory;
@@ -30,7 +30,6 @@
     CellBuilder *_cellBuilder;
     UIView *_triggerHeader;
     UIView *_nilFooter;
-    BOOL _portrate;
     BOOL _headerON;
     BOOL _footerON;
 }

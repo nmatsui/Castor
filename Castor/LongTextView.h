@@ -7,14 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "EntryData.h"
 #import "ContainerView.h"
 
-@interface LongTextView : UIViewController {
+@interface LongTextView : AbstractView {
     UITextView *_textView;
     EntryData *_entry;
     DataFactory *_factory;
-    BOOL _portrate;
 }
 
 @property(nonatomic, retain) EntryData *entry;

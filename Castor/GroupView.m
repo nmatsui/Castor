@@ -114,14 +114,8 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        _portrate = NO;
-        [self.roomTable reloadData];
-    }
-    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        _portrate = YES;
-        [self.roomTable reloadData];
-    }
+    [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+    [self.roomTable reloadData];
     return YES;
 }
 
@@ -209,17 +203,6 @@
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
     [pool release];
-}
-
-//// Alertable
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
 }
 
 //// Private

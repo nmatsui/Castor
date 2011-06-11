@@ -67,12 +67,6 @@
     self.factory = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return YES;
-}
-
 //// IBAction
 - (IBAction)logoutClick:(id)sender
 {

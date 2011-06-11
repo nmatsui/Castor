@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "Reloadable.h"
-#import "Alertable.h"
 #import "DataFactory.h"
 #import "ContainerView.h"
 #import "HomeView.h"
@@ -18,7 +18,7 @@
 
 @class ContainerView;
 
-@interface GroupView : UIViewController <UITableViewDataSource, UITableViewDelegate, Reloadable, Alertable> {
+@interface GroupView : AbstractView <UITableViewDataSource, UITableViewDelegate, Reloadable> {
     UITableView *_roomTable;
     NSMutableArray *_roomList;    
     DataFactory *_factory;
@@ -27,7 +27,6 @@
     UIView *_triggerHeader;
     UIView *_nilFooter;
     ContainerView *_container;
-    BOOL _portrate;
     BOOL _headerON;
     UIToolbar *_toolbar;
 }

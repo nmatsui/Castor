@@ -7,12 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Alertable.h"
+#import "AbstractView.h"
 #import "DataFactory.h"
 #import "ContainerView.h"
 
 
-@interface LoginView : UIViewController <Alertable>  {
+@interface LoginView : AbstractView {
     UITextField *_email;
     UITextField *_password;
     UIButton    *_loginButton;

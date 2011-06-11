@@ -95,12 +95,7 @@
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        _portrate = NO;
-    }
-    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        _portrate = YES;
-    }
+    [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
     [self.currentView shouldAutorotateToInterfaceOrientation:interfaceOrientation];
     return YES;
 }

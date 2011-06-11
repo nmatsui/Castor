@@ -96,32 +96,10 @@ static const float MIN_SCALE = 1.0;
     self.entry = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        _portrate = NO;
-    }
-    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        _portrate = YES;
-    }
-    return YES;
-}
-
 //// UIScrollViewDelegate
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {  
     return self.imageView;  
 } 
-
-//// Alertable
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
-}
 
 //// Private
 - (void)_startIndicator:(id)sender

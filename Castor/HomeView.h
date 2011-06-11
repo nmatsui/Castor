@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "Reloadable.h"
-#import "Alertable.h"
 #import "ContainerView.h"
 #import "GroupView.h"
 #import "RoomView.h"
@@ -21,7 +21,7 @@
 
 @class ContainerView;
 
-@interface HomeView : UIViewController <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable, Alertable> {
+@interface HomeView : AbstractView <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable> {
     UITableView *_homeTable;
     NSMutableArray *_homeList;
     DataFactory *_factory;
@@ -34,7 +34,6 @@
     UIView *_triggerFooter;
     ContainerView *_container;
     int _page;
-    BOOL _portrate;
     BOOL _headerON;
     BOOL _footerON;
 }

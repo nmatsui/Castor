@@ -148,14 +148,8 @@ static const int MAX_LEVLE = 6;
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
-    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        _portrate = NO;
-        [self.entryTable reloadData];
-    }
-    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        _portrate = YES;
-        [self.entryTable reloadData];
-    }
+    [super shouldAutorotateToInterfaceOrientation:interfaceOrientation];
+    [self.entryTable reloadData];
     return YES;
 }
 
@@ -269,17 +263,6 @@ static const int MAX_LEVLE = 6;
     NSLog(@"reloadComment[%@]", self.originEntry.entryId);
     [self performSelector:@selector(_startIndicator:) withObject:self];
     [self performSelectorInBackground:@selector(_reloadCommentListInBackground:) withObject:nil];
-}
-
-//// Alertable
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
 }
 
 //// IBAction

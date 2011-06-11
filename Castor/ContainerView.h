@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "AbstractView.h"
 #import "DataFactory.h"
 #import "HomeView.h"
 #import "GroupView.h"
@@ -15,14 +16,13 @@
 @class HomeView;
 @class GroupView;
 
-@interface ContainerView : UIViewController {
+@interface ContainerView : AbstractView {
     UIToolbar *_toolbar;
     UIBarButtonItem *_toggleButton;
     DataFactory *_factory;
     HomeView *_homeView;
     GroupView *_groupView;
     UIViewController <Reloadable> *_currentView;
-    BOOL _portrate;
 }
 
 @property(nonatomic, retain) IBOutlet UIToolbar *toolbar;

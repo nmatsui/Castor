@@ -135,17 +135,6 @@ static const int MAX_RESOLUTION = 800;
     self.indicator = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    if (interfaceOrientation == UIDeviceOrientationLandscapeLeft || interfaceOrientation == UIDeviceOrientationLandscapeRight) {
-        _portrate = NO;
-    }
-    else if (interfaceOrientation == UIDeviceOrientationPortraitUpsideDown || interfaceOrientation == UIDeviceOrientationPortrait) {
-        _portrate = YES;
-    }
-    return YES;
-}
-
 //// UITextViewDelegate
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text
 {
@@ -172,17 +161,6 @@ static const int MAX_RESOLUTION = 800;
 {
     [[picker parentViewController] dismissModalViewControllerAnimated:YES];
     self.cameraController = nil;
-}
-
-//// Alertable
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
 }
 
 //// IBAction

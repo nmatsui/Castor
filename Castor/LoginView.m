@@ -73,23 +73,6 @@
     self.loginButton = nil;
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    // Return YES for supported orientations
-    return YES;
-}
-
-//// Alertable
-- (void)alertException:(NSString *)message
-{
-    UIAlertView *alert = [[UIAlertView alloc] init];
-    [alert setDelegate:self];
-    [alert setMessage:message];
-    [alert addButtonWithTitle:@"OK"];
-	[alert show];
-	[alert release];
-}
-
 /// IBAction
 - (IBAction)loginClick:(id)sender
 {

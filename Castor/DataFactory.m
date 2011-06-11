@@ -46,7 +46,7 @@
     [super dealloc];
 }
 
-- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(UIViewController <Alertable> *)sender
+- (BOOL)storeAuthTokenWithEmail:(NSString *)email password:(NSString *)password sender:(AbstractView *)sender
 {
     BOOL result = NO;
     @try {
@@ -90,7 +90,7 @@
     }
 }
 
-- (NSMutableArray *)getHomeTimelineWithPage:(int)page sender:(UIViewController <Alertable> *)sender
+- (NSMutableArray *)getHomeTimelineWithPage:(int)page sender:(AbstractView *)sender
 {
     NSLog(@"getHomeTimelineWithPage [%d]", page);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
@@ -121,7 +121,7 @@
     }
 }
 
-- (NSMutableArray *)getRoomListWithSender:(UIViewController <Alertable> *)sender
+- (NSMutableArray *)getRoomListWithSender:(AbstractView *)sender
 {
     NSLog(@"getRoomListWithSender");
     NSMutableArray *list = nil;
@@ -150,7 +150,7 @@
     }
 }
 
-- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(UIViewController <Alertable> *)sender
+- (NSMutableArray *)getRoomEntryListByRoomId:(NSNumber *)roomId page:(int)page sender:(AbstractView *)sender
 {
     NSLog(@"getRoomEntryListByRoomId[%@] page[%d]", roomId, page);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
@@ -181,7 +181,7 @@
     }
 }
 
-- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender
+- (NSMutableArray *)getEntryCommentListByEntryData:(EntryData *)entry sender:(AbstractView *)sender
 {
     NSLog(@"getEntryCommentListByEntryData[%@]", entry.entryId);
     NSMutableArray *list = [[[NSMutableArray alloc] init] autorelease];
@@ -196,7 +196,7 @@
     return list;
 }
 
-- (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(UIViewController <Alertable> *)sender
+- (void)addEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(AbstractView *)sender
 {
     NSLog(@"addEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
     @try {
@@ -208,7 +208,7 @@
     }
 }
 
-- (void)addEntryText:(NSString *)text image:(NSData *)image filename:(NSString *)filename roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(UIViewController <Alertable> *)sender
+- (void)addEntryText:(NSString *)text image:(NSData *)image filename:(NSString *)filename roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId sender:(AbstractView *)sender
 {
     NSLog(@"addEntryText[%@] image(size %d) filename[%@] roomId[%@] parentId[%@]", text, [image length], filename, roomId, parentId);
     @try {
@@ -220,7 +220,7 @@
     }
 }
 
-- (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender
+- (void)updateEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId sender:(AbstractView *)sender
 {
     NSLog(@"updateEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
     @try {
@@ -232,7 +232,7 @@
     }
 }
 
-- (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(UIViewController <Alertable> *)sender
+- (void)deleteEntryByEntryId:(NSNumber *)entryId roomId:(NSNumber *)roomId sender:(AbstractView *)sender
 {
     NSLog(@"deleteEntryByEntryId[%@] roomId[%@]", entryId, roomId);
     @try {
@@ -244,7 +244,7 @@
     }
 }
 
-- (void)markEntryRead:(NSNumber *)entryId sender:(UIViewController <Alertable> *)sender
+- (void)markEntryRead:(NSNumber *)entryId sender:(AbstractView *)sender
 {
     NSLog(@"markEntryRead[%@]", entryId);
     @try {
@@ -256,7 +256,7 @@
     }
 }
 
-- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(UIViewController <Alertable> *)sender
+- (UIImage *)getAttachmentImageByEntryData:(EntryData *)entry sender:(AbstractView *)sender
 {
     NSLog(@"getAttachmentImage[%@]", entry.entryId);
     UIImage *image = nil;
