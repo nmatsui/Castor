@@ -42,6 +42,7 @@
 - (void)dealloc
 {
     self.factory = nil;
+    self.indicator = nil;
     [super dealloc];
 }
 
@@ -82,6 +83,7 @@
 {
     [super viewDidUnload];
     self.factory = nil;
+    self.indicator = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

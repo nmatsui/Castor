@@ -122,7 +122,6 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"GroupCell";
-    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.roomList count] <= indexPath.row) return cell;

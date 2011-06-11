@@ -10,7 +10,6 @@
 
 @interface CellBuilder (Private)
 - (UILabel *)_makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font;
-//- (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font;
 - (UIImageView *)_makeIcon:(CGRect)rect;
 @end
 
@@ -238,19 +237,6 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     [label setLineBreakMode:UILineBreakModeWordWrap];
     return label;
 }
-
-//- (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font
-//{
-//    UITextView *textView = [[UITextView alloc] init];
-//    [textView setFrame:rect];
-//    [textView setText:text];
-//    [textView setFont:font];
-//    [textView setTextColor:[UIColor blackColor]];
-//    [textView setBackgroundColor:[UIColor clearColor]];
-//    [textView setTextAlignment:UITextAlignmentLeft];
-//    [textView setDataDetectorTypes:UIDataDetectorTypeLink];
-//    return textView;
-//}
 
 - (UIImageView *)_makeIcon:(CGRect)rect
 {
