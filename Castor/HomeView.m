@@ -25,7 +25,6 @@
 
 @synthesize homeTable = _homeTable;
 @synthesize homeList = _homeList;
-@synthesize factory = _factory;
 @synthesize cellBuilder = _cellBuilder;
 @synthesize targetRoom = _targetRoom;
 @synthesize targetEntry = _targetEntry;
@@ -39,10 +38,9 @@
               factory:(DataFactory *)factory
             container:(ContainerView *)container
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         _page = 1;
-        self.factory = factory;
         self.homeList = [self.factory getHomeTimelineFromCache];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.selectors = [[NSMutableArray alloc] init];
@@ -64,7 +62,6 @@
 {
     self.homeTable = nil;
     self.homeList = nil;
-    self.factory = nil;
     self.cellBuilder = nil;
     self.targetRoom = nil;
     self.targetEntry = nil;
@@ -128,7 +125,6 @@
     [super viewDidUnload];
     self.homeTable = nil;
     self.homeList = nil;
-    self.factory = nil;
     self.cellBuilder = nil;
     self.targetRoom = nil;
     self.targetEntry = nil;

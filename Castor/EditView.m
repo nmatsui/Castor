@@ -22,7 +22,6 @@
 @synthesize cameraButton = _cameraButton;
 @synthesize postButton = _postButton;
 @synthesize clipIcon = _clipIcon;
-@synthesize factory = _factory;
 @synthesize roomId = _roomId;
 @synthesize parentId = _parentId;
 @synthesize targetEntry = _targetEntry;
@@ -41,9 +40,8 @@ static const int MAX_RESOLUTION = 800;
          previousView:(UIViewController <Reloadable> *)previousView 
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
-        self.factory = factory;
         self.roomId = roomId;
         self.parentId = parentId;
         self.targetEntry = targetEntry;
@@ -60,7 +58,6 @@ static const int MAX_RESOLUTION = 800;
     self.letterCount = nil;
     self.cameraButton = nil;
     self.clipIcon = nil;
-    self.factory = nil;
     self.roomId = nil;
     self.parentId = nil;
     self.targetEntry = nil;
@@ -125,7 +122,6 @@ static const int MAX_RESOLUTION = 800;
     self.letterCount = nil;
     self.cameraButton = nil;
     self.clipIcon = nil;
-    self.factory = nil;
     self.roomId = nil;
     self.parentId = nil;
     self.targetEntry = nil;

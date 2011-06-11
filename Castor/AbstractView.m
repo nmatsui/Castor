@@ -11,17 +11,21 @@
 
 @implementation AbstractView
 
+@synthesize factory = _factory;
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+              factory:(DataFactory *)factory
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
+        self.factory = factory;
     }
     return self;
 }
 
 - (void)dealloc
 {
+    self.factory = nil;
     [super dealloc];
 }
 
@@ -53,8 +57,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
+    self.factory = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

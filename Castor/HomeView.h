@@ -24,7 +24,6 @@
 @interface HomeView : AbstractView <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable> {
     UITableView *_homeTable;
     NSMutableArray *_homeList;
-    DataFactory *_factory;
     CellBuilder *_cellBuilder;
     RoomData *_targetRoom;
     EntryData *_targetEntry;
@@ -40,7 +39,6 @@
 
 @property(nonatomic, retain) IBOutlet UITableView *homeTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *homeList;
-@property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
 @property(nonatomic, retain) RoomData *targetRoom;
 @property(nonatomic, retain) EntryData *targetEntry;

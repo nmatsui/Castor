@@ -22,7 +22,6 @@
 @interface RoomView : AbstractView <UITableViewDataSource, UITableViewDelegate, UIActionSheetDelegate, UIGestureRecognizerDelegate, Reloadable> {
     UITableView *_entryTable;
     NSMutableArray *_entryList;
-    DataFactory *_factory;
     RoomData *_room;
     EntryData *_target;
     EntryData *_willDelete;
@@ -38,7 +37,6 @@
 
 @property(nonatomic, retain) IBOutlet UITableView *entryTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *entryList;
-@property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) RoomData *room;
 @property(nonatomic, retain) EntryData *target;
 @property(nonatomic, retain) EntryData *willDelete;

@@ -14,10 +14,7 @@
 #import "CacheManager.h"
 
 @interface SettingView : AbstractView {
-    DataFactory *_factory;
 }
-
-@property(nonatomic, retain) DataFactory *factory;
 
 - (IBAction)logoutClick:(id)sender;
 - (IBAction)cacheDeleteClick:(id)sender;

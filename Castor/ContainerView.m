@@ -13,7 +13,6 @@
 
 @synthesize toolbar = _toolbar;
 @synthesize toggleButton = _toggleButton;
-@synthesize factory = _factory;
 @synthesize homeView = _homeView;
 @synthesize groupView = _groupView;
 @synthesize currentView = _currentView;
@@ -21,9 +20,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
-        self.factory = factory;
         self.homeView = [[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
                                                   factory:self.factory
                                                 container:self];
@@ -37,7 +35,6 @@
 {
     self.toolbar = nil;
     self.toggleButton = nil;
-    self.factory = nil;
     self.homeView = nil;
     self.groupView = nil;
     self.currentView = nil;
@@ -87,7 +84,6 @@
     [super viewDidUnload];
     self.toolbar = nil;
     self.toggleButton = nil;
-    self.factory = nil;
     self.homeView = nil;
     self.groupView = nil;
     self.currentView = nil;

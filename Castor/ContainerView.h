@@ -19,7 +19,6 @@
 @interface ContainerView : AbstractView {
     UIToolbar *_toolbar;
     UIBarButtonItem *_toggleButton;
-    DataFactory *_factory;
     HomeView *_homeView;
     GroupView *_groupView;
     UIViewController <Reloadable> *_currentView;
@@ -27,7 +26,6 @@
 
 @property(nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property(nonatomic, retain) IBOutlet UIBarButtonItem *toggleButton;
-@property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) HomeView *homeView;
 @property(nonatomic, retain) GroupView *groupView;
 @property(nonatomic, retain) UIViewController <Reloadable> *currentView;

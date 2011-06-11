@@ -18,7 +18,6 @@
 @synthesize imageView = _imageView;
 @synthesize scrollView = _scrollView;
 @synthesize indicator = _indicator;
-@synthesize factory = _factory;
 @synthesize entry = _entry;
 
 static const float MAX_SCALE = 5.0;
@@ -28,10 +27,9 @@ static const float MIN_SCALE = 1.0;
                 entry:(EntryData *)entry 
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         self.entry = entry;
-        self.factory = factory;
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
         [self.view addSubview:self.indicator];
     }
@@ -43,7 +41,6 @@ static const float MIN_SCALE = 1.0;
     self.imageView = nil;
     self.scrollView = nil;
     self.indicator = nil;
-    self.factory = nil;
     self.entry = nil;
     [super dealloc];
 }
@@ -92,7 +89,6 @@ static const float MIN_SCALE = 1.0;
     self.imageView = nil;
     self.scrollView = nil;
     self.indicator = nil;
-    self.factory = nil;
     self.entry = nil;
 }
 

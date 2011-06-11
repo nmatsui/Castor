@@ -14,12 +14,10 @@
 @interface LongTextView : AbstractView {
     UITextView *_textView;
     EntryData *_entry;
-    DataFactory *_factory;
 }
 
 @property(nonatomic, retain) EntryData *entry;
 @property(nonatomic, retain) IBOutlet UITextView *textView;
-@property(nonatomic, retain) DataFactory *factory;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry

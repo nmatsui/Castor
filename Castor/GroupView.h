@@ -21,7 +21,6 @@
 @interface GroupView : AbstractView <UITableViewDataSource, UITableViewDelegate, Reloadable> {
     UITableView *_roomTable;
     NSMutableArray *_roomList;    
-    DataFactory *_factory;
     UIActivityIndicatorView *_indicator;
     CellBuilder *_cellBuilder;
     UIView *_triggerHeader;
@@ -33,7 +32,6 @@
 
 @property(nonatomic, retain) IBOutlet UITableView *roomTable;
 @property(nonatomic, retain) IBOutlet NSMutableArray *roomList;
-@property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) UIActivityIndicatorView *indicator;
 @property(nonatomic, retain) CellBuilder *cellBuilder;
 @property(nonatomic, retain) UIView *triggerHeader;

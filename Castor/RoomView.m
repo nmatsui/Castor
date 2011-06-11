@@ -24,7 +24,6 @@
 
 @synthesize entryTable = _entryTable;
 @synthesize entryList = _entryList;
-@synthesize factory = _factory;
 @synthesize room = _room;
 @synthesize target = _target;
 @synthesize willDelete = _willDelete;
@@ -38,11 +37,10 @@
                  room:(RoomData *)room 
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         _page = 1;
         self.room = room;
-        self.factory = factory;
         self.entryList = [self.factory getRoomEntryListFromCache:self.room.roomId];
         self.selectors = [[NSMutableArray alloc] init];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -63,7 +61,6 @@
 {
     self.entryList = nil;
     self.entryTable = nil;
-    self.factory = nil;
     self.room = nil;
     self.target = nil;
     self.willDelete = nil;
@@ -125,7 +122,6 @@
     [super viewDidUnload];
     self.entryList = nil;
     self.entryTable = nil;
-    self.factory = nil;
     self.room = nil;
     self.target = nil;
     self.willDelete = nil;

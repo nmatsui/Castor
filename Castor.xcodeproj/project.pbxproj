@@ -44,9 +44,6 @@
 		86C3FA8413A33158008C98BB /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 86C3FA8313A33158008C98BB /* iTunesArtwork */; };
 		86CD2356136D3C53005AB366 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CD2354136D3C53005AB366 /* EditView.m */; };
 		86CD2357136D3C53005AB366 /* EditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2355136D3C53005AB366 /* EditView.xib */; };
-		86D786B613A334B3004088CA /* Castor_icon_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B013A334B3004088CA /* Castor_icon_57.png */; };
-		86D786B713A334B3004088CA /* Castor_icon_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B113A334B3004088CA /* Castor_icon_114.png */; };
-		86D786B813A334B3004088CA /* Castor_icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B213A334B3004088CA /* Castor_icon_512.png */; };
 		86D786B913A334B3004088CA /* Castor_icon_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B313A334B3004088CA /* Castor_icon_retina.png */; };
 		86D786BA13A334B3004088CA /* Castor_icon_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B413A334B3004088CA /* Castor_icon_small.png */; };
 		86D786BB13A334B3004088CA /* Castor_icon_trim.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B513A334B3004088CA /* Castor_icon_trim.png */; };
@@ -140,9 +137,6 @@
 		86CD2353136D3C53005AB366 /* EditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditView.h; sourceTree = "<group>"; };
 		86CD2354136D3C53005AB366 /* EditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditView.m; sourceTree = "<group>"; };
 		86CD2355136D3C53005AB366 /* EditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditView.xib; sourceTree = "<group>"; };
-		86D786B013A334B3004088CA /* Castor_icon_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_57.png; sourceTree = "<group>"; };
-		86D786B113A334B3004088CA /* Castor_icon_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_114.png; sourceTree = "<group>"; };
-		86D786B213A334B3004088CA /* Castor_icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_512.png; sourceTree = "<group>"; };
 		86D786B313A334B3004088CA /* Castor_icon_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_retina.png; sourceTree = "<group>"; };
 		86D786B413A334B3004088CA /* Castor_icon_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_small.png; sourceTree = "<group>"; };
 		86D786B513A334B3004088CA /* Castor_icon_trim.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_trim.png; sourceTree = "<group>"; };
@@ -252,9 +246,6 @@
 		86DA6C681371592500DD923D /* image */ = {
 			isa = PBXGroup;
 			children = (
-				86D786B013A334B3004088CA /* Castor_icon_57.png */,
-				86D786B113A334B3004088CA /* Castor_icon_114.png */,
-				86D786B213A334B3004088CA /* Castor_icon_512.png */,
 				86D786B313A334B3004088CA /* Castor_icon_retina.png */,
 				86D786B413A334B3004088CA /* Castor_icon_small.png */,
 				86D786B513A334B3004088CA /* Castor_icon_trim.png */,
@@ -518,9 +509,6 @@
 				86C3FA8013A330F2008C98BB /* Castor_icon_57.png in Resources */,
 				86C3FA8213A33112008C98BB /* Castor_icon_114.png in Resources */,
 				86C3FA8413A33158008C98BB /* iTunesArtwork in Resources */,
-				86D786B613A334B3004088CA /* Castor_icon_57.png in Resources */,
-				86D786B713A334B3004088CA /* Castor_icon_114.png in Resources */,
-				86D786B813A334B3004088CA /* Castor_icon_512.png in Resources */,
 				86D786B913A334B3004088CA /* Castor_icon_retina.png in Resources */,
 				86D786BA13A334B3004088CA /* Castor_icon_small.png in Resources */,
 				86D786BB13A334B3004088CA /* Castor_icon_trim.png in Resources */,

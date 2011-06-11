@@ -23,7 +23,6 @@
 
 @synthesize entryTable = _entryTable;
 @synthesize entryList = _entryList;
-@synthesize factory = _factory;
 @synthesize room = _room;
 @synthesize originEntry = _originEntry;
 @synthesize target = _target;
@@ -43,12 +42,11 @@ static const int MAX_LEVLE = 6;
          previousView:(UIViewController <Reloadable> *)previousView 
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         self.room = room;
         self.originEntry = originEntry;
         self.previousView = previousView;
-        self.factory = factory;
         self.entryList = [self.factory getEntryCommentListFromCache:self.originEntry];
         self.selectors = [[NSMutableArray alloc] init];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
@@ -69,7 +67,6 @@ static const int MAX_LEVLE = 6;
 {
     self.entryList = nil;
     self.entryTable = nil;
-    self.factory = nil;
     self.room = nil;
     self.originEntry = nil;
     self.target = nil;
@@ -133,7 +130,6 @@ static const int MAX_LEVLE = 6;
     [super viewDidUnload];
     self.entryList = nil;
     self.entryTable = nil;
-    self.factory = nil;
     self.room = nil;
     self.originEntry = nil;
     self.target = nil;

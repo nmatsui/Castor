@@ -17,7 +17,6 @@
 
 @synthesize roomTable = _roomTable;
 @synthesize roomList = _roomList;
-@synthesize factory = _factory;
 @synthesize indicator = _indicator;
 @synthesize cellBuilder = _cellBuilder;
 @synthesize triggerHeader = _triggerHeader;
@@ -29,9 +28,8 @@
               factory:(DataFactory *)factory
             container:(ContainerView *)container
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
-        self.factory = factory;
         self.roomList = [self.factory getRoomListFromCache];
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
@@ -46,7 +44,6 @@
 {
     self.roomList = nil;
     self.roomTable = nil;
-    self.factory = nil;
     self.indicator = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;
@@ -104,7 +101,6 @@
     [super viewDidUnload];
     self.roomList = nil;
     self.roomTable = nil;
-    self.factory = nil;
     self.indicator = nil;
     self.cellBuilder = nil;
     self.triggerHeader = nil;

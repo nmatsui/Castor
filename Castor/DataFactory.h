@@ -13,6 +13,8 @@
 #import "YouRoomGateway.h"
 #import "CacheManager.h"
 
+@class AbstractView;
+
 @interface DataFactory : NSObject {
     NSString *_authTokenPath;
     YouRoomGateway *_gateway;

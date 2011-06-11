@@ -20,7 +20,6 @@
     UIButton *_cameraButton;
     UIImageView *_clipIcon;
     UIButton *_postButton;
-    DataFactory *_factory;
     NSNumber *_roomId;
     NSNumber *_parentId;
     EntryData *_targetEntry;
@@ -35,7 +34,6 @@
 @property(nonatomic, retain) IBOutlet UIButton *cameraButton;
 @property(nonatomic, retain) IBOutlet UIImageView *clipIcon;
 @property(nonatomic, retain) IBOutlet UIButton *postButton;
-@property(nonatomic, retain) DataFactory *factory;
 @property(nonatomic, retain) NSNumber *roomId;
 @property(nonatomic, retain) NSNumber *parentId;
 @property(nonatomic, retain) EntryData *targetEntry;

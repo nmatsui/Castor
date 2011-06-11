@@ -13,16 +13,14 @@
 
 @synthesize textView = _textView;
 @synthesize entry = _entry;
-@synthesize factory = _factory;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
                 entry:(EntryData *)entry
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         self.entry = entry;
-        self.factory = factory;
     }
     return self;
 }

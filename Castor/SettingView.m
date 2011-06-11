@@ -10,21 +10,17 @@
 
 @implementation SettingView
 
-@synthesize factory = _factory;
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
-        self.factory = factory;
     }
     return self;
 }
 
 - (void)dealloc
 {
-    self.factory = nil;
     [super dealloc];
 }
 
@@ -64,7 +60,6 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    self.factory = nil;
 }
 
 //// IBAction
