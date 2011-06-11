@@ -12,7 +12,7 @@
 - (void)_reloadHomeTimelineInBackground:(id)arg;
 - (void)_nextPage:(id)sender;
 - (void)_headerTap:(id)sender;
-- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
+- (void)_swipeHandler:(UISwipeGestureRecognizer *)gestureRecognizer;
 - (void)_moveToCommentViewWithOrigin:(NSArray *)origin;
 - (void)_markReadWithOrigin:(NSArray *)origin;
 - (void)_viewAttachmentWithOrigin:(NSArray *)origin;
@@ -45,7 +45,7 @@
         _headerON = NO;
         _footerON = NO;
         self.container = container;
-        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
+        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_swipeHandler:)];
         swipe.direction = UISwipeGestureRecognizerDirectionLeft + UISwipeGestureRecognizerDirectionRight;
         swipe.delegate = self;
         [self.homeTable addGestureRecognizer:swipe];
@@ -278,7 +278,7 @@
     [pool release];
 }
 
-- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)_swipeHandler:(UISwipeGestureRecognizer *)gestureRecognizer
 {
     CGPoint p = [gestureRecognizer locationInView:self.homeTable];
     NSIndexPath *indexPath = [self.homeTable indexPathForRowAtPoint:p];

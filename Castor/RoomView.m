@@ -11,7 +11,7 @@
 @interface RoomView (Private)
 - (void)_reloadEntryListInBackground:(id)arg;
 - (void)_nextPage:(id)sender;
-- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer;
+- (void)_swipeHandler:(UISwipeGestureRecognizer *)gestureRecognizer;
 - (void)_moveToCommentViewWithOriginEntry:(EntryData *)originEntry;
 - (void)_updateEntryWithOriginEntry:(EntryData *)originEntry;
 - (void)_deleteEntryWithOriginEntry:(EntryData *)originEntry;
@@ -44,7 +44,7 @@
         self.cellBuilder = [[CellBuilder alloc] initWithDataFactory:self.factory];
         _headerON = NO;
         _footerON = NO;
-        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_longPressHandler:)];
+        UISwipeGestureRecognizer *swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(_swipeHandler:)];
         swipe.direction = UISwipeGestureRecognizerDirectionLeft + UISwipeGestureRecognizerDirectionRight;
         swipe.delegate = self;
         [self.entryTable addGestureRecognizer:swipe];
@@ -300,7 +300,7 @@
     [self performSelectorInBackground:@selector(_reloadEntryListInBackground:) withObject:nil];
 }
 
-- (void)_longPressHandler:(UILongPressGestureRecognizer *)gestureRecognizer
+- (void)_swipeHandler:(UISwipeGestureRecognizer *)gestureRecognizer
 {
     CGPoint p = [gestureRecognizer locationInView:self.entryTable];
     NSIndexPath *indexPath = [self.entryTable indexPathForRowAtPoint:p];
