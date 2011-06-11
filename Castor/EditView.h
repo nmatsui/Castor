@@ -11,7 +11,6 @@
 #import "Reloadable.h"
 #import "DataFactory.h"
 #import "EntryData.h"
-#import "ContainerView.h"
 
 
 @interface EditView : AbstractView <UITextViewDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate> {

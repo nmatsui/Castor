@@ -57,8 +57,10 @@
     [super viewDidLoad];
     NSLog(@"LoginView loaded");
     self.title = @"Login";
-    [self.navigationItem.backBarButtonItem setEnabled:NO];
-    self.navigationItem.hidesBackButton = YES;
+    if (self.factory != nil) {
+        [self.navigationItem.backBarButtonItem setEnabled:NO];
+        self.navigationItem.hidesBackButton = YES;
+    }
 }
 
 - (void)viewDidUnload

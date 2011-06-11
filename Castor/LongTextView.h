@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "AbstractView.h"
 #import "EntryData.h"
-#import "ContainerView.h"
 
 @interface LongTextView : AbstractView {
     UITextView *_textView;

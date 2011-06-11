@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "AbstractView.h"
 #import "Reloadable.h"
-#import "ContainerView.h"
 #import "GroupView.h"
 #import "RoomView.h"
 #import "CommentView.h"

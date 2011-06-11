@@ -79,19 +79,6 @@ static const int MAX_RESOLUTION = 800;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.factory == nil) {
-        NSLog(@"DataFactory disappeared");
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
-                                                            message:@"メモリ不足のためキャッシュが破棄されました"
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
-        [alertView release];
-        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
-                                                                       factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:containerView animated:YES];
-    }
     if (self.parentId != nil) {
         [self.cameraButton setEnabled:NO];
     }
@@ -103,16 +90,18 @@ static const int MAX_RESOLUTION = 800;
     [super viewDidLoad];
     [self _enableOperation];
     NSLog(@"EditView loaded");
-    if (self.targetEntry == nil) {
-        self.title = @"Add Entry";
-        self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER];
+    if (self.factory != nil) {
+        if (self.targetEntry == nil) {
+            self.title = @"Add Entry";
+            self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER];
+        }
+        else {
+            self.title = @"Update Entry";
+            self.textView.text = self.targetEntry.content;
+            self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER - [self.targetEntry.content length]];
+        }
+        [self.textView becomeFirstResponder];
     }
-    else {
-        self.title = @"Update Entry";
-        self.textView.text = self.targetEntry.content;
-        self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER - [self.targetEntry.content length]];
-    }
-    [self.textView becomeFirstResponder];
 }
 
 - (void)viewDidUnload

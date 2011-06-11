@@ -40,30 +40,14 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (self.factory == nil) {
-        NSLog(@"DataFactory disappeared");
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
-                                                            message:@"メモリ不足のためキャッシュが破棄されました"
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
-        [alertView release];
-        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
-                                                                       factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:containerView animated:YES];
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSLog(@"LongTextView loaded");
     self.title = @"Long Text";
-    self.textView.text = self.entry.attachmentText;
+    if (self.factory != nil) {
+        self.textView.text = self.entry.attachmentText;
+    }
 }
 
 - (void)viewDidUnload

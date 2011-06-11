@@ -53,34 +53,18 @@ static const float MIN_SCALE = 1.0;
     // Release any cached data, images, etc that aren't in use.
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-    [super viewWillAppear:animated];
-    if (self.factory == nil) {
-        NSLog(@"DataFactory disappeared");
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
-                                                            message:@"メモリ不足のためキャッシュが破棄されました"
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
-        [alertView release];
-        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
-                                                                       factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:containerView animated:YES];
-    }
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSLog(@"ImageView loaded");
     self.title = @"Image";
-    self.scrollView.maximumZoomScale = MAX_SCALE;
-    self.scrollView.minimumZoomScale = MIN_SCALE;
-    [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-    [self performSelector:@selector(_startIndicator:) withObject:self];
-    [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
+    if (self.factory != nil) {
+        self.scrollView.maximumZoomScale = MAX_SCALE;
+        self.scrollView.minimumZoomScale = MIN_SCALE;
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
+    }
 }
 
 - (void)viewDidUnload

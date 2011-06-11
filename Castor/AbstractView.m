@@ -46,13 +46,21 @@
 }
 */
 
-/*
-// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    if (self.factory == nil) {
+        NSLog(@"DataFactory disappeared");
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeに戻ります" 
+                                                            message:@"メモリ不足のためキャッシュが破棄されました"
+                                                           delegate:nil
+                                                  cancelButtonTitle:nil
+                                                  otherButtonTitles:@"OK", nil];
+        [alertView show];
+        [alertView release];
+        [self.navigationController popToRootViewControllerAnimated:NO];
+    }
 }
-*/
 
 - (void)viewDidUnload
 {

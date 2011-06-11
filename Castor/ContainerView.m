@@ -22,11 +22,6 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
-        self.homeView = [[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
-                                                  factory:self.factory
-                                                container:self];
-        self.currentView = self.homeView;
-        self.title = @"Home";
     }
     return self;
 }
@@ -52,19 +47,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.factory == nil) {
-        NSLog(@"DataFactory disappeared");
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
-                                                            message:@"メモリ不足のためキャッシュが破棄されました"
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
-        [alertView release];
-        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
-                                                                       factory:[[DataFactory alloc] init]] autorelease];
-        [self.navigationController pushViewController:containerView animated:YES];
-    }
     NSLog(@"ContainerView Will appear");
     self.navigationController.navigationBar.hidden = NO;
     [self.currentView viewWillAppear:YES];
@@ -74,9 +56,16 @@
 {
     [super viewDidLoad];
     NSLog(@"ContainerView loaded");
-    [self.navigationItem.backBarButtonItem setEnabled:NO];
-    self.navigationItem.hidesBackButton = YES;
-    [self.view insertSubview:self.homeView.view belowSubview:self.toolbar];
+    if (self.factory != nil) {
+        self.homeView = [[HomeView alloc] initWithNibName:@"HomeView" bundle:nil
+                                                  factory:self.factory
+                                                container:self];
+        self.currentView = self.homeView;
+        self.title = @"Home";
+        [self.navigationItem.backBarButtonItem setEnabled:NO];
+        self.navigationItem.hidesBackButton = YES;
+        [self.view insertSubview:self.homeView.view belowSubview:self.toolbar];
+    }
 }
 
 - (void)viewDidUnload

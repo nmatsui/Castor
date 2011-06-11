@@ -83,19 +83,6 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.factory == nil) {
-        NSLog(@"DataFactory disappeared");
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Homeへ移動します" 
-                                                            message:@"メモリ不足のためキャッシュが破棄されました"
-                                                           delegate:nil
-                                                  cancelButtonTitle:nil
-                                                  otherButtonTitles:@"OK", nil];
-        [alertView show];
-        [alertView release];
-        ContainerView *containerView = [[[ContainerView alloc] initWithNibName:@"ContainerView" bundle:nil
-                                                                       factory:[[DataFactory alloc] init]] autorelease];
-        [self.container.navigationController pushViewController:containerView animated:YES];
-    }
     NSLog(@"HomeView Will appear");
     self.container.navigationController.navigationBar.hidden = NO;
     [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
@@ -114,10 +101,12 @@
     [super viewDidLoad];
     NSLog(@"HomeView loaded");
     self.title = @"Home";
-    [self.container.navigationItem.backBarButtonItem setEnabled:NO];
-    self.container.navigationItem.hidesBackButton = YES;
-    [self performSelector:@selector(_startIndicator:) withObject:self];
-    [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
+    if (self.factory != nil) {
+        [self.container.navigationItem.backBarButtonItem setEnabled:NO];
+        self.container.navigationItem.hidesBackButton = YES;
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
+    }
 }
 
 - (void)viewDidUnload
