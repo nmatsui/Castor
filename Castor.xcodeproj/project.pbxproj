@@ -21,6 +21,9 @@
 		8614C6401375335100AFBC39 /* README in Resources */ = {isa = PBXBuildFile; fileRef = 8614C63F1375335000AFBC39 /* README */; };
 		8614CA611388FAAA00F0E23B /* 68-paperclip.png in Resources */ = {isa = PBXBuildFile; fileRef = 8614CA601388FAAA00F0E23B /* 68-paperclip.png */; };
 		86175060138E7DC4009E8B09 /* 57-upload.png in Resources */ = {isa = PBXBuildFile; fileRef = 8617505F138E7DC4009E8B09 /* 57-upload.png */; };
+		86220E7513A322B700EBF893 /* Castor-full.png in Resources */ = {isa = PBXBuildFile; fileRef = 86220E7213A322B700EBF893 /* Castor-full.png */; };
+		86220E7613A322B700EBF893 /* castor-splash.png in Resources */ = {isa = PBXBuildFile; fileRef = 86220E7313A322B700EBF893 /* castor-splash.png */; };
+		86220E7713A322B700EBF893 /* Castor.png in Resources */ = {isa = PBXBuildFile; fileRef = 86220E7413A322B700EBF893 /* Castor.png */; };
 		865DD8921373916F0008EB9F /* create_table.sql in Resources */ = {isa = PBXBuildFile; fileRef = 865DD8901373916F0008EB9F /* create_table.sql */; };
 		865DD895137392C10008EB9F /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 865DD894137392C10008EB9F /* libsqlite3.dylib */; };
 		865DD8981373981A0008EB9F /* CacheManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 865DD8971373981A0008EB9F /* CacheManager.m */; };
@@ -36,8 +39,17 @@
 		86B04C31136C0B1600F8BFA1 /* GroupView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C2F136C0B1600F8BFA1 /* GroupView.xib */; };
 		86B04C39136C41FF00F8BFA1 /* CommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86B04C37136C41FF00F8BFA1 /* CommentView.m */; };
 		86B04C3A136C41FF00F8BFA1 /* CommentView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86B04C38136C41FF00F8BFA1 /* CommentView.xib */; };
+		86C3FA8013A330F2008C98BB /* Castor_icon_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 86C3FA7F13A330F2008C98BB /* Castor_icon_57.png */; };
+		86C3FA8213A33112008C98BB /* Castor_icon_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 86C3FA8113A33112008C98BB /* Castor_icon_114.png */; };
+		86C3FA8413A33158008C98BB /* iTunesArtwork in Resources */ = {isa = PBXBuildFile; fileRef = 86C3FA8313A33158008C98BB /* iTunesArtwork */; };
 		86CD2356136D3C53005AB366 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = 86CD2354136D3C53005AB366 /* EditView.m */; };
 		86CD2357136D3C53005AB366 /* EditView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 86CD2355136D3C53005AB366 /* EditView.xib */; };
+		86D786B613A334B3004088CA /* Castor_icon_57.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B013A334B3004088CA /* Castor_icon_57.png */; };
+		86D786B713A334B3004088CA /* Castor_icon_114.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B113A334B3004088CA /* Castor_icon_114.png */; };
+		86D786B813A334B3004088CA /* Castor_icon_512.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B213A334B3004088CA /* Castor_icon_512.png */; };
+		86D786B913A334B3004088CA /* Castor_icon_retina.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B313A334B3004088CA /* Castor_icon_retina.png */; };
+		86D786BA13A334B3004088CA /* Castor_icon_small.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B413A334B3004088CA /* Castor_icon_small.png */; };
+		86D786BB13A334B3004088CA /* Castor_icon_trim.png in Resources */ = {isa = PBXBuildFile; fileRef = 86D786B513A334B3004088CA /* Castor_icon_trim.png */; };
 		86D96E6013924FDF00449613 /* libicucore.A.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 86D96E5F13924FDE00449613 /* libicucore.A.dylib */; };
 		86D96E7013926CF100449613 /* RKLMatchEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D96E6D13926CF100449613 /* RKLMatchEnumerator.m */; };
 		86D96E7113926CF100449613 /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 86D96E6F13926CF100449613 /* RegexKitLite.m */; };
@@ -98,6 +110,9 @@
 		8614C63F1375335000AFBC39 /* README */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README; sourceTree = "<group>"; };
 		8614CA601388FAAA00F0E23B /* 68-paperclip.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "68-paperclip.png"; sourceTree = "<group>"; };
 		8617505F138E7DC4009E8B09 /* 57-upload.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "57-upload.png"; sourceTree = "<group>"; };
+		86220E7213A322B700EBF893 /* Castor-full.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Castor-full.png"; sourceTree = "<group>"; };
+		86220E7313A322B700EBF893 /* castor-splash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "castor-splash.png"; sourceTree = "<group>"; };
+		86220E7413A322B700EBF893 /* Castor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor.png; sourceTree = "<group>"; };
 		865DD8901373916F0008EB9F /* create_table.sql */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = create_table.sql; sourceTree = "<group>"; };
 		865DD894137392C10008EB9F /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		865DD8961373981A0008EB9F /* CacheManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CacheManager.h; sourceTree = "<group>"; };
@@ -120,9 +135,18 @@
 		86B04C36136C41FE00F8BFA1 /* CommentView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommentView.h; sourceTree = "<group>"; };
 		86B04C37136C41FF00F8BFA1 /* CommentView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommentView.m; sourceTree = "<group>"; };
 		86B04C38136C41FF00F8BFA1 /* CommentView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CommentView.xib; sourceTree = "<group>"; };
+		86C3FA7F13A330F2008C98BB /* Castor_icon_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_57.png; sourceTree = "<group>"; };
+		86C3FA8113A33112008C98BB /* Castor_icon_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_114.png; sourceTree = "<group>"; };
+		86C3FA8313A33158008C98BB /* iTunesArtwork */ = {isa = PBXFileReference; lastKnownFileType = file; path = iTunesArtwork; sourceTree = "<group>"; };
 		86CD2353136D3C53005AB366 /* EditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditView.h; sourceTree = "<group>"; };
 		86CD2354136D3C53005AB366 /* EditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditView.m; sourceTree = "<group>"; };
 		86CD2355136D3C53005AB366 /* EditView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EditView.xib; sourceTree = "<group>"; };
+		86D786B013A334B3004088CA /* Castor_icon_57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_57.png; sourceTree = "<group>"; };
+		86D786B113A334B3004088CA /* Castor_icon_114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_114.png; sourceTree = "<group>"; };
+		86D786B213A334B3004088CA /* Castor_icon_512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_512.png; sourceTree = "<group>"; };
+		86D786B313A334B3004088CA /* Castor_icon_retina.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_retina.png; sourceTree = "<group>"; };
+		86D786B413A334B3004088CA /* Castor_icon_small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_small.png; sourceTree = "<group>"; };
+		86D786B513A334B3004088CA /* Castor_icon_trim.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Castor_icon_trim.png; sourceTree = "<group>"; };
 		86D96E5F13924FDE00449613 /* libicucore.A.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.A.dylib; path = usr/lib/libicucore.A.dylib; sourceTree = SDKROOT; };
 		86D96E6C13926CF100449613 /* RKLMatchEnumerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RKLMatchEnumerator.h; sourceTree = "<group>"; };
 		86D96E6D13926CF100449613 /* RKLMatchEnumerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RKLMatchEnumerator.m; sourceTree = "<group>"; };
@@ -228,6 +252,15 @@
 		86DA6C681371592500DD923D /* image */ = {
 			isa = PBXGroup;
 			children = (
+				86D786B013A334B3004088CA /* Castor_icon_57.png */,
+				86D786B113A334B3004088CA /* Castor_icon_114.png */,
+				86D786B213A334B3004088CA /* Castor_icon_512.png */,
+				86D786B313A334B3004088CA /* Castor_icon_retina.png */,
+				86D786B413A334B3004088CA /* Castor_icon_small.png */,
+				86D786B513A334B3004088CA /* Castor_icon_trim.png */,
+				86220E7213A322B700EBF893 /* Castor-full.png */,
+				86220E7313A322B700EBF893 /* castor-splash.png */,
+				86220E7413A322B700EBF893 /* Castor.png */,
 				86916C111391356B007CB1F9 /* myrooms_gray.png */,
 				8617505F138E7DC4009E8B09 /* 57-upload.png */,
 				8611A6C8138BECC500FF03DD /* 57-download.png */,
@@ -300,6 +333,9 @@
 		86F85B79136ACEB00031F3B2 = {
 			isa = PBXGroup;
 			children = (
+				86C3FA8313A33158008C98BB /* iTunesArtwork */,
+				86C3FA8113A33112008C98BB /* Castor_icon_114.png */,
+				86C3FA7F13A330F2008C98BB /* Castor_icon_57.png */,
 				86D96E5F13924FDE00449613 /* libicucore.A.dylib */,
 				8614C63F1375335000AFBC39 /* README */,
 				865DD894137392C10008EB9F /* libsqlite3.dylib */,
@@ -477,6 +513,18 @@
 				86175060138E7DC4009E8B09 /* 57-upload.png in Resources */,
 				86916C0A1390E8BA007CB1F9 /* ContainerView.xib in Resources */,
 				86916C121391356B007CB1F9 /* myrooms_gray.png in Resources */,
+				86220E7513A322B700EBF893 /* Castor-full.png in Resources */,
+				86220E7613A322B700EBF893 /* castor-splash.png in Resources */,
+				86220E7713A322B700EBF893 /* Castor.png in Resources */,
+				86C3FA8013A330F2008C98BB /* Castor_icon_57.png in Resources */,
+				86C3FA8213A33112008C98BB /* Castor_icon_114.png in Resources */,
+				86C3FA8413A33158008C98BB /* iTunesArtwork in Resources */,
+				86D786B613A334B3004088CA /* Castor_icon_57.png in Resources */,
+				86D786B713A334B3004088CA /* Castor_icon_114.png in Resources */,
+				86D786B813A334B3004088CA /* Castor_icon_512.png in Resources */,
+				86D786B913A334B3004088CA /* Castor_icon_retina.png in Resources */,
+				86D786BA13A334B3004088CA /* Castor_icon_small.png in Resources */,
+				86D786BB13A334B3004088CA /* Castor_icon_trim.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
