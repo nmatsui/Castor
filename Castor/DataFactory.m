@@ -82,7 +82,7 @@
     NSData *data = [self.cacheManager selectHomeTimeline];
     if (data != nil) {
         NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [data release];
+        //[data release];
         return array;
     }
     else {
@@ -113,7 +113,7 @@
     NSData *data = [self.cacheManager selectRoomList];
     if (data != nil) {
         NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [data release];
+        //[data release];
         return array;
     }
     else {
@@ -142,7 +142,7 @@
     NSData *data = [self.cacheManager selectRoomTimelineAtRoomId:roomId];
     if (data != nil) {
         NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [data release];
+        //data release];
         return array;
     }
     else {
@@ -173,7 +173,7 @@
     NSData *data = [self.cacheManager selectEntriesAtRoomId:entry.roomId entryId:entry.entryId];
     if (data != nil) {
         NSMutableArray *array = [NSKeyedUnarchiver unarchiveObjectWithData:data];
-        [data release];
+        //[data release];
         return array;
     }
     else {

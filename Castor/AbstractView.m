@@ -24,7 +24,17 @@
     if (self) {
         self.factory = factory;
         self.indicator = [[UIActivityIndicatorView alloc]initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
-        [self.view addSubview:self.indicator];
+        [[self view] addSubview:self.indicator];
+    }
+    return self;
+}
+
+- (id)initWithNibNameNoIndicator:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                         factory:(DataFactory *)factory
+{
+    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    if (self) {
+        self.factory = factory;
     }
     return self;
 }

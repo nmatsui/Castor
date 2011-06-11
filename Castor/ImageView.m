@@ -48,18 +48,24 @@ static const float MIN_SCALE = 1.0;
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"ImageView Will appear");
+    if (self.factory != nil) {
+        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSLog(@"ImageView loaded");
     self.title = @"Image";
-    if (self.factory != nil) {
-        self.scrollView.maximumZoomScale = MAX_SCALE;
-        self.scrollView.minimumZoomScale = MIN_SCALE;
-        [UIApplication sharedApplication].networkActivityIndicatorVisible = YES;
-        [self performSelector:@selector(_startIndicator:) withObject:self];
-        [self performSelectorInBackground:@selector(_loadAttachmentImageInBackground:) withObject:nil];
-    }
+    self.scrollView.maximumZoomScale = MAX_SCALE;
+    self.scrollView.minimumZoomScale = MIN_SCALE;
 }
 
 - (void)viewDidUnload

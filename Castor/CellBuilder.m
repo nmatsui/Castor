@@ -10,7 +10,7 @@
 
 @interface CellBuilder (Private)
 - (UILabel *)_makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font;
-- (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font;
+//- (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font;
 - (UIImageView *)_makeIcon:(CGRect)rect;
 @end
 
@@ -55,7 +55,6 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     [nameLabel setShadowColor:[UIColor darkTextColor]];
     [nameLabel setShadowOffset:CGSizeMake(1.0f, 1.0f)];
     [v addSubview:nameLabel];
-    [nameLabel release];
     
     if (target != nil) {
         UIImageView *icon = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow001_black.gif"]];
@@ -88,7 +87,6 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     CGSize s = [room.roomName sizeWithFont:[UIFont systemFontOfSize:GROUP_FONT_SIZE] constrainedToSize:CGSizeMake(w, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *nameLabel = [self _makeLabel:CGRectMake(60, 10, w, s.height) text:room.roomName font:[UIFont systemFontOfSize:GROUP_FONT_SIZE]];
     [v addSubview:nameLabel];
-    [nameLabel release];
     UIImageView *icon = [self _makeIcon:CGRectMake(20, 5, 30, 30)];
     [icon setImage:[UIImage imageNamed:@"myrooms_gray.png"]];
     [v addSubview:icon];
@@ -96,9 +94,9 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
         float height = 30 * room.roomIcon.size.height / room.roomIcon.size.width;
         [icon setFrame:CGRectMake(20, 5 + 15 - height / 2, 30, height)];
         [icon setImage:room.roomIcon];
-        [icon release];
     }
     else {
+        [icon retain];
         [room retain];
         dispatch_async(_localQueue, ^{
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -136,25 +134,20 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     }
     UILabel *indentLabel = [self _makeLabel:CGRectMake(10, 10, 40, 16) text:str font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
     [v addSubview:indentLabel];
-    [indentLabel release];
     UILabel *nameLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
-    [nameLabel release];
     float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
     if (entry.attachmentType != nil) {
         UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 15, 100, 10) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:attachmentLabel];
-        [attachmentLabel release];
     }
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
-    [contentLabel release];
     if (entry.descendantsCount != nil) {
         UILabel *descendantsLabel = [self _makeLabel:CGRectMake(w, 5, 100, 10) 
                                                 text:[NSString stringWithFormat:@"%@ comments", entry.descendantsCount] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:descendantsLabel];
-        [descendantsLabel release];
     }
     UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [icon setImage:[UIImage imageNamed:@"myrooms_gray.png"]];
@@ -163,9 +156,9 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
         float height = 30 * entry.participationIcon.size.height / entry.participationIcon.size.width;
         [icon setFrame:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
         [icon setImage:entry.participationIcon];
-        [icon release];
     }
     else {
+        [icon retain];
         [entry retain];
         dispatch_async(_localQueue, ^{
             NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
@@ -194,12 +187,10 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     UILabel *label = [self _makeLabel:CGRectMake(40, 10, 190, 20) text:@"プルダウンすると更新" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     label.tag = 1;
     [v addSubview:label];
-    [label release];
     UIImageView *arrow = [self _makeIcon:CGRectMake(230, 12, 16, 16)];
     [arrow setImage:[UIImage imageNamed:@"57-download.png"]];
     arrow.tag = 2;
     [v addSubview:arrow];
-    [arrow release];
     
     return v;
 }
@@ -212,12 +203,10 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     UILabel *label = [self _makeLabel:CGRectMake(40, 10, 190, 20) text:@"プルアップすると次ページを表示" font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     label.tag = 1;
     [v addSubview:label];
-    [label release];
     UIImageView *arrow = [self _makeIcon:CGRectMake(230, 12, 16, 16)];
     [arrow setImage:[UIImage imageNamed:@"57-upload.png"]];
     arrow.tag = 2;
     [v addSubview:arrow];
-    [arrow release];
     
     return v;
 }
@@ -238,7 +227,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
 //// Private
 - (UILabel *)_makeLabel:(CGRect)rect text:(NSString *)text font:(UIFont *)font
 {
-    UILabel *label = [[UILabel alloc] init];
+    UILabel *label = [[[UILabel alloc] init] autorelease];
     [label setFrame:rect];
     [label setText:text];
     [label setFont:font];
@@ -250,22 +239,22 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     return label;
 }
 
-- (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font
-{
-    UITextView *textView = [[UITextView alloc] init];
-    [textView setFrame:rect];
-    [textView setText:text];
-    [textView setFont:font];
-    [textView setTextColor:[UIColor blackColor]];
-    [textView setBackgroundColor:[UIColor clearColor]];
-    [textView setTextAlignment:UITextAlignmentLeft];
-    [textView setDataDetectorTypes:UIDataDetectorTypeLink];
-    return textView;
-}
+//- (UITextView *)_makeTextView:(CGRect)rect text:(NSString *)text font:(UIFont *)font
+//{
+//    UITextView *textView = [[UITextView alloc] init];
+//    [textView setFrame:rect];
+//    [textView setText:text];
+//    [textView setFont:font];
+//    [textView setTextColor:[UIColor blackColor]];
+//    [textView setBackgroundColor:[UIColor clearColor]];
+//    [textView setTextAlignment:UITextAlignmentLeft];
+//    [textView setDataDetectorTypes:UIDataDetectorTypeLink];
+//    return textView;
+//}
 
 - (UIImageView *)_makeIcon:(CGRect)rect
 {
-    UIImageView *imageView = [[UIImageView alloc] init];
+    UIImageView *imageView = [[[UIImageView alloc] init] autorelease];
     [imageView setFrame:rect];
     return imageView;
 }

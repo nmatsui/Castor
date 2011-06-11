@@ -80,14 +80,18 @@
     [super viewWillAppear:animated];
     NSLog(@"HomeView Will appear");
     self.container.navigationController.navigationBar.hidden = NO;
-    [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
-    if (self.triggerHeader == nil) {
-        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.homeTable.bounds portrate:_portrate];
-        [self.homeTable addSubview:self.triggerHeader];
-    }
-    if (self.triggerFooter == nil) {
-        self.triggerFooter = [self.cellBuilder getTriggerFooter:self.homeTable.bounds portrate:_portrate];
-        self.homeTable.tableFooterView = self.triggerFooter;
+    if (self.factory != nil) {
+        [self.homeTable deselectRowAtIndexPath:[self.homeTable indexPathForSelectedRow] animated:YES];
+        if (self.triggerHeader == nil) {
+            self.triggerHeader = [self.cellBuilder getTriggerHeader:self.homeTable.bounds portrate:_portrate];
+            [self.homeTable addSubview:self.triggerHeader];
+        }
+        if (self.triggerFooter == nil) {
+            self.triggerFooter = [self.cellBuilder getTriggerFooter:self.homeTable.bounds portrate:_portrate];
+            self.homeTable.tableFooterView = self.triggerFooter;
+        }
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
     }
 }
 
@@ -96,12 +100,8 @@
     [super viewDidLoad];
     NSLog(@"HomeView loaded");
     self.title = @"Home";
-    if (self.factory != nil) {
-        [self.container.navigationItem.backBarButtonItem setEnabled:NO];
-        self.container.navigationItem.hidesBackButton = YES;
-        [self performSelector:@selector(_startIndicator:) withObject:self];
-        [self performSelectorInBackground:@selector(_reloadHomeTimelineInBackground:) withObject:nil];
-    }
+    [self.container.navigationItem.backBarButtonItem setEnabled:NO];
+    self.container.navigationItem.hidesBackButton = YES;
 }
 
 - (void)viewDidUnload
@@ -152,8 +152,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"GroupCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.homeList count] <= indexPath.section && [[[self.homeList objectAtIndex:indexPath.section] entries] count] <= indexPath.row) return cell;
     

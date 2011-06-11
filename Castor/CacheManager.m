@@ -57,7 +57,7 @@
     sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"), [roomId intValue]);
     NSData *image = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
-        image = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+        image = [[[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)] autorelease];
     }
     sqlite3_finalize(statement);
     [self commit];
@@ -121,7 +121,7 @@
     sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@participationId"), [participationId intValue]);
     NSData *image = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
-        image = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+        image = [[[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)] autorelease];
     }
     sqlite3_finalize(statement);
     [self commit];
@@ -184,7 +184,7 @@
     };
     NSData *timeline = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
-        timeline = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+        timeline = [[[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)] autorelease];
     }
     sqlite3_finalize(statement);
     [self commit];
@@ -245,7 +245,7 @@
     };
     NSData *list = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
-        list = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+        list = [[[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)] autorelease];
     }
     sqlite3_finalize(statement);
     [self commit];
@@ -307,7 +307,7 @@
     sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@roomId"), [roomId intValue]);
     NSData *timeline = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
-        timeline = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+        timeline = [[[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)] autorelease];
     }
     sqlite3_finalize(statement);
     [self commit];
@@ -371,7 +371,7 @@
     sqlite3_bind_int(statement, sqlite3_bind_parameter_index(statement, "@entry_id"), [entryId intValue]);
     NSData *entries = nil;
     if (sqlite3_step(statement) == SQLITE_ROW) {
-        entries = [[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)];
+        entries = [[[NSData alloc] initWithBytes:sqlite3_column_blob(statement, 0) length:sqlite3_column_int(statement, 1)] autorelease];
     }
     sqlite3_finalize(statement);
     [self commit];

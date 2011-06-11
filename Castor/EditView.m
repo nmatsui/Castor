@@ -74,29 +74,34 @@ static const int MAX_RESOLUTION = 800;
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    if (self.parentId != nil) {
-        [self.cameraButton setEnabled:NO];
+    NSLog(@"EditView Will appear");
+    if (self.factory != nil) {
+        [self _enableOperation];
+        
+        if (self.parentId != nil) {
+            [self.cameraButton setEnabled:NO];
+        }
+        [self.clipIcon setHidden:YES];
+        if (self.factory != nil) {
+            if (self.targetEntry == nil) {
+                self.title = @"Add Entry";
+                self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER];
+            }
+            else {
+                self.title = @"Update Entry";
+                self.textView.text = self.targetEntry.content;
+                self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER - [self.targetEntry.content length]];
+            }
+            [self.textView becomeFirstResponder];
+        }
     }
-    [self.clipIcon setHidden:YES];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    [self _enableOperation];
     NSLog(@"EditView loaded");
-    if (self.factory != nil) {
-        if (self.targetEntry == nil) {
-            self.title = @"Add Entry";
-            self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER];
-        }
-        else {
-            self.title = @"Update Entry";
-            self.textView.text = self.targetEntry.content;
-            self.letterCount.text = [NSString stringWithFormat:@"%d", MAX_LETTER - [self.targetEntry.content length]];
-        }
-        [self.textView becomeFirstResponder];
-    }
+
 }
 
 - (void)viewDidUnload

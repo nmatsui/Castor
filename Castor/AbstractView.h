@@ -22,6 +22,8 @@
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
               factory:(DataFactory *)factory;
+- (id)initWithNibNameNoIndicator:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil 
+                         factory:(DataFactory *)factory;
 - (void)alertException:(NSString *)message;
 
 @end

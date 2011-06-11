@@ -79,14 +79,18 @@
 {
     [super viewWillAppear:animated];
     NSLog(@"RoomView Will appear");
-    [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
-    if (self.triggerHeader == nil) {
-        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
-        [self.entryTable addSubview:self.triggerHeader];
-    }
-    if (self.triggerFooter == nil) {
-        self.triggerFooter = [self.cellBuilder getTriggerFooter:self.entryTable.bounds portrate:_portrate];
-        self.entryTable.tableFooterView = self.triggerFooter;
+    if (self.factory != nil) {
+        [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
+        if (self.triggerHeader == nil) {
+            self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
+            [self.entryTable addSubview:self.triggerHeader];
+        }
+        if (self.triggerFooter == nil) {
+            self.triggerFooter = [self.cellBuilder getTriggerFooter:self.entryTable.bounds portrate:_portrate];
+            self.entryTable.tableFooterView = self.triggerFooter;
+        }
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadEntryListInBackground:) withObject:nil];
     }
 }
 
@@ -94,11 +98,7 @@
 {
     [super viewDidLoad];
     NSLog(@"roomView[%@] loaded", self.room.roomId);
-    if (self.factory != nil) {
-        self.title = @"Room";
-        [self performSelector:@selector(_startIndicator:) withObject:self];
-        [self performSelectorInBackground:@selector(_reloadEntryListInBackground:) withObject:nil];
-    }
+    self.title = @"Room";
 }
 
 - (void)viewDidUnload
@@ -150,8 +150,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"EntryCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.entryList count] <= indexPath.row) return cell;
     
@@ -345,7 +345,6 @@
         [menu addButtonWithTitle:@"Cancel"];
         [self.selectors addObject:@"_cancelWithOriginEntry:"];
         
-        
         [menu showInView:self.view];
         [menu release];
     }
@@ -390,6 +389,7 @@
     [alert addButtonWithTitle:@"いいえ"];
     [alert addButtonWithTitle:@"はい"];
     [alert show];
+    [alert release];
 }
 
 - (void)_viewAttachmentWithOriginEntry:(EntryData *)originEntry

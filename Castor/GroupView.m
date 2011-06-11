@@ -60,10 +60,14 @@
     [super viewWillAppear:animated];
     NSLog(@"GroupView Will appear");
     self.container.navigationController.navigationBar.hidden = NO;
-    [self.roomTable deselectRowAtIndexPath:[self.roomTable indexPathForSelectedRow] animated:YES];
-    if (self.triggerHeader == nil) {
-        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.roomTable.bounds portrate:_portrate];
-        [self.roomTable addSubview:self.triggerHeader];
+    if (self.factory != nil) {
+        [self.roomTable deselectRowAtIndexPath:[self.roomTable indexPathForSelectedRow] animated:YES];
+        if (self.triggerHeader == nil) {
+            self.triggerHeader = [self.cellBuilder getTriggerHeader:self.roomTable.bounds portrate:_portrate];
+            [self.roomTable addSubview:self.triggerHeader];
+        }
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
     }
 }
 
@@ -72,12 +76,8 @@
     [super viewDidLoad];
     NSLog(@"GroupView loaded");
     self.title = @"Group";
-    if (self.factory != nil) {
-        [self.container.navigationItem.backBarButtonItem setEnabled:NO];
-        self.container.navigationItem.hidesBackButton = YES;
-        [self performSelector:@selector(_startIndicator:) withObject:self];
-        [self performSelectorInBackground:@selector(_reloadGroupListInBackground:) withObject:nil];
-    }
+    [self.container.navigationItem.backBarButtonItem setEnabled:NO];
+    self.container.navigationItem.hidesBackButton = YES;
 }
 
 - (void)viewDidUnload
@@ -122,8 +122,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"GroupCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.roomList count] <= indexPath.row) return cell;
     

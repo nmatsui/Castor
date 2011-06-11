@@ -18,7 +18,7 @@
                 entry:(EntryData *)entry
               factory:(DataFactory *)factory
 {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil factory:factory];
+    self = [super initWithNibNameNoIndicator:nibNameOrNil bundle:nibBundleOrNil factory:factory];
     if (self) {
         self.entry = entry;
     }
@@ -40,14 +40,20 @@
     // Release any cached data, images, etc that aren't in use.
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    NSLog(@"LongTextView Will appear");
+    if (self.factory != nil) {
+        self.textView.text = self.entry.attachmentText;
+    }
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSLog(@"LongTextView loaded");
     self.title = @"Long Text";
-    if (self.factory != nil) {
-        self.textView.text = self.entry.attachmentText;
-    }
 }
 
 - (void)viewDidUnload

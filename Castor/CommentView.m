@@ -87,14 +87,18 @@ static const int MAX_LEVLE = 6;
 {
     [super viewWillAppear:animated];
     NSLog(@"CommentView Will appear");
-    [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
-    if (self.triggerHeader == nil) {
-        self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
-        [self.entryTable addSubview:self.triggerHeader];
-    }
-    if (self.nilFooter == nil) {
-        self.nilFooter = [self.cellBuilder getNilFooter:self.entryTable.bounds portrate:_portrate];
-        self.entryTable.tableFooterView = self.nilFooter;
+    if (self.factory != nil) {
+        [self.entryTable deselectRowAtIndexPath:[self.entryTable indexPathForSelectedRow] animated:YES];
+        if (self.triggerHeader == nil) {
+            self.triggerHeader = [self.cellBuilder getTriggerHeader:self.entryTable.bounds portrate:_portrate];
+            [self.entryTable addSubview:self.triggerHeader];
+        }
+        if (self.nilFooter == nil) {
+            self.nilFooter = [self.cellBuilder getNilFooter:self.entryTable.bounds portrate:_portrate];
+            self.entryTable.tableFooterView = self.nilFooter;
+        }
+        [self performSelector:@selector(_startIndicator:) withObject:self];
+        [self performSelectorInBackground:@selector(_reloadCommentListInBackground:) withObject:nil];
     }
 }
 
@@ -103,10 +107,6 @@ static const int MAX_LEVLE = 6;
     [super viewDidLoad];
     NSLog(@"commentView loaded[%@]", self.originEntry.entryId);
     self.title = @"Comments";
-    if (self.factory != nil) {
-        [self performSelector:@selector(_startIndicator:) withObject:self];
-        [self performSelectorInBackground:@selector(_reloadCommentListInBackground:) withObject:nil];
-    }
 }
 
 - (void)viewDidUnload
@@ -151,8 +151,8 @@ static const int MAX_LEVLE = 6;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"EntryCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
+    //UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    UITableViewCell *cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier] autorelease];
     [cell setSelectionStyle:UITableViewCellSelectionStyleBlue];
     if ([self.entryList count] <= indexPath.row) return cell;
     
@@ -323,7 +323,6 @@ static const int MAX_LEVLE = 6;
         [menu addButtonWithTitle:@"Cancel"];
         [self.selectors addObject:@"_cancelWithOriginEntry:"];
         
-        
         [menu showInView:self.view];
         [menu release];
     }
@@ -369,6 +368,7 @@ static const int MAX_LEVLE = 6;
     [alert addButtonWithTitle:@"いいえ"];
     [alert addButtonWithTitle:@"はい"];
     [alert show];
+    [alert release];
 }
 
 - (void)_viewAttachmentWithOriginEntry:(EntryData *)originEntry

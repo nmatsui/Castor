@@ -229,7 +229,7 @@
                                   body:[body dataUsingEncoding:NSUTF8StringEncoding]
                            oauth_token:self.oAuthToken
                     oauth_token_secret:self.oAuthTokenSecret];
-    NSLog(@"%@", [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue]);
+    //NSLog(@"%@", [[[[NSString alloc] initWithData:response encoding:NSUTF8StringEncoding] autorelease] JSONValue]);
     if (response == nil || [response length] == 0) {
         return NO; // ステータスコードまで見るべきか？
     }
