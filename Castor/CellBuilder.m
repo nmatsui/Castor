@@ -19,7 +19,7 @@
 static const int GROUP_FONT_SIZE  = 14;
 static const int ENTRY_FONT_SIZE  = 12;
 static const int INDENT_FONT_SIZE = 10;
-static const int INDENT_WIDTH     = 6;
+static const int INDENT_WIDTH     = 8;
 static const int SECTION_HEADER_FONT_SIZE = 16;
 
 - (id)initWithDataFactory:(DataFactory *)factory
@@ -117,7 +117,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
 
 - (CGFloat)getEntryCellHeight:(EntryData *)entry portrate:(BOOL)portrate
 {
-    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 90 : [[UIScreen mainScreen] bounds].size.height - 90;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
     float height = 30 + s.height + 20 + [entry.level intValue]*INDENT_WIDTH;
     return (height<60)?60:height;
@@ -126,33 +126,32 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
 - (UIView *)getEntryCellView:(EntryData *)entry portrate:(BOOL)portrate
 {
     UIView *v = [[[UIView alloc] initWithFrame:CGRectZero] autorelease];
-    NSString *str = @"";
-    for (int i = 0; i < [entry.level intValue]; i++) {
-        str = [str stringByAppendingString:@">"];
+    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 90 : [[UIScreen mainScreen] bounds].size.height - 90;
+    CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
+    
+    if ([entry.level intValue] != 0 ) {
+        [v addSubview:[[[BackgroundRect alloc] initWithFrame:CGRectMake(0, 0, w+90, [self getEntryCellHeight:entry portrate:portrate]) level:[entry.level intValue]] autorelease]];
     }
-    UILabel *indentLabel = [self _makeLabel:CGRectMake(10, 10, 40, 16) text:str font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
-    [v addSubview:indentLabel];
-    UILabel *nameLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *nameLabel = [self _makeLabel:CGRectMake(50+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
-    float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 100 : [[UIScreen mainScreen] bounds].size.height - 100;
+    
     if (entry.attachmentType != nil) {
         UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 15, 100, 10) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:attachmentLabel];
     }
-    CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    UILabel *contentLabel = [self _makeLabel:CGRectMake(60+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *contentLabel = [self _makeLabel:CGRectMake(50+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
     if (entry.descendantsCount != nil) {
         UILabel *descendantsLabel = [self _makeLabel:CGRectMake(w, 5, 100, 10) 
                                                 text:[NSString stringWithFormat:@"%@ comments", entry.descendantsCount] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:descendantsLabel];
     }
-    UIImageView *icon = [self _makeIcon:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
+    UIImageView *icon = [self _makeIcon:CGRectMake(INDENT_WIDTH+[entry.level intValue]*INDENT_WIDTH, 5, 30, 30)];
     [icon setImage:[UIImage imageNamed:@"myrooms_gray.png"]];
     [v addSubview:icon];
     if (entry.participationIcon != nil && entry.participationIcon.size.height != 0 && entry.participationIcon.size.width != 0) {
         float height = 30 * entry.participationIcon.size.height / entry.participationIcon.size.width;
-        [icon setFrame:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
+        [icon setFrame:CGRectMake(INDENT_WIDTH+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
         [icon setImage:entry.participationIcon];
     }
     else {
@@ -165,7 +164,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
             if (entry.participationIcon != nil && entry.participationIcon.size.height != 0 && entry.participationIcon.size.width != 0) {
                 dispatch_async(_mainQueue, ^{
                     float height = 30 * entry.participationIcon.size.height / entry.participationIcon.size.width;
-                    [icon setFrame:CGRectMake(20+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
+                    [icon setFrame:CGRectMake(INDENT_WIDTH+[entry.level intValue]*INDENT_WIDTH, 5 + 15 - height / 2, 30, height)];
                     [icon setImage:entry.participationIcon];
                 });
             }
