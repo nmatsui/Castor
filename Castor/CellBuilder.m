@@ -19,7 +19,7 @@
 static const int GROUP_FONT_SIZE  = 14;
 static const int ENTRY_FONT_SIZE  = 12;
 static const int INDENT_FONT_SIZE = 10;
-static const int INDENT_WIDTH     = 8;
+static const int INDENT_WIDTH     = 10;
 static const int SECTION_HEADER_FONT_SIZE = 16;
 
 - (id)initWithDataFactory:(DataFactory *)factory
@@ -119,7 +119,7 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
 {
     float w = (portrate) ? [[UIScreen mainScreen] bounds].size.width - 90 : [[UIScreen mainScreen] bounds].size.height - 90;
     CGSize s = [entry.content sizeWithFont:[UIFont systemFontOfSize:ENTRY_FONT_SIZE] constrainedToSize:CGSizeMake(w-[entry.level intValue]*INDENT_WIDTH, 1024) lineBreakMode:UILineBreakModeCharacterWrap];
-    float height = 30 + s.height + 20 + [entry.level intValue]*INDENT_WIDTH;
+    float height = 30 + s.height + 20;
     return (height<60)?60:height;
 }
 
@@ -132,14 +132,14 @@ static const int SECTION_HEADER_FONT_SIZE = 16;
     if ([entry.level intValue] != 0 ) {
         [v addSubview:[[[BackgroundRect alloc] initWithFrame:CGRectMake(0, 0, w+90, [self getEntryCellHeight:entry portrate:portrate]) level:[entry.level intValue]] autorelease]];
     }
-    UILabel *nameLabel = [self _makeLabel:CGRectMake(50+[entry.level intValue]*INDENT_WIDTH, 10, 250, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *nameLabel = [self _makeLabel:CGRectMake(50+[entry.level intValue]*INDENT_WIDTH, 10, 250-[entry.level intValue]*INDENT_WIDTH, 16) text:entry.participationName font:[UIFont boldSystemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:nameLabel];
     
     if (entry.attachmentType != nil) {
         UILabel *attachmentLabel = [self _makeLabel:CGRectMake(w, 15, 100, 10) text:[NSString stringWithFormat:@"<%@ attached>", entry.attachmentType] font:[UIFont systemFontOfSize:INDENT_FONT_SIZE]];
         [v addSubview:attachmentLabel];
     }
-    UILabel *contentLabel = [self _makeLabel:CGRectMake(50+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height+[entry.level intValue]*INDENT_WIDTH) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
+    UILabel *contentLabel = [self _makeLabel:CGRectMake(50+[entry.level intValue]*INDENT_WIDTH, 30, w-[entry.level intValue]*INDENT_WIDTH, s.height) text:entry.content font:[UIFont systemFontOfSize:ENTRY_FONT_SIZE]];
     [v addSubview:contentLabel];
     if (entry.descendantsCount != nil) {
         UILabel *descendantsLabel = [self _makeLabel:CGRectMake(w, 5, 100, 10) 

@@ -10,7 +10,7 @@
 
 @implementation BackgroundRect
 
-static const int INDENT_WIDTH = 8;
+static const int INDENT_WIDTH = 10;
 static const int RIGHT_MERGIN_WIDTH = 5;
 
 - (id)initWithFrame:(CGRect)frame level:(int)level
