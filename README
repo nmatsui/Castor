@@ -1,5 +1,7 @@
-Castorは youRoom( http://youroom.in/ )のiPhoneネイティブクライアントです。
+Castorは youRoom < http://youroom.in/ > のiPhoneネイティブクライアントです。
 iOS4.2以降で動作します。
+
+CastorはGPL v3ライセンスです。詳細はLICENSEファイル、および < http://www.gnu.org/licenses/ > を参照ください。
 
 操作方法）
 1. 初回起動時には、登録したEmailアドレスとパスワードを入力します。

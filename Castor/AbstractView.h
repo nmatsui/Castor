@@ -2,8 +2,7 @@
 //  AbstractView.h
 //  Castor
 //
-//  Created by Nobuyuki Matsui on 11/06/11.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (C) 2011 Nobuyuki Matsui. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

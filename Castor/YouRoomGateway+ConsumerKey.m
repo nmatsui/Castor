@@ -2,8 +2,7 @@
 //  YouRoomGateway+ConsumerKey.m
 //  Castor
 //
-//  Created by Nobuyuki Matsui on 11/05/04.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (C) 2011 Nobuyuki Matsui. All rights reserved.
 //
 
 #import "YouRoomGateway.h"
@@ -12,10 +11,10 @@
 @implementation YouRoomGateway (YouRoomGateway_ConsumerKey)
 - (NSString *)getConsumerKey
 {
-    return @"xxxxxxxxxx";
+    return @"xxxxxxxx"; // Change your Consumer key
 }
 - (NSString *)getConsumerSecret;
 {
-    return @"xxxxxxxxxx";
+    return @"xxxxxxxx"; // Change your Consumer Secret
 }
 @end

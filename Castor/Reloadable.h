@@ -2,8 +2,7 @@
 //  Reloadable.h
 //  Castor
 //
-//  Created by Nobuyuki Matsui on 11/05/05.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright (C) 2011 Nobuyuki Matsui. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
