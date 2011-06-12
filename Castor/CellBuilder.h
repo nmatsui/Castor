@@ -9,6 +9,7 @@
 #import "DataFactory.h"
 #import "RoomData.h"
 #import "EntryData.h"
+#import "BackgroundRect.h"
 
 @interface CellBuilder : NSObject {
     DataFactory *_factory;
