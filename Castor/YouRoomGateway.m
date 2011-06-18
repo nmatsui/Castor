@@ -14,6 +14,7 @@
 - (void)_retrieveVerifyCredential;
 - (EntryData *)_constructEntryListFromJSONDic:(NSDictionary *)entry roomId:(NSNumber *)roomId level:(NSNumber *)level;
 - (NSMutableArray *)_detectUrlList:(NSString *)content;
+- (NSMutableString *)_encodeText:(NSString *)text;
 @end
 
 @implementation YouRoomGateway
@@ -172,11 +173,14 @@
 
 - (BOOL)postEntryText:(NSString *)text roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
 {
-    NSLog(@"postEntryText[%@] roomId[%@] parentId[%@]", text, roomId, parentId);
-    NSString *body = [NSString stringWithFormat:@"entry[content]=%@", text];
+    NSMutableString *encoded = [self _encodeText:text];
+    NSLog(@"postEntryText[%@->%@] roomId[%@] parentId[%@]", text, encoded, roomId, parentId);
+    
+    NSString *body = [NSString stringWithFormat:@"entry[content]=%@", encoded];
     if (parentId != nil) {
         body = [body stringByAppendingFormat:@"&entry[parent_id]=%@", parentId];
     }
+    
     NSData *response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries?format=json", roomId]]
                                method:@"POST"
                                  body:[body dataUsingEncoding:NSUTF8StringEncoding]
@@ -190,13 +194,14 @@
 
 - (BOOL)postEntryText:(NSString *)text image:(NSData *)image filename:(NSString *)filename roomId:(NSNumber *)roomId parentId:(NSNumber *)parentId
 {
-    NSLog(@"postEntryText[%@] image(size[%d]) filename[%@] roomId[%@] parentId[%@]", text, [image length], filename, roomId, parentId);
+    NSMutableString *encoded = [self _encodeText:text];
+    NSLog(@"postEntryText[%@->%@] image(size[%d]) filename[%@] roomId[%@] parentId[%@]", text, encoded, [image length], filename, roomId, parentId);
     NSString *boundary = @"---------------------------CASTORBOUNDARY";
     NSString *contentType = [NSString stringWithFormat:@"multipart/form-data; boundary=%@", boundary];
     NSMutableData *postBody = [NSMutableData data];
     [postBody appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [postBody appendData:[@"Content-Disposition: form-data; name=\"entry[content]\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [postBody appendData:[text dataUsingEncoding:NSUTF8StringEncoding]];
+    [postBody appendData:[encoded dataUsingEncoding:NSUTF8StringEncoding]];
     [postBody appendData:[[NSString stringWithFormat:@"\r\n--%@\r\n", boundary] dataUsingEncoding:NSUTF8StringEncoding]];
     [postBody appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"entry[attachment_attributes][uploaded_data]\"; filename=\"%@\"\r\n", filename] dataUsingEncoding:NSUTF8StringEncoding]];
     [postBody appendData:[@"Content-Type: image/png\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
@@ -221,8 +226,9 @@
 
 - (BOOL)putEntryText:(NSString *)text roomId:(NSNumber *)roomId entryId:(NSNumber *)entryId
 {
-    NSLog(@"putEntryText[%@] roomId[%@] entryId[%@]", text, roomId, entryId);
-    NSString *body = [NSString stringWithFormat:@"entry[content]=%@", text];
+    NSMutableString *encoded = [self _encodeText:text];
+    NSLog(@"putEntryText[%@->%@] roomId[%@] entryId[%@]", text, encoded, roomId, entryId);
+    NSString *body = [NSString stringWithFormat:@"entry[content]=%@", encoded];
     NSData * response = [self _request:[NSURL URLWithString:[NSString stringWithFormat:@"https://www.youroom.in/r/%@/entries/%@?format=json", roomId, entryId]]
                                 method:@"PUT"
                                   body:[body dataUsingEncoding:NSUTF8StringEncoding]
@@ -317,12 +323,13 @@
 {
     NSLog(@"request(%@) to %@ [body:%@]", method, url, [[[NSString alloc] initWithData:body encoding:NSUTF8StringEncoding] autorelease]);
     NSString *header = OAuthorizationHeader(url, method, body, [self getConsumerKey], [self getConsumerSecret], oauth_token, oauth_token_secret);
-//    NSLog(@"request header : %@", header);
+    //NSLog(@"request header : %@", header);
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:method];
     [request setValue:header forHTTPHeaderField:@"Authorization"];
-    [request setHTTPBody:body];
+    [request setHTTPBody:body];    
     [request setValue:contentType forHTTPHeaderField:@"Content-Type"];
+    //NSLog(@"%@", [[NSString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding]);
     NSHTTPURLResponse *response = nil;
     NSError *error = nil;
     NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
@@ -441,5 +448,18 @@
     [pool release];
     
     return list;
+}
+
+- (NSMutableString *)_encodeText:(NSString *)text
+{
+    NSMutableString *encoded = [NSMutableString stringWithString:text];
+    
+    NSArray *key =   [NSArray arrayWithObjects:@"&"  , @"+"  , @"="  , @";"  , @"%"  , nil];
+    NSArray *value = [NSArray arrayWithObjects:@"%26", @"%2B", @"%3D", @"%3B", @"%25", nil];
+    NSDictionary *dic = [NSDictionary dictionaryWithObjects:value forKeys:key];
+    for (NSString *key in dic) {
+        [encoded replaceOccurrencesOfString:key withString:[dic objectForKey:key] options:0 range:NSMakeRange(0, [encoded length])];
+    }
+    return encoded;
 }
 @end
